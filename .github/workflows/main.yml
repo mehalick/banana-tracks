@@ -26,6 +26,8 @@ jobs:
 
     - name: Publish
       run: dotnet publish -c Release --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj
+
+    - name: Download Artifacts
       uses: actions/upload-artifact@v1
       with:
         name: dist

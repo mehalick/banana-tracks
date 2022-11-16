@@ -9,8 +9,27 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@master
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '7.0'
+
+    - name: Build
+      run: dotnet build -c Release
+
+    - name: Test
+      run: dotnet test -c Release --no-build
+
+    - name: Publish
+      run: dotnet publish -c Release --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj
+      uses: actions/upload-artifact@v1
+      with:
+        name: dist
+        path: publish/wwwroot
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -20,4 +39,4 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3 bucket
-      run: aws s3 sync ./src/ s3://bananatracks.com --delete
+      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete

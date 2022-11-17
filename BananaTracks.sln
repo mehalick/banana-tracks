@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdk", "cdk\src\Cdk\Cdk.csproj", "{C408C818-A839-4EC1-A00D-F1AE8687936E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananaTracks.App", "src\BananaTracks.App\BananaTracks.App.csproj", "{9ADCE9DF-631E-4C1F-9CD5-D74448782858}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.App", "src\BananaTracks.App\BananaTracks.App.csproj", "{9ADCE9DF-631E-4C1F-9CD5-D74448782858}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D14409F1-D93B-4F70-9A32-4EBC1B14F9C6}"
 	ProjectSection(SolutionItems) = preProject

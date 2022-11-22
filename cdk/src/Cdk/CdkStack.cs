@@ -70,7 +70,7 @@ public class CdkStack : Stack
 			new FunctionProps
 			{
 				FunctionName = Name("ApiLambda"),
-				Code = Code.FromAsset(@"..\src\BananaTracks.Api\bin\Release\net7.0"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Api\bin\Release\net6.0"),
 				Description = "BananaTracks API",
 				Handler = "BananaTracks.Api",
 				MemorySize = 256,

@@ -36,11 +36,12 @@ public class Program
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {
-	public CustomAuthorizationMessageHandler(IAccessTokenProvider provider, 
+	public CustomAuthorizationMessageHandler(
+		IConfiguration configuration,
+		IAccessTokenProvider provider,
 		NavigationManager navigation)
 		: base(provider, navigation)
 	{
-		ConfigureHandler(
-			authorizedUrls: new[] { "https://localhost:7144" });
+		ConfigureHandler(new[] { configuration["Api:BaseAddress"] });
 	}
 }

@@ -33,6 +33,11 @@ public class Program
 				.AllowAnyHeader());
 		});
 
+		if (builder.Environment.IsProduction())
+		{
+			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
+		}
+
 		builder.Services.AddFastEndpoints();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();

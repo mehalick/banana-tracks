@@ -1,8 +1,5 @@
-using System.Globalization;
+using BananaTracks.Shared.Models;
 
 namespace BananaTracks.Shared;
 
-public record GetTestResponse
-{
-	public string Name { get; set; } = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
-}
+public record GetTestResponse(IEnumerable<Activity> Activities);

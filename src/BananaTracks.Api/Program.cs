@@ -1,5 +1,8 @@
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BananaTracks.Api;
 
@@ -42,6 +45,23 @@ public class Program
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 
+		builder.Services.AddHttpContextAccessor();
+
+		if (builder.Environment.IsProduction())
+		{
+			builder.Services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
+		}
+		else
+		{
+			var awsAccessKeyId = builder.Configuration["AwsAccessKeyId"];
+			var awsSecretAccessKey = builder.Configuration["AwsSecretAccessKey"];
+
+			builder.Services.AddSingleton<IAmazonDynamoDB>(_ =>
+				new AmazonDynamoDBClient(awsAccessKeyId, awsSecretAccessKey));
+		}
+
+		builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
+
 		var app = builder.Build();
 
 		app.UseCors("ApiCors");
@@ -50,8 +70,6 @@ public class Program
 		app.UseSwaggerUI();
 
 		app.UseHttpsRedirection();
-
-		app.MapGet("/", () => "Welcome to BananaTracks API").AllowAnonymous();
 
 		app.UseAuthentication();
 		app.UseAuthorization();

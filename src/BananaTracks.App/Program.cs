@@ -36,16 +36,10 @@ public class Program
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {
-	public CustomAuthorizationMessageHandler(IAccessTokenProvider provider, NavigationManager navigation)
+	public CustomAuthorizationMessageHandler(IConfiguration configuration, IAccessTokenProvider provider, NavigationManager navigation)
 		: base(provider, navigation)
 	{
-		ConfigureHandler(new[] {"https://localhost:7144", "https://api.bananatracks.com"});
+		ConfigureHandler(new[] {configuration["Api:BaseAddress"]});
 
-	}
-
-	protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-	{
-		request.Headers.Add("x-andy", "yup");
-		return await base.SendAsync(request, cancellationToken);
 	}
 }

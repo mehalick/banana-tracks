@@ -34,11 +34,11 @@ jobs:
         path: publish/wwwroot
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
     - name: Deploy static site to S3 bucket
-      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete
+      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete >> $GITHUB_OUTPUT

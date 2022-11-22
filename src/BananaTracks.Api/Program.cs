@@ -51,7 +51,7 @@ public class Program
 
 		app.UseHttpsRedirection();
 
-		app.MapGet("/", () => "Welcome to BananaTracks API");
+		app.MapGet("/", () => "Welcome to BananaTracks API").AllowAnonymous();
 
 		app.UseAuthentication();
 		app.UseAuthorization();

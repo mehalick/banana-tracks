@@ -8,6 +8,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: us-east-1
+
     steps:
 
     - name: Checkout
@@ -17,6 +23,9 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '7.0'
+
+    - name: Install Lambda Tools
+      run: dotnet tool install -g Amazon.Lambda.Tools
 
     - name: Build
       run: dotnet build -c Release
@@ -40,5 +49,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Deploy static site to S3 bucket
+    - name: Deploy API to Lambda
+      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api
+
+    - name: Deploy app to S3
       run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete

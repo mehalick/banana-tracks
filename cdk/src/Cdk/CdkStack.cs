@@ -99,6 +99,7 @@ public class CdkStack : Stack
 		var apiResource = api.Root.AddResource("{proxy+}");
 		apiResource.AddMethod("GET", new LambdaIntegration(function));
 		apiResource.AddMethod("POST", new LambdaIntegration(function));
+		apiResource.AddMethod("OPTIONS", new LambdaIntegration(function));
 
 		var aRecord = new ARecord(this, Name("ApiARecord"), new ARecordProps
 		{

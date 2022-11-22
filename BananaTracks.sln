@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\main.yml = .github\workflows\main.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananaTracks.Api", "src\BananaTracks.Api\BananaTracks.Api.csproj", "{52159FB9-D351-412A-A03D-8F31ADA29B87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Api", "src\BananaTracks.Api\BananaTracks.Api.csproj", "{52159FB9-D351-412A-A03D-8F31ADA29B87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananaTracks.Shared", "src\BananaTracks.Shared\BananaTracks.Shared.csproj", "{82401919-770F-4B3E-850B-FF6E02007BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Shared", "src\BananaTracks.Shared\BananaTracks.Shared.csproj", "{82401919-770F-4B3E-850B-FF6E02007BD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

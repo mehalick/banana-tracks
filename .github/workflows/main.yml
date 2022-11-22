@@ -41,4 +41,4 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3 bucket
-      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete >> $GITHUB_OUTPUT
+      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete

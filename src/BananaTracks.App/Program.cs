@@ -36,12 +36,10 @@ public class Program
 
 public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 {
-	public CustomAuthorizationMessageHandler(
-		IConfiguration configuration,
-		IAccessTokenProvider provider,
-		NavigationManager navigation)
+	public CustomAuthorizationMessageHandler(IAccessTokenProvider provider, NavigationManager navigation)
 		: base(provider, navigation)
 	{
-		ConfigureHandler(new[] { configuration["Api:BaseAddress"] });
+		ConfigureHandler(
+			authorizedUrls: new[] { "https://localhost:7144", "https://api.bananatracks.com" });
 	}
 }

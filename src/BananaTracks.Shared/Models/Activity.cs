@@ -1,3 +1,3 @@
 ﻿namespace BananaTracks.Shared.Models;
 
-public record Activity(string UserId, string ActivityId);
+public record Activity(string UserId, string ActivityId, string Name);

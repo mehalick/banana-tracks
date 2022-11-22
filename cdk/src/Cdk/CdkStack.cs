@@ -142,11 +142,12 @@ public class CdkStack : Stack
 			Actions = new[]
 			{
 				"dynamodb:BatchGetItem",
+				"dynamodb:BatchWriteItem",
+				"dynamodb:DescribeTable",
 				"dynamodb:GetItem",
+				"dynamodb:PutItem",
 				"dynamodb:Query",
 				"dynamodb:Scan",
-				"dynamodb:BatchWriteItem",
-				"dynamodb:PutItem",
 				"dynamodb:UpdateItem"
 			}
 		}));

@@ -3,7 +3,7 @@ using Amazon.DynamoDBv2.DataModel;
 namespace BananaTracks.Api.Entities;
 
 [DynamoDBTable("BananaTracksActivities")]
-public class Activity
+internal class Activity
 {
 	[DynamoDBHashKey]
 	public string UserId { get; set; } = default!;
@@ -11,8 +11,10 @@ public class Activity
 	[DynamoDBRangeKey]
 	public string ActivityId { get; set; } = default!;
 
+	public string Name { get; set; } = default!;
+
 	public static Shared.Models.Activity Create(Activity activity)
 	{
-		return new(activity.UserId, activity.ActivityId);
+		return new(activity.UserId, activity.ActivityId, activity.Name);
 	}
 }

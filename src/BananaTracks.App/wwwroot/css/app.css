@@ -1,5 +1,14 @@
 body {
 	margin: 0;
+	background-color: #0a0d12;
+}
+
+body, .table {
+	color: #c9d1d9;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-bottom: 1rem;
 }
 
 #app {
@@ -21,7 +30,7 @@ body {
 
 header {
 	grid-area: header;
-	background: #192129;
+	background: #11151b;
 	color: white;
 }
 
@@ -41,7 +50,7 @@ main {
 
 footer {
 	grid-area: footer;
-	background: #293947;
+	background: #11151b;
 	color: white;
 }
 
@@ -86,8 +95,18 @@ a, .btn-link {
 	box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-.content {
-	padding-top: 1.1rem;
+.table {
+	border-top: 1px solid #c9d1d9;
+	border-right: 1px solid #c9d1d9;
+	border-left: 1px solid #c9d1d9;
+}
+
+.table thead {
+	background: #11151b;
+}
+
+.table th, .table td {
+	border-bottom-color: #c9d1d9 !important;
 }
 
 .valid.modified:not([type=checkbox]) {

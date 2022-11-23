@@ -5,7 +5,6 @@ using Amazon.CDK.AWS.CloudFront;
 using Amazon.CDK.AWS.CloudFront.Origins;
 using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.IAM;
-using Amazon.CDK.AWS.IoT;
 using Amazon.CDK.AWS.Lambda;
 using Amazon.CDK.AWS.Route53;
 using Amazon.CDK.AWS.Route53.Targets;
@@ -40,7 +39,7 @@ public class CdkStack : Stack
 
 		var cloudFrontDistribution = CreateCloudFrontDistribution(bucket, certificate);
 
-		var dynamoDb = new Table(this, Name("DynamoDbActivities"), new TableProps
+		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
 		{
 			TableName = Name("Activities"),
 			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
@@ -50,7 +49,17 @@ public class CdkStack : Stack
 			PointInTimeRecovery = true
 		});
 
-		var function = CreateApiFunction(dynamoDb);
+		var routinesTable = new Table(this, Name("DynamoDbRoutines"), new TableProps
+		{
+			TableName = Name("Routines"),
+			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
+			SortKey = new Attribute{ Name = "RoutineId", Type = AttributeType.STRING },
+			BillingMode = BillingMode.PAY_PER_REQUEST,
+			RemovalPolicy = RemovalPolicy.DESTROY,
+			PointInTimeRecovery = true
+		});
+
+		var function = CreateApiFunction(activitiesTable, routinesTable);
 
 		var api = CreateApiGateway(function, certificate);
 
@@ -110,7 +119,7 @@ public class CdkStack : Stack
 		});
 	}
 
-	private Function CreateApiFunction(ITable activitiesTable)
+	private Function CreateApiFunction(ITable activitiesTable, ITable routinesTable)
 	{
 		var lambdaRole = new Role(this, Name("LambdaRole"),
 			new RoleProps
@@ -138,7 +147,7 @@ public class CdkStack : Stack
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Effect = Effect.ALLOW,
-			Resources = new[] { activitiesTable.TableArn },
+			Resources = new[] { activitiesTable.TableArn, routinesTable.TableArn },
 			Actions = new[]
 			{
 				"dynamodb:BatchGetItem",

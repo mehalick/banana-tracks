@@ -1,8 +1,8 @@
-﻿using BananaTracks.Shared;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace BananaTracks.Api.Configuration;
 
-[JsonSerializable(typeof(GetActivitiesResponse))]
+[JsonSerializable(typeof(ActivitiesListResponse))]
+[JsonSerializable(typeof(RoutinesListResponse))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 { }

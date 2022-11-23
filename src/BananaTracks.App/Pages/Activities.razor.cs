@@ -3,10 +3,10 @@
 [Authorize]
 public partial class Activities : AppComponentBase
 {
-	private GetActivitiesResponse? _response;
+	private ActivitiesListResponse? _response;
 
 	protected override async Task OnInitializedAsync()
 	{
-		_response = await HttpClient.GetFromJsonAsync<GetActivitiesResponse>(ApiRoutes.ActivitiesList);
+		_response = await HttpClient.GetFromJsonAsync<ActivitiesListResponse>(ApiRoutes.ActivitiesList);
 	}
 }

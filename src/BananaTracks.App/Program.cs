@@ -1,5 +1,5 @@
 global using BananaTracks.App.Components;
-global using BananaTracks.Shared;
+global using BananaTracks.Shared.Responses;
 global using BananaTracks.Shared.Constants;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;

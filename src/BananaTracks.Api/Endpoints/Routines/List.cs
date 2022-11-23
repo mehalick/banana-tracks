@@ -1,15 +1,15 @@
-using BananaTracks.Shared.Responses;
+﻿using BananaTracks.Shared.Responses;
 
-namespace BananaTracks.Api.Endpoints.Activities;
+namespace BananaTracks.Api.Endpoints.Routines;
 
-public class List : EndpointWithoutRequest<ActivitiesListResponse>
+public class List : EndpointWithoutRequest<RoutinesListResponse>
 {
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
 
 	public override void Configure()
 	{
-		Get(ApiRoutes.ActivitiesList);
+		Get(ApiRoutes.RoutinesList);
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
@@ -24,9 +24,9 @@ public class List : EndpointWithoutRequest<ActivitiesListResponse>
 		var userId = _httpContextAccessor.GetUserId();
 
 		var items = await _dynamoDbContext
-			.QueryAsync<Activity>(userId)
+			.QueryAsync<Routine>(userId)
 			.GetRemainingAsync(cancellationToken);
 
-		Response = new(items.Select(Activity.ToModel));
+		Response = new(items.Select(Routine.ToModel));
 	}
 }

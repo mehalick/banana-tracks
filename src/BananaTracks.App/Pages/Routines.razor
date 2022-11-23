@@ -4,3 +4,30 @@
 <PageTitle>Routines</PageTitle>
 
 <h1>Routines</h1>
+
+@if (_response is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>UserId</th>
+				<th>RoutineId</th>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var activity in _response.Routines)
+			{
+				<tr>
+					<td>@activity.UserId</td>
+					<td>@activity.RoutineId</td>
+					<td>@activity.Name</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

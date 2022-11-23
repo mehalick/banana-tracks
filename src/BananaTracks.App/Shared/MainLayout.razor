@@ -18,14 +18,26 @@
 			<small>Home</small>
 		</NavLink>
 		<AuthorizeView>
-			<NavLink href="activities">
-				<i class="fal fa-grid-2 fa-fw fa-lg"></i>
-				<small>Activities</small>
-			</NavLink>
-			<NavLink href="routines">
-				<i class="fal fa-grid-dividers fa-fw fa-lg"></i>
-				<small>Routines</small>
-			</NavLink>
+			<Authorized>
+				<NavLink href="activities">
+					<i class="fal fa-grid-2 fa-fw fa-lg"></i>
+					<small>Activities</small>
+				</NavLink>
+				<NavLink href="routines">
+					<i class="fal fa-grid-dividers fa-fw fa-lg"></i>
+					<small>Routines</small>
+				</NavLink>
+			</Authorized>
+			<Authorizing>
+				<a class="opacity-25">
+					<i class="fal fa-grid-2 fa-fw fa-lg"></i>
+					<small>Activities</small>
+				</a>
+				<a class="opacity-25">
+					<i class="fal fa-grid-dividers fa-fw fa-lg"></i>
+					<small>Routines</small>
+				</a>
+			</Authorizing>
 		</AuthorizeView>
 	</nav>
 </footer>

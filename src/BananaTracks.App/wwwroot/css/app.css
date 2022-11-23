@@ -30,7 +30,7 @@ header {
 		justify-content: space-between;
 	}
 
-	header a {
+	header a, header a:focus, header a:hover {
 		color: white;
 	}
 

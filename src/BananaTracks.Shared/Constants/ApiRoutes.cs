@@ -1,0 +1,6 @@
+﻿namespace BananaTracks.Shared.Constants;
+
+public static class ApiRoutes
+{
+	public const string ActivitiesList = "activities.list";
+}

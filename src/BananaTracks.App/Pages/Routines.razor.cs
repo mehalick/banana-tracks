@@ -1,7 +1,7 @@
 ﻿namespace BananaTracks.App.Pages;
 
 [Authorize]
-public partial class Activities : AppComponentBase
+public partial class Routines : AppComponentBase
 {
 	private GetActivitiesResponse? _response;
 

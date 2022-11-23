@@ -1,4 +1,9 @@
-using Microsoft.AspNetCore.Components;
+global using BananaTracks.App.Components;
+global using BananaTracks.Shared;
+global using BananaTracks.Shared.Constants;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Components;
+global using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -39,7 +44,6 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 	public CustomAuthorizationMessageHandler(IConfiguration configuration, IAccessTokenProvider provider, NavigationManager navigation)
 		: base(provider, navigation)
 	{
-		ConfigureHandler(new[] {configuration["Api:BaseAddress"]});
-
+		ConfigureHandler(new[] { configuration["Api:BaseAddress"] });
 	}
 }

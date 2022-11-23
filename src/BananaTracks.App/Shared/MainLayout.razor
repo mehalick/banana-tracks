@@ -1,16 +1,31 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-	<div class="sidebar">
-		<NavMenu />
+<header>
+	<div class="container">
+		<div>BananaTracks</div>
+		<div><LoginDisplay /></div>
 	</div>
-
-	<main>
-		<div class="top-row px-4 auth">
-			<LoginDisplay />
-		</div>
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
-</div>
+</header>
+<main>
+	<div class="container">
+		@Body
+	</div>
+</main>
+<footer>
+	<nav class="container">
+		<NavLink href="" Match="NavLinkMatch.All">
+			<i class="fal fa-home-alt fa-fw fa-lg"></i>
+			<small>Home</small>
+		</NavLink>
+		<AuthorizeView>
+			<NavLink href="activities">
+				<i class="fal fa-grid-2 fa-fw fa-lg"></i>
+				<small>Activities</small>
+			</NavLink>
+			<NavLink href="routines">
+				<i class="fal fa-grid-dividers fa-fw fa-lg"></i>
+				<small>Routines</small>
+			</NavLink>
+		</AuthorizeView>
+	</nav>
+</footer>

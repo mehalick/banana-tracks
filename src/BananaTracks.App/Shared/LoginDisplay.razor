@@ -2,7 +2,9 @@
 
 <AuthorizeView>
 	<Authorized>
-		Hello, @context.User.Identity?.Name!
+		<span class="d-none d-sm-inline">
+			Hello, @context.User.Identity?.Name!
+		</span>
 		<a href="#" @onclick="BeginSignOut">Log out</a>
 	</Authorized>
 	<NotAuthorized>

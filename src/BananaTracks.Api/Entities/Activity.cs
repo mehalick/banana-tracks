@@ -13,7 +13,7 @@ internal class Activity
 
 	public string Name { get; set; } = default!;
 
-	public static Shared.Models.Activity Create(Activity activity)
+	public static Shared.Models.Activity ToModel(Activity activity)
 	{
 		return new(activity.UserId, activity.ActivityId, activity.Name);
 	}

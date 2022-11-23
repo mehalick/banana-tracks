@@ -3,7 +3,8 @@
 		<Found Context="routeData">
 			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
 				<Authorizing>
-					<p>Determining session state, please wait...</p>
+					<p><i class="fa-solid fa-circle-notch fa-spin fa-lg"></i> Fetching profile...</p>
+					<p><i class="fa-solid fa-user fa-beat-fade fa-lg" style="--fa-beat-fade-opacity: 0.1; --fa-beat-fade-scale: 1.25;"></i> Fetching profile...</p>
 				</Authorizing>
 				<NotAuthorized>
 					@if (context.User.Identity?.IsAuthenticated != true)

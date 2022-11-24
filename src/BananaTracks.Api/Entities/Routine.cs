@@ -1,7 +1,7 @@
 namespace BananaTracks.Api.Entities;
 
 [DynamoDBTable("BananaTracksRoutines")]
-internal class Routine
+internal class Routine : EntityBase
 {
 	[DynamoDBHashKey]
 	public string UserId { get; set; } = default!;

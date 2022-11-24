@@ -1,13 +1,13 @@
 namespace BananaTracks.Api.Entities;
 
 [DynamoDBTable("BananaTracksActivities")]
-internal class Activity
+internal class Activity : EntityBase
 {
 	[DynamoDBHashKey]
 	public string UserId { get; set; } = default!;
 
 	[DynamoDBRangeKey]
-	public string ActivityId { get; set; } = default!;
+	public string ActivityId { get; set; } = Guid.NewGuid().ToString();
 
 	public string Name { get; set; } = default!;
 

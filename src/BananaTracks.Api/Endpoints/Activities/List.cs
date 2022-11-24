@@ -1,5 +1,3 @@
-using BananaTracks.Shared.Responses;
-
 namespace BananaTracks.Api.Endpoints.Activities;
 
 public class List : EndpointWithoutRequest<ActivitiesListResponse>
@@ -27,6 +25,6 @@ public class List : EndpointWithoutRequest<ActivitiesListResponse>
 			.QueryAsync<Activity>(userId)
 			.GetRemainingAsync(cancellationToken);
 
-		Response = new(items.Select(Activity.ToModel));
+		Response = new(items.OrderBy(i => i.Name).Select(Activity.ToModel));
 	}
 }

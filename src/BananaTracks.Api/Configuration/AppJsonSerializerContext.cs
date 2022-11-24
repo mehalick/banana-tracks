@@ -1,11 +1,10 @@
-﻿using BananaTracks.Api.Endpoints.Activities;
-using System.Text.Json.Serialization;
-using BananaTracks.Shared.Requests;
+﻿using System.Text.Json.Serialization;
 
 namespace BananaTracks.Api.Configuration;
 
-[JsonSerializable(typeof(ActivityAddRequest))]
-[JsonSerializable(typeof(ActivitiesListResponse))]
-[JsonSerializable(typeof(RoutinesListResponse))]
+[JsonSerializable(typeof(AddActivityRequest))]
+[JsonSerializable(typeof(ListActivitiesResponse))]
+[JsonSerializable(typeof(ListRoutinesResponse))]
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 { }

@@ -3,6 +3,7 @@ global using BananaTracks.Api.Configuration;
 global using BananaTracks.Api.Entities;
 global using BananaTracks.Api.Extensions;
 global using BananaTracks.Shared.Constants;
+global using BananaTracks.Shared.Models;
 global using BananaTracks.Shared.Requests;
 global using BananaTracks.Shared.Responses;
 global using FastEndpoints;

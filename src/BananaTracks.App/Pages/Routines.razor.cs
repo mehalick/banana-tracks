@@ -3,10 +3,10 @@
 [Authorize]
 public partial class Routines : AppComponentBase
 {
-	private RoutinesListResponse? _response;
+	private ListRoutinesResponse? _response;
 
 	protected override async Task OnInitializedAsync()
 	{
-		_response = await HttpClient.GetFromJsonAsync<RoutinesListResponse>(ApiRoutes.RoutinesList);
+		_response = await HttpClient.GetFromJsonAsync<ListRoutinesResponse>(ApiRoutes.RoutinesList);
 	}
 }

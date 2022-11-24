@@ -2,7 +2,7 @@
 
 namespace BananaTracks.Shared.Requests;
 
-public class ActivityAddRequest
+public class AddActivityRequest
 {
 	[Required]
 	public string Name { get; set; } = default!;

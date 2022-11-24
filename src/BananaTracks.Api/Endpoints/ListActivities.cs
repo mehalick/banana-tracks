@@ -1,6 +1,6 @@
-namespace BananaTracks.Api.Endpoints.Activities;
+namespace BananaTracks.Api.Endpoints;
 
-public class List : EndpointWithoutRequest<ActivitiesListResponse>
+public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 {
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
@@ -11,7 +11,7 @@ public class List : EndpointWithoutRequest<ActivitiesListResponse>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public List(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
+	public ListActivities(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
 	{
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
@@ -25,6 +25,9 @@ public class List : EndpointWithoutRequest<ActivitiesListResponse>
 			.QueryAsync<Activity>(userId)
 			.GetRemainingAsync(cancellationToken);
 
-		Response = new(items.OrderBy(i => i.Name).Select(Activity.ToModel));
+		Response = new()
+		{
+			Activities = items.OrderBy(i => i.Name).Select(Activity.ToModel)
+		};
 	}
 }

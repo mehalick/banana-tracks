@@ -11,8 +11,13 @@ internal class Routine
 
 	public string Name { get; set; } = default!;
 
-	public static Shared.Models.Routine ToModel(Routine activity)
+	public static RoutineModel ToModel(Routine activity)
 	{
-		return new(activity.UserId, activity.RoutineId, activity.Name);
+		return new()
+		{
+			UserId = activity.UserId, 
+			RoutineId = activity.RoutineId, 
+			Name = activity.Name
+		};
 	}
 }

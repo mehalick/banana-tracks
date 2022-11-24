@@ -1,6 +1,6 @@
-﻿namespace BananaTracks.Api.Endpoints.Activities;
+﻿namespace BananaTracks.Api.Endpoints;
 
-internal class Add : Endpoint<ActivityAddRequest>
+internal class AddActivity : Endpoint<AddActivityRequest>
 {
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
@@ -8,16 +8,16 @@ internal class Add : Endpoint<ActivityAddRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.ActivitiesAdd);
-		//SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public Add(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
+	public AddActivity(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
 	{
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
 	}
 
-	public override async Task HandleAsync(ActivityAddRequest request, CancellationToken cancellationToken)
+	public override async Task HandleAsync(AddActivityRequest request, CancellationToken cancellationToken)
 	{
 		var userId = _httpContextAccessor.GetUserId();
 

@@ -1,8 +1,6 @@
-﻿using BananaTracks.Shared.Responses;
+﻿namespace BananaTracks.Api.Endpoints;
 
-namespace BananaTracks.Api.Endpoints.Routines;
-
-public class List : EndpointWithoutRequest<RoutinesListResponse>
+public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 {
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
@@ -13,7 +11,7 @@ public class List : EndpointWithoutRequest<RoutinesListResponse>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public List(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
+	public ListRoutines(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
 	{
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
@@ -27,6 +25,9 @@ public class List : EndpointWithoutRequest<RoutinesListResponse>
 			.QueryAsync<Routine>(userId)
 			.GetRemainingAsync(cancellationToken);
 
-		Response = new(items.Select(Routine.ToModel));
+		Response = new()
+		{
+			Routines = items.OrderBy(i => i.Name).Select(Routine.ToModel)
+		};
 	}
 }

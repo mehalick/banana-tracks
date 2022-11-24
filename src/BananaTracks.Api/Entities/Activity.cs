@@ -11,8 +11,13 @@ internal class Activity : EntityBase
 
 	public string Name { get; set; } = default!;
 
-	public static Shared.Models.Activity ToModel(Activity activity)
+	public static ActivityModel ToModel(Activity activity)
 	{
-		return new(activity.UserId, activity.ActivityId, activity.Name);
+		return new()
+		{
+			UserId = activity.UserId,
+			ActivityId = activity.ActivityId,
+			Name = activity.Name
+		};
 	}
 }

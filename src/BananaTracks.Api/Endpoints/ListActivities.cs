@@ -7,7 +7,7 @@ public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 
 	public override void Configure()
 	{
-		Get(ApiRoutes.ActivitiesList);
+		Get(ApiRoutes.ListActivities);
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
@@ -21,13 +21,13 @@ public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 	{
 		var userId = _httpContextAccessor.GetUserId();
 
-		var items = await _dynamoDbContext
+		var activities = await _dynamoDbContext
 			.QueryAsync<Activity>(userId)
 			.GetRemainingAsync(cancellationToken);
 
 		Response = new()
 		{
-			Activities = items.OrderBy(i => i.Name).Select(Activity.ToModel)
+			Activities = activities.OrderBy(i => i.Name).Select(Activity.ToModel)
 		};
 	}
 }

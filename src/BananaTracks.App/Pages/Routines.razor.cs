@@ -7,6 +7,6 @@ public partial class Routines : AppComponentBase
 
 	protected override async Task OnInitializedAsync()
 	{
-		_response = await HttpClient.GetFromJsonAsync<ListRoutinesResponse>(ApiRoutes.RoutinesList);
+		_response = await HttpClient.GetFromJsonAsync<ListRoutinesResponse>(ApiRoutes.ListRoutines);
 	}
 }

@@ -6,7 +6,7 @@ public partial class AddActivity : AppComponentBase
 
 	public async Task OnValidSubmit()
 	{
-		await HttpClient.PostAsJsonAsync(ApiRoutes.ActivitiesAdd, AddActivityRequest);
+		await HttpClient.PostAsJsonAsync(ApiRoutes.AddActivity, AddActivityRequest);
 
 		NavigationManager.NavigateTo("activities");
 	}

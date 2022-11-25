@@ -3,6 +3,7 @@
 namespace BananaTracks.Api.Configuration;
 
 [JsonSerializable(typeof(AddActivityRequest))]
+[JsonSerializable(typeof(AddRoutineRequest))]
 [JsonSerializable(typeof(ListActivitiesResponse))]
 [JsonSerializable(typeof(ListRoutinesResponse))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]

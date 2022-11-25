@@ -2,8 +2,9 @@
 
 public static class ApiRoutes
 {
-	public const string ActivitiesAdd = "activities.add";
-	public const string ActivitiesList = "activities.list";
+	public const string AddActivity = "activities.add";
+	public const string AddRoutine = "routines.add";
 	public const string HealthCheck = "health.check";
-	public const string RoutinesList = "routines.list";
+	public const string ListActivities = "activities.list";
+	public const string ListRoutines = "routines.list";
 }

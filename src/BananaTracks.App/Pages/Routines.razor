@@ -11,21 +11,28 @@
 }
 else
 {
+	<p><a href="routines/add">Add Routine</a></p>
+
 	<table class="table">
 		<thead>
 			<tr>
-				<th>UserId</th>
-				<th>RoutineId</th>
 				<th>Name</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var activity in _response.Routines)
+			@foreach (var routine in _response.Routines)
 			{
 				<tr>
-					<td>@activity.UserId</td>
-					<td>@activity.RoutineId</td>
-					<td>@activity.Name</td>
+					<td>@routine.Name</td>
+					<td>
+						<ul>
+						@foreach (var i in routine.Activities)
+						{
+							<li>@i.Activity.Name</li>
+						}
+						</ul>
+					</td>
 				</tr>
 			}
 		</tbody>

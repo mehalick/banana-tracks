@@ -7,6 +7,6 @@ public partial class Activities : AppComponentBase
 
 	protected override async Task OnInitializedAsync()
 	{
-		_response = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ActivitiesList);
+		_response = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ListActivities);
 	}
 }

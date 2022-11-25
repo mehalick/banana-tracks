@@ -2,7 +2,7 @@
 
 namespace BananaTracks.Shared.Responses;
 
-public record ListRoutinesResponse
+public class ListRoutinesResponse
 {
 	public IEnumerable<RoutineModel> Routines { get; set; } = Enumerable.Empty<RoutineModel>();
 }

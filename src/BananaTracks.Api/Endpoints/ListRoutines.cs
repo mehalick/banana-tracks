@@ -7,7 +7,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 
 	public override void Configure()
 	{
-		Get(ApiRoutes.RoutinesList);
+		Get(ApiRoutes.ListRoutines);
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
@@ -21,13 +21,26 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 	{
 		var userId = _httpContextAccessor.GetUserId();
 
-		var items = await _dynamoDbContext
+		var activities = await GetActivities(userId, cancellationToken);
+
+		var routines = await _dynamoDbContext
 			.QueryAsync<Routine>(userId)
 			.GetRemainingAsync(cancellationToken);
 
 		Response = new()
 		{
-			Routines = items.OrderBy(i => i.Name).Select(Routine.ToModel)
+			Routines = routines
+				.OrderBy(i => i.Name)
+				.Select(i => Routine.ToModel(i, activities))
 		};
+	}
+
+	private async Task<Dictionary<string, Activity>> GetActivities(string userId, CancellationToken cancellationToken)
+	{
+		var activities = await _dynamoDbContext
+			.QueryAsync<Activity>(userId)
+			.GetRemainingAsync(cancellationToken);
+
+		return activities.ToDictionary(i => i.ActivityId, i => i);
 	}
 }

@@ -7,7 +7,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 
 	public override void Configure()
 	{
-		Post(ApiRoutes.ActivitiesAdd);
+		Post(ApiRoutes.AddActivity);
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 

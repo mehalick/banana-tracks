@@ -1,4 +1,4 @@
-﻿@page "/routines"
+﻿@page "/routines/list"
 @inherits AppComponentBase
 
 <PageTitle>Routines</PageTitle>
@@ -11,12 +11,13 @@
 }
 else
 {
-	<p><a href="routines/add">Add Routine</a></p>
+	<p><a href="/routines/add">Add Routine</a></p>
 
 	<table class="table">
 		<thead>
 			<tr>
 				<th>Name</th>
+				<th>Activities</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -27,12 +28,13 @@ else
 					<td>@routine.Name</td>
 					<td>
 						<ul>
-						@foreach (var i in routine.Activities)
-						{
-							<li>@i.Name</li>
-						}
+							@foreach (var i in routine.Activities)
+							{
+								<li>@i.Name</li>
+							}
 						</ul>
 					</td>
+					<td><a href="/routines/@routine.RoutineId/run">Run</a></td>
 				</tr>
 			}
 		</tbody>

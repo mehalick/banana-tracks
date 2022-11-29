@@ -1,7 +1,7 @@
 ﻿namespace BananaTracks.App.Pages;
 
 [Authorize]
-public partial class Activities : AppComponentBase
+public partial class ListActivities : AppComponentBase
 {
 	private ListActivitiesResponse? _response;
 

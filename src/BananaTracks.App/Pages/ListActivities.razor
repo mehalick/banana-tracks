@@ -1,0 +1,26 @@
+﻿@page "/activities/list"
+@inherits AppComponentBase
+
+<PageTitle>Activities</PageTitle>
+
+<h1>Activities</h1>
+
+<Loading IsLoading="_response is null">
+	<p><a href="/activities/add">Add Activity</a></p>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var activity in _response!.Activities)
+			{
+				<tr>
+					<td>@activity.Name</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</Loading>

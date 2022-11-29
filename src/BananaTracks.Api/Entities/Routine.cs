@@ -35,7 +35,11 @@ internal class Routine : EntityBase
 		{
 			UserId = routine.UserId,
 			RoutineId = routine.RoutineId,
-			Name = routine.Name
+			Name = routine.Name,
+			Activities = routine.Activities
+				.OrderBy(i => i.SortOrder)
+				.Select(RoutineActivity.ToModel)
+				.ToList()
 		};
 	}
 
@@ -71,6 +75,17 @@ internal class RoutineActivity
 	public int BreakInSeconds { get; set; }
 
 	public int SortOrder { get; set; }
+
+	public static RoutineActivityModel ToModel(RoutineActivity activity)
+	{
+		return new()
+		{
+			ActivityId = activity.ActivityId,
+			Name = activity.Name,
+			DurationInSeconds = activity.DurationInSeconds,
+			BreakInSeconds = activity.BreakInSeconds
+		};
+	}
 
 	public static RoutineActivity FromModel(RoutineActivityModel model)
 	{

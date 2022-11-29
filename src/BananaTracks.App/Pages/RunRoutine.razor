@@ -1,0 +1,22 @@
+﻿@page "/routines/{RoutineId}/run"
+@inherits AppComponentBase
+
+<PageTitle>Run Routine</PageTitle>
+
+<h1>Run Routine</h1>
+
+<Loading IsLoading="_routine is null">
+	@switch (_runStatus)
+	{
+		case RunStatus.IsPending: default:
+			<p><button type="button" @onclick="StartTimer" class="btn btn-primary">Start</button></p>
+			break;
+		case RunStatus.IsRunning:
+			<p>@_currentActivity</p>
+			<p>@_timeSince</p>
+			break;
+		case RunStatus.IsDone:
+			<p>DONE</p>
+			break;
+	}
+</Loading>

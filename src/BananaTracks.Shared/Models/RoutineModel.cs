@@ -10,7 +10,8 @@ public class RoutineModel
 
 public class RoutineActivityModel
 {
-	public ActivityModel Activity { get; set; } = default!;
+	public string ActivityId { get; set; } = default!;
+	public string Name { get; set; } = default!;
 	public int DurationInSeconds { get; set; }
 	public int BreakInSeconds { get; set; }
 }

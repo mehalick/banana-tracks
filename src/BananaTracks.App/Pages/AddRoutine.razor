@@ -1,18 +1,69 @@
 ﻿@page "/routines/add"
+@using System.Diagnostics
 @inherits AppComponentBase
 
 <PageTitle>Add Routine</PageTitle>
 
 <h1>Add Routine</h1>
 
-<EditForm Model="AddRoutineRequest" OnValidSubmit="OnValidSubmit">
+<EditForm Model="_addRoutineRequest" OnValidSubmit="OnValidSubmit">
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 
 	<div class="mb-3">
 		<label for="name" class="form-label">Name</label>
-		<InputText id="name" class="form-control" @bind-Value="AddRoutineRequest.Name" />
+		<InputText id="name" class="form-control" @bind-Value="_addRoutineRequest.Name" />
 	</div>
+
+	<Loading IsLoading="_listActivitiesResponse is null">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Activity</th>
+					<th>Duration</th>
+					<th>Break After</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var activity in _addRoutineRequest.Activities)
+				{
+					<tr>
+						<td>
+							<InputSelect @bind-Value="activity.ActivityId" class="form-select">
+								@foreach (var option in _listActivitiesResponse!.Activities)
+								{
+									<option value="@option.ActivityId">@option.Name</option>
+								}
+							</InputSelect>
+						</td>
+						<td>
+							<div class="input-group ">
+								<InputNumber @bind-Value="activity.DurationInSeconds" class="form-control" />
+								<span class="input-group-text">seconds</span>
+							</div>
+						</td>
+						<td>
+							<div class="input-group ">
+								<InputNumber @bind-Value="activity.BreakInSeconds" class="form-control" />
+								<span class="input-group-text">seconds</span>
+							</div>
+						</td>
+						<td>
+							<button type="button" @onclick="() => RemoveActivity(activity)">-</button>
+						</td>
+					</tr>
+				}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="4">
+						<button type="button" @onclick="AddActivity" class="float-end">+</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</Loading>
 
 	<button class="btn btn-primary" type="submit">Add Routine</button>
 

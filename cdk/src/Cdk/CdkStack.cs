@@ -20,7 +20,10 @@ namespace Cdk;
 public class CdkStack : Stack
 {
 	private const string DomainName = "bananatracks.com";
-
+	private const string ApiDomainName = "api.bananatracks.com";
+	private const string AppDomainName = "app.bananatracks.com";
+	private const string CdnDomainName = "cdn.bananatracks.com";
+	
 	internal CdkStack(Construct scope, string id, IStackProps props) : base(scope, id, props)
 	{
 		var bucket = CreateS3Bucket();
@@ -37,7 +40,7 @@ public class CdkStack : Stack
 			Validation = CertificateValidation.FromDns(zone)
 		});
 
-		var cloudFrontDistribution = CreateCloudFrontDistribution(bucket, certificate);
+		var (appDistribution, cdnDistribution) = CreateCloudFrontDistributions(bucket, certificate);
 
 		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
 		{
@@ -66,18 +69,23 @@ public class CdkStack : Stack
 		_ = new ARecord(this, Name("AppARecord"), new ARecordProps
 		{
 			Zone = zone,
-			RecordName = $"app.{DomainName}",
-			Target = RecordTarget.FromAlias(new CloudFrontTarget(cloudFrontDistribution))
+			RecordName = AppDomainName,
+			Target = RecordTarget.FromAlias(new CloudFrontTarget(appDistribution))
+		});
+
+		_ = new ARecord(this, Name("CdnARecord"), new ARecordProps
+		{
+			Zone = zone,
+			RecordName = CdnDomainName,
+			Target = RecordTarget.FromAlias(new CloudFrontTarget(cdnDistribution))
 		});
 
 		_ = new ARecord(this, Name("ApiARecord"), new ARecordProps
 		{
 			Zone = zone,
-			RecordName = $"api.{DomainName}",
+			RecordName = ApiDomainName,
 			Target = RecordTarget.FromAlias(new ApiGatewayDomain(api.DomainName!))
 		});
-
-		
 	}
 
 	private Bucket CreateS3Bucket()
@@ -96,27 +104,47 @@ public class CdkStack : Stack
 		});
 	}
 
-	private Distribution CreateCloudFrontDistribution(IBucket bucket, ICertificate certificate)
+	private (Distribution, Distribution) CreateCloudFrontDistributions(IBucket bucket, ICertificate certificate)
 	{
 		var identity = new OriginAccessIdentity(this, Name("CloudFrontOriginAccessIdentity"));
 		bucket.GrantRead(identity);
 
-		return new(this, Name("CloudFrontDistribution"), new DistributionProps
+		var appDistribution = new Distribution(this, Name("CloudFrontAppDistribution"), new DistributionProps
 		{
 			DefaultRootObject = "index.html",
 			DefaultBehavior = new BehaviorOptions
 			{
 				Origin = new S3Origin(bucket, new S3OriginProps
 				{
-					OriginAccessIdentity = identity
+					OriginAccessIdentity = identity,
+					OriginPath = "app"
+				}),
+				ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD_OPTIONS
+			},
+			Certificate = certificate,
+			DomainNames = new[] { AppDomainName },
+			HttpVersion = HttpVersion.HTTP2_AND_3
+		});
+
+		var cdnDistribution = new Distribution(this, Name("CloudFrontCdnDistribution"), new DistributionProps
+		{
+			DefaultBehavior = new BehaviorOptions
+			{
+				Origin = new S3Origin(bucket, new S3OriginProps
+				{
+					OriginAccessIdentity = identity,
+					OriginPath = "cdn"
 				}),
 				ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD
 			},
 			Certificate = certificate,
-			DomainNames = new[] { $"app.{DomainName}" },
+			DomainNames = new[] { CdnDomainName },
 			HttpVersion = HttpVersion.HTTP2_AND_3
 		});
+
+		return (appDistribution, cdnDistribution);
 	}
 
 	private Function CreateApiFunction(ITable activitiesTable, ITable routinesTable)
@@ -127,9 +155,6 @@ public class CdkStack : Stack
 				RoleName = Name("LambdaRole"),
 				AssumedBy = new ServicePrincipal("lambda.amazonaws.com")
 			});
-
-		//var secret = Secret.FromSecretCompleteArn(this, "MySecret", "arn:aws:secretsmanager:us-east-1:965753389244:secret:adp/rdp-IZ1HRA");
-		//secret.GrantRead(lambdaRole);
 
 		lambdaRole.AddToPolicy(new(
 			new PolicyStatementProps

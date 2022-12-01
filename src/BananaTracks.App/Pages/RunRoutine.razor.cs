@@ -10,7 +10,7 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 	private class ActivityRun
 	{
 		public RoutineActivityModel Activity { get; }
-		public bool IsCurrent { get; private set; }
+		public bool IsCurrent { get; set; }
 		public TimeSpan DurationRemaining { get; private set; }
 		public TimeSpan BreakRemaining { get; private set; }
 
@@ -40,13 +40,8 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 		{
 			_durationStart ??= DateTime.Now;
 
-			Console.WriteLine(_durationStart.Value);
-
 			IsCurrent = true;
 			DurationRemaining = _durationTime.Subtract(DateTime.Now.Subtract(_durationStart.Value));
-
-			Console.WriteLine(DurationRemaining);
-			Console.WriteLine(DurationRemaining.Ticks);
 
 			if (DurationRemaining.Ticks <= 0)
 			{
@@ -145,6 +140,8 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 				}
 			}
 		}
+
+		_activities.Last().IsCurrent = false;
 
 		_runStatus = RunStatus.IsDone;
 	}

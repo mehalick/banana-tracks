@@ -53,4 +53,4 @@ jobs:
       run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api
 
     - name: Deploy app to S3
-      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com --delete
+      run: aws s3 sync ./publish/wwwroot/ s3://bananatracks.com/app --delete

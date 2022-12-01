@@ -30,5 +30,3 @@ artifacts/
 # NPM
 node_modules
 **/wwwroot/dist/
-
-src/BananaTracks.App/wwwroot/service-bell-ring-14610.mp3

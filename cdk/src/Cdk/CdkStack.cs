@@ -26,7 +26,7 @@ public class CdkStack : Stack
 	
 	internal CdkStack(Construct scope, string id, IStackProps props) : base(scope, id, props)
 	{
-		var bucket = CreateS3Bucket();
+		var (appBucket, cdnBucket) = CreateS3Bucket();
 
 		var zone = new HostedZone(this, Name("HostedZone"), new HostedZoneProps
 		{
@@ -40,7 +40,7 @@ public class CdkStack : Stack
 			Validation = CertificateValidation.FromDns(zone)
 		});
 
-		var (appDistribution, cdnDistribution) = CreateCloudFrontDistributions(bucket, certificate);
+		var (appDistribution, cdnDistribution) = CreateCloudFrontDistributions(appBucket, cdnBucket, certificate);
 
 		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
 		{
@@ -88,11 +88,11 @@ public class CdkStack : Stack
 		});
 	}
 
-	private Bucket CreateS3Bucket()
+	private (Bucket, Bucket) CreateS3Bucket()
 	{
-		return new(this, Name("S3Bucket"), new BucketProps
+		var appBucket = new Bucket(this, Name("S3AppBucket"), new BucketProps
 		{
-			BucketName = DomainName,
+			BucketName = AppDomainName,
 			BlockPublicAccess = new(new BlockPublicAccessOptions
 			{
 				BlockPublicAcls = false
@@ -102,22 +102,37 @@ public class CdkStack : Stack
 			WebsiteIndexDocument = "index.html",
 			WebsiteErrorDocument = "index.html"
 		});
+
+		var cdnBucket = new Bucket(this, Name("S3CdnBucket"), new BucketProps
+		{
+			BucketName = CdnDomainName,
+			BlockPublicAccess = new(new BlockPublicAccessOptions
+			{
+				BlockPublicAcls = false
+			}),
+			PublicReadAccess = true,
+			RemovalPolicy = RemovalPolicy.DESTROY,
+			WebsiteIndexDocument = "index.html",
+			WebsiteErrorDocument = "index.html"
+		});
+
+		return (appBucket, cdnBucket);
 	}
 
-	private (Distribution, Distribution) CreateCloudFrontDistributions(IBucket bucket, ICertificate certificate)
+	private (Distribution, Distribution) CreateCloudFrontDistributions(IBucket appBucket, IBucket cdnBucket, ICertificate certificate)
 	{
 		var identity = new OriginAccessIdentity(this, Name("CloudFrontOriginAccessIdentity"));
-		bucket.GrantRead(identity);
+		appBucket.GrantRead(identity);
+		cdnBucket.GrantRead(identity);
 
 		var appDistribution = new Distribution(this, Name("CloudFrontAppDistribution"), new DistributionProps
 		{
 			DefaultRootObject = "index.html",
 			DefaultBehavior = new BehaviorOptions
 			{
-				Origin = new S3Origin(bucket, new S3OriginProps
+				Origin = new S3Origin(appBucket, new S3OriginProps
 				{
-					OriginAccessIdentity = identity,
-					OriginPath = "app"
+					OriginAccessIdentity = identity
 				}),
 				ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD_OPTIONS
@@ -131,10 +146,9 @@ public class CdkStack : Stack
 		{
 			DefaultBehavior = new BehaviorOptions
 			{
-				Origin = new S3Origin(bucket, new S3OriginProps
+				Origin = new S3Origin(cdnBucket, new S3OriginProps
 				{
-					OriginAccessIdentity = identity,
-					OriginPath = "cdn"
+					OriginAccessIdentity = identity
 				}),
 				ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD

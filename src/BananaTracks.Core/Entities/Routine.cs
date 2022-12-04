@@ -42,7 +42,7 @@ public class Routine : EntityBase
 			Activities = routine.Activities
 				.OrderBy(i => i.SortOrder)
 				.Select(RoutineActivity.ToModel)
-				.ToList<RoutineActivityModel>()
+				.ToList()
 		};
 	}
 

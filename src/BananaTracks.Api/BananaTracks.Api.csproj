@@ -22,8 +22,4 @@
 		<ProjectReference Include="..\BananaTracks.Shared\BananaTracks.Shared.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Entities\" />
-	</ItemGroup>
-
 </Project>

@@ -52,7 +52,7 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 			return false;
 		}
 
-		public async Task<bool> UpdateBreak(Func<Task> onComplete)
+		public async Task<bool> UpdateBreak()
 		{
 			if (_breakTime == TimeSpan.Zero)
 			{
@@ -67,7 +67,6 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 			if (BreakRemaining <= TimeSpan.Zero)
 			{
 				IsCurrent = false;
-				await onComplete();
 				return true;
 			}
 
@@ -134,8 +133,7 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 
 			while (await _timer.WaitForNextTickAsync())
 			{
-				var isComplete = await activity.UpdateBreak(async () =>
-					await JsRuntime.InvokeAsync<string>("playAudio", "dingAudio"));
+				var isComplete = await activity.UpdateBreak();
 
 				await InvokeAsync(StateHasChanged);
 

@@ -28,7 +28,7 @@ public class CdkStack : Stack
 
 	internal CdkStack(Construct scope, string id, IStackProps props) : base(scope, id, props)
 	{
-		var (appBucket, cdnBucket) = CreateS3Bucket();
+		var (appBucket, cdnBucket) = CreateS3Buckets();
 
 		var zone = new HostedZone(this, Name("HostedZone"), new HostedZoneProps
 		{
@@ -81,7 +81,7 @@ public class CdkStack : Stack
 		});
 	}
 
-	private (Bucket, Bucket) CreateS3Bucket()
+	private (Bucket, Bucket) CreateS3Buckets()
 	{
 		var appBucket = new Bucket(this, Name("S3AppBucket"), new BucketProps
 		{

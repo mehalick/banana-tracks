@@ -22,7 +22,8 @@ public class Activity : EntityBase
 		{
 			UserId = activity.UserId,
 			ActivityId = activity.ActivityId,
-			Name = activity.Name
+			Name = activity.Name,
+			AudioUrl = activity.AudioUrl
 		};
 	}
 }

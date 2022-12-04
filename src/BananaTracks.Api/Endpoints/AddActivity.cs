@@ -1,5 +1,7 @@
-﻿using Amazon.SimpleNotificationService;
+﻿using System.Text.Json;
+using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using BananaTracks.Core.Topics;
 
 namespace BananaTracks.Api.Endpoints;
 
@@ -26,7 +28,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 
 		var activity = new Activity
 		{
-			UserId = userId!,
+			UserId = userId,
 			Name = request.Name
 		};
 
@@ -37,7 +39,11 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		var publishRequest = new PublishRequest
 		{
 			TopicArn = "arn:aws:sns:us-east-1:856057347702:ActivityCreated",
-			Message = "Test Message"
+			Message = JsonSerializer.Serialize(new ActivityCreatedMessage
+			{
+				UserId = activity.UserId,
+				ActivityId = activity.ActivityId
+			})
 		};
 
 		await client.PublishAsync(publishRequest, cancellationToken);

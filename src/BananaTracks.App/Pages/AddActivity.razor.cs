@@ -8,6 +8,6 @@ public partial class AddActivity : AppComponentBase
 	{
 		await HttpClient.PostAsJsonAsync(ApiRoutes.AddActivity, AddActivityRequest);
 
-		NavigationManager.NavigateTo("activities");
+		NavigationManager.NavigateTo("activities/list");
 	}
 }

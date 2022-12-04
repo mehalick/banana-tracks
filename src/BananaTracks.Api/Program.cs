@@ -7,6 +7,7 @@ global using BananaTracks.Shared.Models;
 global using BananaTracks.Shared.Requests;
 global using BananaTracks.Shared.Responses;
 global using FastEndpoints;
+global using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 

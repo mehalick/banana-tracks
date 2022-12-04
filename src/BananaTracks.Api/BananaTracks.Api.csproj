@@ -5,8 +5,6 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>3bbc4e33-32ca-4b6b-9081-f6d66e03b85e</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\BananaTracks.Core\BananaTracks.Core.csproj" />
 		<ProjectReference Include="..\BananaTracks.Shared\BananaTracks.Shared.csproj" />
 	</ItemGroup>
 

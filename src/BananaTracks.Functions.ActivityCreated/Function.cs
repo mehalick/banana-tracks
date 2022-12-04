@@ -1,5 +1,7 @@
+using System.Text.Json;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SNSEvents;
+using BananaTracks.Core.Topics;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
@@ -20,9 +22,11 @@ public class Function
 		}
 	}
 
-	private async Task ProcessRecordAsync(SNSEvent.SNSRecord record, ILambdaContext context)
+	private static async Task ProcessRecordAsync(SNSEvent.SNSRecord record, ILambdaContext context)
 	{
-		context.Logger.LogInformation($"Processed record {record.Sns.Message}");
+		var message = JsonSerializer.Deserialize<ActivityCreatedMessage>(record.Sns.Message)!;
+
+		context.Logger.LogInformation($"Processed activity created UserId: {message.UserId} ActivityId: {message.ActivityId}");
 
 		// TODO: Do interesting work based on the new message
 		await Task.CompletedTask;

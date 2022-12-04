@@ -15,4 +15,7 @@
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
     <PackageReference Include="Amazon.Lambda.SNSEvents" Version="2.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BananaTracks.Core\BananaTracks.Core.csproj" />
+  </ItemGroup>
 </Project>

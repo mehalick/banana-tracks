@@ -48,6 +48,6 @@ public partial class AddRoutine : AppComponentBase
 
 		await HttpClient.PostAsJsonAsync(ApiRoutes.AddRoutine, _addRoutineRequest);
 
-		NavigationManager.NavigateTo("routines");
+		NavigationManager.NavigateTo("routines/list");
 	}
 }

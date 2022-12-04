@@ -4,11 +4,13 @@ using Amazon.CDK.AWS.CertificateManager;
 using Amazon.CDK.AWS.CloudFront;
 using Amazon.CDK.AWS.CloudFront.Origins;
 using Amazon.CDK.AWS.DynamoDB;
+using Amazon.CDK.AWS.Events.Targets;
 using Amazon.CDK.AWS.IAM;
 using Amazon.CDK.AWS.Lambda;
 using Amazon.CDK.AWS.Route53;
 using Amazon.CDK.AWS.Route53.Targets;
 using Amazon.CDK.AWS.S3;
+using Amazon.CDK.AWS.SNS;
 using Constructs;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 using Function = Amazon.CDK.AWS.Lambda.Function;
@@ -42,24 +44,11 @@ public class CdkStack : Stack
 
 		var (appDistribution, cdnDistribution) = CreateCloudFrontDistributions(appBucket, cdnBucket, certificate);
 
-		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
-		{
-			TableName = Name("Activities"),
-			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute{ Name = "ActivityId", Type = AttributeType.STRING },
-			BillingMode = BillingMode.PAY_PER_REQUEST,
-			RemovalPolicy = RemovalPolicy.DESTROY,
-			PointInTimeRecovery = true
-		});
+		var (activitiesTable, routinesTable) = CreateDynamoDbTables();
 
-		var routinesTable = new Table(this, Name("DynamoDbRoutines"), new TableProps
+		var topic = new Topic(this, Name("ActivityCreatedTopic"), new TopicProps
 		{
-			TableName = Name("Routines"),
-			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute{ Name = "RoutineId", Type = AttributeType.STRING },
-			BillingMode = BillingMode.PAY_PER_REQUEST,
-			RemovalPolicy = RemovalPolicy.DESTROY,
-			PointInTimeRecovery = true
+			TopicName = "ActivityCreated"
 		});
 
 		var function = CreateApiFunction(activitiesTable, routinesTable);
@@ -135,7 +124,8 @@ public class CdkStack : Stack
 					OriginAccessIdentity = identity
 				}),
 				ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD_OPTIONS
+				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+				CachePolicy = CachePolicy.CACHING_DISABLED
 			},
 			Certificate = certificate,
 			DomainNames = new[] { AppDomainName },
@@ -159,6 +149,31 @@ public class CdkStack : Stack
 		});
 
 		return (appDistribution, cdnDistribution);
+	}
+
+	private (Table, Table) CreateDynamoDbTables()
+	{
+		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
+		{
+			TableName = Name("Activities"),
+			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
+			SortKey = new Attribute{ Name = "ActivityId", Type = AttributeType.STRING },
+			BillingMode = BillingMode.PAY_PER_REQUEST,
+			RemovalPolicy = RemovalPolicy.DESTROY,
+			PointInTimeRecovery = true
+		});
+
+		var routinesTable = new Table(this, Name("DynamoDbRoutines"), new TableProps
+		{
+			TableName = Name("Routines"),
+			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
+			SortKey = new Attribute{ Name = "RoutineId", Type = AttributeType.STRING },
+			BillingMode = BillingMode.PAY_PER_REQUEST,
+			RemovalPolicy = RemovalPolicy.DESTROY,
+			PointInTimeRecovery = true
+		});
+
+		return (activitiesTable, routinesTable);
 	}
 
 	private Function CreateApiFunction(ITable activitiesTable, ITable routinesTable)

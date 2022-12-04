@@ -4,6 +4,7 @@ internal class HealthCheck : EndpointWithoutRequest
 {
 	public override void Configure()
 	{
+		AllowAnonymous();
 		Get(ApiRoutes.HealthCheck);
 	}
 

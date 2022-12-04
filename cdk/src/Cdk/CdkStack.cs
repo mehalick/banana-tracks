@@ -199,7 +199,8 @@ public class CdkStack : Stack
 					"logs:CreateLogGroup",
 					"logs:CreateLogStream",
 					"logs:PutLogEvents",
-					"polly:SynthesizeSpeech"
+					"polly:StartSpeechSynthesisTask",
+					//"polly:SynthesizeSpeech"
 				}
 			}));
 

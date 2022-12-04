@@ -5,6 +5,7 @@ using Amazon.Lambda.SQSEvents;
 using BananaTracks.Core.Entities;
 using BananaTracks.Core.Messages;
 using System.Text.Json;
+using Amazon;
 using Amazon.Polly;
 using Amazon.Polly.Model;
 
@@ -39,7 +40,7 @@ public class Function
 
 		if (activity is not null)
 		{
-			var client = new AmazonPollyClient();
+			var client = new AmazonPollyClient(RegionEndpoint.USEast1);
 
 			//var synthesizeSpeechRequest = new SynthesizeSpeechRequest
 			//{
@@ -56,7 +57,7 @@ public class Function
 				VoiceId = VoiceId.Joanna,
 				Text = activity.Name,
 				OutputS3BucketName = "cdn.bananatracks.com",
-				OutputS3KeyPrefix = "polly"
+				OutputS3KeyPrefix = "polly/"
 			});
 
 			context.Logger.LogInformation($"Synthesized text to {response.SynthesisTask.OutputUri}");

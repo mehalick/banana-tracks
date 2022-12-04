@@ -1,7 +1,10 @@
-namespace BananaTracks.Api.Entities;
+using Amazon.DynamoDBv2.DataModel;
+using BananaTracks.Shared.Models;
+
+namespace BananaTracks.Core.Entities;
 
 [DynamoDBTable("BananaTracksActivities")]
-internal class Activity : EntityBase
+public class Activity : EntityBase
 {
 	[DynamoDBHashKey]
 	public string UserId { get; set; } = default!;

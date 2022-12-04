@@ -1,3 +1,5 @@
+using BananaTracks.Core.Entities;
+
 namespace BananaTracks.Api.Endpoints;
 
 public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>

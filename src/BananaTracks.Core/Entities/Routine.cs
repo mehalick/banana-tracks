@@ -1,7 +1,10 @@
-namespace BananaTracks.Api.Entities;
+using Amazon.DynamoDBv2.DataModel;
+using BananaTracks.Shared.Models;
+
+namespace BananaTracks.Core.Entities;
 
 [DynamoDBTable("BananaTracksRoutines")]
-internal class Routine : EntityBase
+public class Routine : EntityBase
 {
 	[DynamoDBHashKey]
 	public string UserId { get; set; } = default!;
@@ -39,7 +42,7 @@ internal class Routine : EntityBase
 			Activities = routine.Activities
 				.OrderBy(i => i.SortOrder)
 				.Select(RoutineActivity.ToModel)
-				.ToList()
+				.ToList<RoutineActivityModel>()
 		};
 	}
 
@@ -60,41 +63,6 @@ internal class Routine : EntityBase
 					BreakInSeconds = i.BreakInSeconds
 				})
 				.ToList()
-		};
-	}
-}
-
-internal class RoutineActivity
-{
-	public string ActivityId { get; set; } = default!;
-
-	public string Name { get; set; } = default!;
-
-	public int DurationInSeconds { get; set; }
-
-	public int BreakInSeconds { get; set; }
-
-	public int SortOrder { get; set; }
-
-	public static RoutineActivityModel ToModel(RoutineActivity activity)
-	{
-		return new()
-		{
-			ActivityId = activity.ActivityId,
-			Name = activity.Name,
-			DurationInSeconds = activity.DurationInSeconds,
-			BreakInSeconds = activity.BreakInSeconds
-		};
-	}
-
-	public static RoutineActivity FromModel(RoutineActivityModel model)
-	{
-		return new()
-		{
-			ActivityId = model.ActivityId,
-			Name = model.Name,
-			DurationInSeconds = model.DurationInSeconds,
-			BreakInSeconds = model.BreakInSeconds
 		};
 	}
 }

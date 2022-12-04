@@ -1,6 +1,6 @@
-namespace BananaTracks.Api.Entities;
+namespace BananaTracks.Core.Entities;
 
-internal abstract class EntityBase
+public abstract class EntityBase
 {
 	public EntityStatus Status { get; set; } = EntityStatus.Active;
 

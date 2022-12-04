@@ -1,4 +1,4 @@
-﻿namespace BananaTracks.Core.Topics;
+﻿namespace BananaTracks.Core.Messages;
 
 public class ActivityCreatedMessage
 {

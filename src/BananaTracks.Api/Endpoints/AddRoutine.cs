@@ -1,4 +1,6 @@
-﻿namespace BananaTracks.Api.Endpoints;
+﻿using BananaTracks.Core.Entities;
+
+namespace BananaTracks.Api.Endpoints;
 
 internal class AddRoutine : Endpoint<AddRoutineRequest>
 {

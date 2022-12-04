@@ -6,6 +6,7 @@ using Amazon.CDK.AWS.CloudFront.Origins;
 using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.IAM;
 using Amazon.CDK.AWS.Lambda;
+using Amazon.CDK.AWS.Lambda.EventSources;
 using Amazon.CDK.AWS.Route53;
 using Amazon.CDK.AWS.Route53.Targets;
 using Amazon.CDK.AWS.S3;
@@ -45,14 +46,14 @@ public class CdkStack : Stack
 
 		var (activitiesTable, routinesTable) = CreateDynamoDbTables();
 
-		var queue = new Queue(this, Name("ActivityCreatedQueue"), new QueueProps
+		var activityCreatedQueue = new Queue(this, Name("ActivityCreatedQueue"), new QueueProps
 		{
 			QueueName = "ActivityCreated"
 		});
 
-		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, queue);
+		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, activityCreatedQueue);
 
-		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole);
+		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole, activityCreatedQueue);
 
 		var apiFunction = CreateApiFunction(lambdaRole);
 
@@ -197,7 +198,8 @@ public class CdkStack : Stack
 				{
 					"logs:CreateLogGroup",
 					"logs:CreateLogStream",
-					"logs:PutLogEvents"
+					"logs:PutLogEvents",
+					"polly:SynthesizeSpeech"
 				}
 			}));
 
@@ -232,7 +234,7 @@ public class CdkStack : Stack
 		return lambdaRole;
 	}
 
-	private Function CreateActivityCreatedFunction(IRole lambdaRole)
+	private Function CreateActivityCreatedFunction(IRole lambdaRole, IQueue activityCreatedQueue)
 	{
 		var activityCreatedFunction = new Function(this, Name("ActivityCreatedFunction"),
 			new FunctionProps
@@ -246,6 +248,8 @@ public class CdkStack : Stack
 				Runtime = Runtime.DOTNET_6,
 				Timeout = Duration.Seconds(30)
 			});
+
+		activityCreatedFunction.AddEventSource(new SqsEventSource(activityCreatedQueue));
 
 		return activityCreatedFunction;
 	}

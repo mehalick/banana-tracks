@@ -1,5 +1,6 @@
 ﻿using Amazon.SQS;
-using BananaTracks.Core.Topics;
+using BananaTracks.Core.Entities;
+using BananaTracks.Core.Messages;
 
 namespace BananaTracks.Api.Endpoints;
 

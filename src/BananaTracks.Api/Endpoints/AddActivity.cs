@@ -5,6 +5,7 @@ namespace BananaTracks.Api.Endpoints;
 
 internal class AddActivity : Endpoint<AddActivityRequest>
 {
+	private readonly IConfiguration _configuration;
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
 
@@ -14,8 +15,9 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public AddActivity(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
+	public AddActivity(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
 	{
+		_configuration = configuration;
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
 	}
@@ -34,13 +36,20 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 
 		var client = new AmazonSQSClient(Amazon.RegionEndpoint.USEast1);
 
+		var url = _configuration["AWS:SQS:ActivityCreatedQueueUrl"];
+
+		if (string.IsNullOrWhiteSpace(url))
+		{
+			url = "https://sqs.us-east-1.amazonaws.com/856057347702/ActivityCreated";
+		}
+
 		var json = JsonSerializer.Serialize(new ActivityCreatedMessage
 		{
 			UserId = activity.UserId,
 			ActivityId = activity.ActivityId
 		});
 
-		await client.SendMessageAsync("url", json, cancellationToken);
+		await client.SendMessageAsync(url, json, cancellationToken);
 
 		await SendOkAsync(cancellationToken);
 	}

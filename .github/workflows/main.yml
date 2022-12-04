@@ -52,5 +52,8 @@ jobs:
     - name: Deploy API to Lambda
       run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api
 
+    - name: Deploy ActivityCreate Function to Lambda
+      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityCreated
+
     - name: Deploy app to S3
       run: aws s3 sync ./publish/wwwroot/ s3://app.bananatracks.com --delete

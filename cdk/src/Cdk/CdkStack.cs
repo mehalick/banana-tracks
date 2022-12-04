@@ -11,6 +11,7 @@ using Amazon.CDK.AWS.Route53;
 using Amazon.CDK.AWS.Route53.Targets;
 using Amazon.CDK.AWS.S3;
 using Amazon.CDK.AWS.SNS;
+using Amazon.CDK.AWS.SNS.Subscriptions;
 using Constructs;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 using Function = Amazon.CDK.AWS.Lambda.Function;
@@ -51,9 +52,13 @@ public class CdkStack : Stack
 			TopicName = "ActivityCreated"
 		});
 
-		var function = CreateApiFunction(activitiesTable, routinesTable);
+		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, topic);
 
-		var api = CreateApiGateway(function, certificate);
+		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole, topic);
+
+		var apiFunction = CreateApiFunction(lambdaRole);
+
+		var api = CreateApiGateway(apiFunction, certificate);
 
 		_ = new ARecord(this, Name("AppARecord"), new ARecordProps
 		{
@@ -176,7 +181,7 @@ public class CdkStack : Stack
 		return (activitiesTable, routinesTable);
 	}
 
-	private Function CreateApiFunction(ITable activitiesTable, ITable routinesTable)
+	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, ITopic activityCreatedTopic)
 	{
 		var lambdaRole = new Role(this, Name("LambdaRole"),
 			new RoleProps
@@ -204,8 +209,6 @@ public class CdkStack : Stack
 			Resources = new[] { activitiesTable.TableArn, routinesTable.TableArn },
 			Actions = new[]
 			{
-				"dynamodb:BatchGetItem",
-				"dynamodb:BatchWriteItem",
 				"dynamodb:DescribeTable",
 				"dynamodb:GetItem",
 				"dynamodb:PutItem",
@@ -215,6 +218,41 @@ public class CdkStack : Stack
 			}
 		}));
 
+		lambdaRole.AddToPolicy(new(new PolicyStatementProps
+		{
+			Effect = Effect.ALLOW,
+			Resources = new[] { activityCreatedTopic.TopicArn },
+			Actions = new[]
+			{
+				"sns:Publish"
+			}
+		}));
+
+		return lambdaRole;
+	}
+
+	private Function CreateActivityCreatedFunction(IRole lambdaRole, ITopic activityCreatedTopic)
+	{
+		var activityCreatedFunction = new Function(this, Name("ActivityCreatedFunction"),
+			new FunctionProps
+			{
+				FunctionName = Name("ActivityCreatedFunction"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.ActivityCreated\bin\Release\net6.0"),
+				Description = "BananaTracks ActivityCreated Function",
+				Handler = "BananaTracks.Functions.ActivityCreated::BananaTracks.Functions.ActivityCreated.Function::FunctionHandler",
+				MemorySize = 256,
+				Role = lambdaRole,
+				Runtime = Runtime.DOTNET_6,
+				Timeout = Duration.Seconds(30)
+			});
+
+		activityCreatedTopic.AddSubscription(new LambdaSubscription(activityCreatedFunction));
+
+		return activityCreatedFunction;
+	}
+
+	private Function CreateApiFunction(IRole lambdaRole)
+	{
 		return new(this, Name("ApiLambda"),
 			new FunctionProps
 			{

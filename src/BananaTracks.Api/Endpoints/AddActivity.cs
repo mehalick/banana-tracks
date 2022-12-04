@@ -1,4 +1,7 @@
-﻿namespace BananaTracks.Api.Endpoints;
+﻿using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
+
+namespace BananaTracks.Api.Endpoints;
 
 internal class AddActivity : Endpoint<AddActivityRequest>
 {
@@ -28,6 +31,16 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		};
 
 		await _dynamoDbContext.SaveAsync(activity, cancellationToken);
+
+		var client = new AmazonSimpleNotificationServiceClient(Amazon.RegionEndpoint.USEast1);
+
+		var publishRequest = new PublishRequest
+		{
+			TopicArn = "arn:aws:sns:us-east-1:856057347702:ActivityCreated",
+			Message = "Test Message"
+		};
+
+		await client.PublishAsync(publishRequest, cancellationToken);
 
 		await SendOkAsync(cancellationToken);
 	}

@@ -4,14 +4,12 @@ using Amazon.CDK.AWS.CertificateManager;
 using Amazon.CDK.AWS.CloudFront;
 using Amazon.CDK.AWS.CloudFront.Origins;
 using Amazon.CDK.AWS.DynamoDB;
-using Amazon.CDK.AWS.Events.Targets;
 using Amazon.CDK.AWS.IAM;
 using Amazon.CDK.AWS.Lambda;
 using Amazon.CDK.AWS.Route53;
 using Amazon.CDK.AWS.Route53.Targets;
 using Amazon.CDK.AWS.S3;
-using Amazon.CDK.AWS.SNS;
-using Amazon.CDK.AWS.SNS.Subscriptions;
+using Amazon.CDK.AWS.SQS;
 using Constructs;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 using Function = Amazon.CDK.AWS.Lambda.Function;
@@ -26,7 +24,7 @@ public class CdkStack : Stack
 	private const string ApiDomainName = "api.bananatracks.com";
 	private const string AppDomainName = "app.bananatracks.com";
 	private const string CdnDomainName = "cdn.bananatracks.com";
-	
+
 	internal CdkStack(Construct scope, string id, IStackProps props) : base(scope, id, props)
 	{
 		var (appBucket, cdnBucket) = CreateS3Bucket();
@@ -47,14 +45,14 @@ public class CdkStack : Stack
 
 		var (activitiesTable, routinesTable) = CreateDynamoDbTables();
 
-		var topic = new Topic(this, Name("ActivityCreatedTopic"), new TopicProps
+		var queue = new Queue(this, Name("ActivityCreatedQueue"), new QueueProps
 		{
-			TopicName = "ActivityCreated"
+			QueueName = "ActivityCreated"
 		});
 
-		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, topic);
+		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, queue);
 
-		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole, topic);
+		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole);
 
 		var apiFunction = CreateApiFunction(lambdaRole);
 
@@ -161,8 +159,8 @@ public class CdkStack : Stack
 		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
 		{
 			TableName = Name("Activities"),
-			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute{ Name = "ActivityId", Type = AttributeType.STRING },
+			PartitionKey = new Attribute { Name = "UserId", Type = AttributeType.STRING },
+			SortKey = new Attribute { Name = "ActivityId", Type = AttributeType.STRING },
 			BillingMode = BillingMode.PAY_PER_REQUEST,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			PointInTimeRecovery = true
@@ -171,8 +169,8 @@ public class CdkStack : Stack
 		var routinesTable = new Table(this, Name("DynamoDbRoutines"), new TableProps
 		{
 			TableName = Name("Routines"),
-			PartitionKey = new Attribute{ Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute{ Name = "RoutineId", Type = AttributeType.STRING },
+			PartitionKey = new Attribute { Name = "UserId", Type = AttributeType.STRING },
+			SortKey = new Attribute { Name = "RoutineId", Type = AttributeType.STRING },
 			BillingMode = BillingMode.PAY_PER_REQUEST,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			PointInTimeRecovery = true
@@ -181,7 +179,7 @@ public class CdkStack : Stack
 		return (activitiesTable, routinesTable);
 	}
 
-	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, ITopic activityCreatedTopic)
+	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, IQueue activityCreatedQueue)
 	{
 		var lambdaRole = new Role(this, Name("LambdaRole"),
 			new RoleProps
@@ -221,17 +219,20 @@ public class CdkStack : Stack
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Effect = Effect.ALLOW,
-			Resources = new[] { activityCreatedTopic.TopicArn },
+			Resources = new[] { activityCreatedQueue.QueueArn },
 			Actions = new[]
 			{
-				"sns:Publish"
+				"sqs:ReceiveMessage",
+				"sqs:DeleteMessage",
+				"sqs:GetQueueAttributes",
+				"sqs:SendMessage"
 			}
 		}));
 
 		return lambdaRole;
 	}
 
-	private Function CreateActivityCreatedFunction(IRole lambdaRole, ITopic activityCreatedTopic)
+	private Function CreateActivityCreatedFunction(IRole lambdaRole)
 	{
 		var activityCreatedFunction = new Function(this, Name("ActivityCreatedFunction"),
 			new FunctionProps
@@ -245,8 +246,6 @@ public class CdkStack : Stack
 				Runtime = Runtime.DOTNET_6,
 				Timeout = Duration.Seconds(30)
 			});
-
-		activityCreatedTopic.AddSubscription(new LambdaSubscription(activityCreatedFunction));
 
 		return activityCreatedFunction;
 	}

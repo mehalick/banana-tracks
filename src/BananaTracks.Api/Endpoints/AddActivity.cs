@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using Amazon.SimpleNotificationService;
-using Amazon.SimpleNotificationService.Model;
+﻿using Amazon.SQS;
 using BananaTracks.Core.Topics;
 
 namespace BananaTracks.Api.Endpoints;
@@ -34,19 +32,15 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 
 		await _dynamoDbContext.SaveAsync(activity, cancellationToken);
 
-		var client = new AmazonSimpleNotificationServiceClient(Amazon.RegionEndpoint.USEast1);
+		var client = new AmazonSQSClient(Amazon.RegionEndpoint.USEast1);
 
-		var publishRequest = new PublishRequest
+		var json = JsonSerializer.Serialize(new ActivityCreatedMessage
 		{
-			TopicArn = "arn:aws:sns:us-east-1:856057347702:ActivityCreated",
-			Message = JsonSerializer.Serialize(new ActivityCreatedMessage
-			{
-				UserId = activity.UserId,
-				ActivityId = activity.ActivityId
-			})
-		};
+			UserId = activity.UserId,
+			ActivityId = activity.ActivityId
+		});
 
-		await client.PublishAsync(publishRequest, cancellationToken);
+		await client.SendMessageAsync("url", json, cancellationToken);
 
 		await SendOkAsync(cancellationToken);
 	}

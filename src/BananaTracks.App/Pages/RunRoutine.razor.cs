@@ -114,6 +114,11 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 		{
 			Console.WriteLine($"[StartTimer] Activity: {activity.Activity.Name}");
 
+			if (!string.IsNullOrWhiteSpace(activity.Activity.AudioUrl))
+			{
+				await JsRuntime.InvokeAsync<string>("playAudio", $"audio-{activity.Activity.ActivityId}");
+			}
+
 			while (await _timer.WaitForNextTickAsync())
 			{
 				var isComplete = await activity.UpdateDuration(async () =>

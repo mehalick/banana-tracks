@@ -14,4 +14,5 @@ public class RoutineActivityModel
 	public string Name { get; set; } = default!;
 	public int DurationInSeconds { get; set; }
 	public int BreakInSeconds { get; set; }
+	public string AudioUrl { get; set; } = default!;
 }

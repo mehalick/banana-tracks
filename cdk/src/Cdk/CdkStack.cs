@@ -51,7 +51,7 @@ public class CdkStack : Stack
 			QueueName = "ActivityCreated"
 		});
 
-		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, activityCreatedQueue);
+		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, activityCreatedQueue, cdnBucket);
 
 		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole, activityCreatedQueue);
 
@@ -180,7 +180,7 @@ public class CdkStack : Stack
 		return (activitiesTable, routinesTable);
 	}
 
-	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, IQueue activityCreatedQueue)
+	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, IQueue activityCreatedQueue, IBucket cdnBucket)
 	{
 		var lambdaRole = new Role(this, Name("LambdaRole"),
 			new RoleProps
@@ -229,6 +229,16 @@ public class CdkStack : Stack
 				"sqs:DeleteMessage",
 				"sqs:GetQueueAttributes",
 				"sqs:SendMessage"
+			}
+		}));
+
+		lambdaRole.AddToPolicy(new(new PolicyStatementProps
+		{
+			Effect = Effect.ALLOW,
+			Resources = new[] { cdnBucket.BucketArn },
+			Actions = new[]
+			{
+				"s3:PutObject"
 			}
 		}));
 

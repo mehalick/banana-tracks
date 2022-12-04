@@ -14,6 +14,8 @@ public class RoutineActivity
 
 	public int SortOrder { get; set; }
 
+	public string AudioUrl { get; set; } = default!;
+	
 	public static RoutineActivityModel ToModel(RoutineActivity activity)
 	{
 		return new()
@@ -21,8 +23,8 @@ public class RoutineActivity
 			ActivityId = activity.ActivityId,
 			Name = activity.Name,
 			DurationInSeconds = activity.DurationInSeconds,
-			BreakInSeconds = activity.BreakInSeconds
-		};
+			BreakInSeconds = activity.BreakInSeconds,
+			AudioUrl = activity.AudioUrl};
 	}
 
 	public static RoutineActivity FromModel(RoutineActivityModel model)
@@ -32,7 +34,8 @@ public class RoutineActivity
 			ActivityId = model.ActivityId,
 			Name = model.Name,
 			DurationInSeconds = model.DurationInSeconds,
-			BreakInSeconds = model.BreakInSeconds
+			BreakInSeconds = model.BreakInSeconds,
+			AudioUrl = model.AudioUrl
 		};
 	}
 }

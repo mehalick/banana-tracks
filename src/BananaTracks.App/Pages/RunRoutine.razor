@@ -25,7 +25,13 @@
 							<strong>*</strong>
 						}
 					</td>
-					<td>@activity.Activity.Name</td>
+					<td>
+						@activity.Activity.Name
+						@if (!string.IsNullOrWhiteSpace(activity.Activity.AudioUrl))
+						{
+							<audio id="audio-@activity.Activity.ActivityId" src="@activity.Activity.AudioUrl" ></audio>
+						}
+					</td>
 					<td>@DisplayTime(activity.DurationRemaining)</td>
 					<td>@DisplayTime(activity.BreakRemaining)</td>
 				</tr>

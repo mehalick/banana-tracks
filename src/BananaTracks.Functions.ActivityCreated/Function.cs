@@ -61,6 +61,12 @@ public class Function
 			});
 
 			context.Logger.LogInformation($"Synthesized text to {response.SynthesisTask.OutputUri}");
+
+			var url = response.SynthesisTask.OutputUri.Replace("https://s3.us-east-1.amazonaws.com/", "https://");
+
+			activity.AudioUrl = url;
+
+			await _dynamoDbContext.SaveAsync(activity);
 		}
 
 		await Task.CompletedTask;

@@ -14,6 +14,8 @@ public class Activity : EntityBase
 
 	public string Name { get; set; } = default!;
 
+	public string AudioUrl { get; set; } = default!;
+
 	public static ActivityModel ToModel(Activity activity)
 	{
 		return new()

@@ -80,7 +80,7 @@ public class Program
 		{
 			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 			builder.Services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
-			builder.Services.AddSingleton(() => new AmazonSQSClient(region));
+			builder.Services.AddSingleton<IAmazonSQS>(_ => new AmazonSQSClient(region));
 		}
 		else
 		{
@@ -89,7 +89,7 @@ public class Program
 			var credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
 
 			builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(credentials));
-			builder.Services.AddSingleton(_ => new AmazonSQSClient(credentials, region));
+			builder.Services.AddSingleton<IAmazonSQS>(_ => new AmazonSQSClient(credentials, region));
 		}
 
 		builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();

@@ -9,7 +9,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 	private readonly IConfiguration _configuration;
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
-	private readonly AmazonSQSClient _sqsClient;
+	private readonly IAmazonSQS _sqsClient;
 
 	public override void Configure()
 	{
@@ -17,7 +17,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public AddActivity(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, AmazonSQSClient sqsClient)
+	public AddActivity(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, IAmazonSQS sqsClient)
 	{
 		_configuration = configuration;
 		_httpContextAccessor = httpContextAccessor;

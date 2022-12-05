@@ -86,12 +86,12 @@ h1:focus {
 	outline: none;
 }
 
-a, .btn-link {
-	color: #0071c1;
+a, a:hover, a:focus, .btn-link {
+	color: white;
 }
 
 .btn-primary {
-	color: #fff;
+	color: white;
 	background-color: #1b6ec2;
 	border-color: #1861ac;
 }

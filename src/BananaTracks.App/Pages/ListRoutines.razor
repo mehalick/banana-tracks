@@ -5,38 +5,33 @@
 
 <h1>Routines</h1>
 
-@if (_response is null)
-{
-	<p><em>Loading...</em></p>
-}
-else
-{
+<Loading IsLoading="_response is null">
 	<p><a href="/routines/add">Add Routine</a></p>
 
 	<table class="table">
 		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Activities</th>
-				<th></th>
-			</tr>
+		<tr>
+			<th>Name</th>
+			<th>Activities</th>
+			<th></th>
+		</tr>
 		</thead>
 		<tbody>
-			@foreach (var routine in _response.Routines)
-			{
-				<tr>
-					<td>@routine.Name</td>
-					<td>
-						<ul>
-							@foreach (var i in routine.Activities)
-							{
-								<li>@i.Name</li>
-							}
-						</ul>
-					</td>
-					<td><a href="/routines/@routine.RoutineId/run">Run</a></td>
-				</tr>
-			}
+		@foreach (var routine in _response!.Routines)
+		{
+			<tr>
+				<td>@routine.Name</td>
+				<td>
+					<ul>
+						@foreach (var i in routine.Activities)
+						{
+							<li>@i.Name</li>
+						}
+					</ul>
+				</td>
+				<td><a href="/routines/@routine.RoutineId/start">Start</a></td>
+			</tr>
+		}
 		</tbody>
 	</table>
-}
+</Loading>

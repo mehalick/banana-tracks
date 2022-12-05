@@ -1,11 +1,9 @@
 ﻿using BananaTracks.Shared.Models;
-using Humanizer;
 using Microsoft.JSInterop;
-using TimeSpan = System.TimeSpan;
 
 namespace BananaTracks.App.Pages;
 
-public partial class RunRoutine : AppComponentBase, IDisposable
+public partial class StartRoutine : AppComponentBase, IDisposable
 {
 	private class ActivityRun
 	{
@@ -52,7 +50,7 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 			return false;
 		}
 
-		public async Task<bool> UpdateBreak()
+		public bool UpdateBreak()
 		{
 			if (_breakTime == TimeSpan.Zero)
 			{
@@ -133,7 +131,7 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 
 			while (await _timer.WaitForNextTickAsync())
 			{
-				var isComplete = await activity.UpdateBreak();
+				var isComplete = activity.UpdateBreak();
 
 				await InvokeAsync(StateHasChanged);
 
@@ -155,7 +153,7 @@ public partial class RunRoutine : AppComponentBase, IDisposable
 		{
 			return "";
 		}
-		
+
 		var ts = TimeSpan.FromSeconds(Math.Round(timeSpan.TotalSeconds));
 
 		return $"{ts.Minutes:00}:{ts.Seconds:00}";

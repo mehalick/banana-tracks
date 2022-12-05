@@ -9,6 +9,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 	private readonly IConfiguration _configuration;
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
+	private readonly AmazonSQSClient _sqsClient;
 
 	public override void Configure()
 	{
@@ -16,14 +17,24 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public AddActivity(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
+	public AddActivity(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, AmazonSQSClient sqsClient)
 	{
 		_configuration = configuration;
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
+		_sqsClient = sqsClient;
 	}
 
 	public override async Task HandleAsync(AddActivityRequest request, CancellationToken cancellationToken)
+	{
+		var activity = await SaveActivity(request, cancellationToken);
+
+		await SendActivityCreatedMessage(activity, cancellationToken);
+
+		await SendOkAsync(cancellationToken);
+	}
+
+	private async Task<Activity> SaveActivity(AddActivityRequest request, CancellationToken cancellationToken)
 	{
 		var userId = _httpContextAccessor.GetUserId();
 
@@ -34,15 +45,13 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		};
 
 		await _dynamoDbContext.SaveAsync(activity, cancellationToken);
+		
+		return activity;
+	}
 
-		var client = new AmazonSQSClient(Amazon.RegionEndpoint.USEast1);
-
+	private async Task SendActivityCreatedMessage(Activity activity, CancellationToken cancellationToken)
+	{
 		var url = _configuration["AWS:SQS:ActivityCreatedQueueUrl"];
-
-		if (string.IsNullOrWhiteSpace(url))
-		{
-			url = "https://sqs.us-east-1.amazonaws.com/856057347702/ActivityCreated";
-		}
 
 		var json = JsonSerializer.Serialize(new ActivityCreatedMessage
 		{
@@ -50,8 +59,6 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 			ActivityId = activity.ActivityId
 		});
 
-		await client.SendMessageAsync(url, json, cancellationToken);
-
-		await SendOkAsync(cancellationToken);
+		await _sqsClient.SendMessageAsync(url, json, cancellationToken);
 	}
 }

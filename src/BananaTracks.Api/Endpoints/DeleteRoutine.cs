@@ -32,7 +32,8 @@ internal class DeleteRoutine : Endpoint<DeleteRoutineRequest>
 			}
 			else
 			{
-				routine.Status = EntityStatus.Archived;
+				routine.Archive();
+
 				await _dynamoDbContext.SaveAsync(routine, cancellationToken);
 			}
 		}

@@ -103,21 +103,27 @@ public class CdkStack : Stack
 			{
 				BlockPublicAcls = false
 			}),
+			EnforceSSL = true,
 			PublicReadAccess = true,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			WebsiteIndexDocument = "index.html",
 			WebsiteErrorDocument = "index.html"
 		});
 
-		//cdnBucket.AddToResourcePolicy(new(new PolicyStatementProps
-		//{
-		//	Effect = Effect.ALLOW,
-		//	Resources = new[] { "*" },
-		//	Actions = new[]
-		//	{
-		//		"s3:PutObject"
-		//	}
-		//}));
+		cdnBucket.AddToResourcePolicy(new(new PolicyStatementProps
+		{
+			Effect = Effect.ALLOW,
+			Principals = new IPrincipal[]{ new AnyPrincipal() },
+			Resources = new[]
+			{
+				cdnBucket.ArnForObjects("polly"), 
+				cdnBucket.ArnForObjects("polly/*")
+			},
+			Actions = new[]
+			{
+				"s3:PutObject"
+			}
+		}));
 
 		return (appBucket, cdnBucket);
 	}

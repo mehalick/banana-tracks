@@ -32,7 +32,8 @@ internal class DeleteActivity : Endpoint<DeleteActivityRequest>
 			}
 			else
 			{
-				activity.Status = EntityStatus.Archived;
+				activity.Archive();
+				
 				await _dynamoDbContext.SaveAsync(activity, cancellationToken);
 			}
 		}

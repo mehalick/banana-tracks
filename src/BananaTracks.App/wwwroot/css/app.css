@@ -1,3 +1,5 @@
+@import url(theme.css);
+
 html, body {
 	width: 100%;
 	height: 100%;
@@ -5,11 +7,11 @@ html, body {
 }
 
 body {
-	background-color: #0a0d12;
+	background-color: var(--md-sys-color-surface);
 }
 
 body, .table {
-	color: #c9d1d9;
+	color: var(--md-sys-color-on-surface);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -35,17 +37,11 @@ h1, h2, h3, h4, h5, h6 {
 
 header {
 	grid-area: header;
-	background: #11151b;
-	color: white;
 }
 
 	header .container {
 		display: flex;
 		justify-content: space-between;
-	}
-
-	header a, header a:focus, header a:hover {
-		color: white;
 	}
 
 main {
@@ -56,7 +52,6 @@ main {
 footer {
 	grid-area: footer;
 	background: #11151b;
-	color: white;
 }
 
 	footer nav {
@@ -72,7 +67,6 @@ nav a {
 }
 
 	nav a, nav a:focus, nav a:hover {
-		color: #fff;
 		text-decoration: none;
 	}
 
@@ -86,32 +80,58 @@ h1:focus {
 	outline: none;
 }
 
-a, a:hover, a:focus, .btn-link {
-	color: white;
+a, .btn-link {
+	color: var(--md-sys-color-on-surface);
 }
+
+	a:hover, a:focus {
+		color: var(--md-sys-color-primary);
+	}
 
 .btn-primary {
-	color: white;
-	background-color: #1b6ec2;
-	border-color: #1861ac;
+	color: var(--md-sys-color-on-secondary-container);
+	background-color: var(--md-sys-color-secondary-container);
+	border-color: var(--md-sys-color-secondary-container);
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-	box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+	.btn-primary:hover, .btn-primary:focus {
+		color: var(--md-sys-color-on-primary-container);
+		background-color: var(--md-sys-color-primary-container);
+		border-color: var(--md-sys-color-primary-container);
+	}
+
+.btn-secondary {
+	color: var(--md-sys-color-on-tertiary-container);
+	background-color: var(--md-sys-color-tertiary-container);
+	border-color: var(--md-sys-color-tertiary-container);
 }
+
+	.btn-secondary:hover, .btn-secondary:focus {
+		color: var(--md-sys-color-on-secondary-container);
+		background-color: var(--md-sys-color-secondary-container);
+		border-color: var(--md-sys-color-secondary-container);
+	}
+
+.btn {
+	min-width: 38px;
+}
+
+	.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+		box-shadow: 0 0 0 0.1rem var(--md-sys-color-on-surface), 0 0 0 0.25rem var(--md-sys-color-primary-container);
+	}
 
 .table {
-	border-top: 1px solid #c9d1d9;
-	border-right: 1px solid #c9d1d9;
-	border-left: 1px solid #c9d1d9;
+	border-top: 1px solid var(--md-sys-color-outline);
+	border-right: 1px solid var(--md-sys-color-outline);
+	border-left: 1px solid var(--md-sys-color-outline);
 }
 
 	.table thead {
-		background: #11151b;
+		background: var(--md-sys-color-surface);
 	}
 
 	.table th, .table td {
-		border-bottom-color: #c9d1d9 !important;
+		border-bottom-color: var(--md-sys-color-outline) !important;
 	}
 
 		.table th.fit-cell, .table td.fit-cell {

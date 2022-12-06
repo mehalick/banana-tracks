@@ -49,7 +49,7 @@
 							</div>
 						</td>
 						<td>
-							<button type="button" @onclick="() => RemoveActivity(activity)">-</button>
+							<button type="button" @onclick="() => RemoveActivity(activity)" class="btn btn-primary">-</button>
 						</td>
 					</tr>
 				}
@@ -57,13 +57,13 @@
 			<tfoot>
 				<tr>
 					<td colspan="4">
-						<button type="button" @onclick="AddActivity" class="float-end">+</button>
+						<button type="button" @onclick="AddActivity" class="btn btn-primary float-end">+</button>
 					</td>
 				</tr>
 			</tfoot>
 		</table>
 	</Loading>
 
-	<button class="btn btn-primary" type="submit">Add Routine</button>
+	<button type="submit" class="btn btn-primary">Add Routine</button>
 
 </EditForm>

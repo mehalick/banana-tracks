@@ -1,6 +1,4 @@
-﻿using BananaTracks.Core.Entities;
-
-namespace BananaTracks.Api.Endpoints;
+﻿namespace BananaTracks.Api.Endpoints;
 
 public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 {
@@ -32,6 +30,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 		Response = new()
 		{
 			Routines = routines
+				.Active()
 				.OrderBy(i => i.Name)
 				.Select(i => Routine.ToModel(i, activities))
 		};
@@ -43,6 +42,8 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 			.QueryAsync<Activity>(userId)
 			.GetRemainingAsync(cancellationToken);
 
-		return activities.ToDictionary(i => i.ActivityId, i => i);
+		return activities
+			.Active()
+			.ToDictionary(i => i.ActivityId, i => i);
 	}
 }

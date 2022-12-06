@@ -1,5 +1,3 @@
-using BananaTracks.Core.Entities;
-
 namespace BananaTracks.Api.Endpoints;
 
 public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
@@ -29,7 +27,10 @@ public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 
 		Response = new()
 		{
-			Activities = activities.OrderBy(i => i.Name).Select(Activity.ToModel)
+			Activities = activities
+				.Active()
+				.OrderBy(i => i.Name)
+				.Select(Activity.ToModel)
 		};
 	}
 }

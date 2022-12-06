@@ -6,32 +6,41 @@
 <h1>Routines</h1>
 
 <Loading IsLoading="_response is null">
-	<p><a href="/routines/add">Add Routine</a></p>
+
+	<ul class="link-list">
+		<li><a href="/routines/add">Add Routine</a></li>
+	</ul>
 
 	<table class="table">
 		<thead>
-		<tr>
-			<th>Name</th>
-			<th>Activities</th>
-			<th></th>
-		</tr>
+			<tr>
+				<th>Name</th>
+				<th>Activities</th>
+				<th></th>
+				<th></th>
+			</tr>
 		</thead>
 		<tbody>
-		@foreach (var routine in _response!.Routines)
-		{
-			<tr>
-				<td>@routine.Name</td>
-				<td>
-					<ul>
-						@foreach (var i in routine.Activities)
-						{
-							<li>@i.Name</li>
-						}
-					</ul>
-				</td>
-				<td><a href="/routines/@routine.RoutineId/start">Start</a></td>
-			</tr>
-		}
+			@foreach (var routine in _response!.Routines)
+			{
+				<tr>
+					<td>@routine.Name</td>
+					<td>
+						<ul>
+							@foreach (var i in routine.Activities)
+							{
+								<li>@i.Name</li>
+							}
+						</ul>
+					</td>
+					<td class="fit-cell">
+						<a href="/routines/@routine.RoutineId/start" class="btn btn-light">Start &rsaquo;</a>
+					</td>
+					<td class="fit-cell">
+						<a href="/routines/@routine.RoutineId/delete" class="btn btn-light">Delete</a>
+					</td>
+				</tr>
+			}
 		</tbody>
 	</table>
 </Loading>

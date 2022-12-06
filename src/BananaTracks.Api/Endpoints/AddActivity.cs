@@ -1,6 +1,4 @@
 ﻿using Amazon.SQS;
-using BananaTracks.Core.Entities;
-using BananaTracks.Core.Messages;
 
 namespace BananaTracks.Api.Endpoints;
 
@@ -45,7 +43,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		};
 
 		await _dynamoDbContext.SaveAsync(activity, cancellationToken);
-		
+
 		return activity;
 	}
 
@@ -53,11 +51,11 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 	{
 		var url = _configuration["AWS:SQS:ActivityCreatedQueueUrl"];
 
-		var json = JsonSerializer.Serialize(new ActivityCreatedMessage
+		var json = JsonSerializer.Serialize(new()
 		{
 			UserId = activity.UserId,
 			ActivityId = activity.ActivityId
-		});
+		}, AppJsonSerializerContext.Default.ActivityCreatedMessage);
 
 		await _sqsClient.SendMessageAsync(url, json, cancellationToken);
 	}

@@ -109,6 +109,16 @@ public class CdkStack : Stack
 			WebsiteErrorDocument = "index.html"
 		});
 
+		//cdnBucket.AddToResourcePolicy(new(new PolicyStatementProps
+		//{
+		//	Effect = Effect.ALLOW,
+		//	Resources = new[] { "*" },
+		//	Actions = new[]
+		//	{
+		//		"s3:PutObject"
+		//	}
+		//}));
+
 		return (appBucket, cdnBucket);
 	}
 
@@ -199,8 +209,7 @@ public class CdkStack : Stack
 					"logs:CreateLogGroup",
 					"logs:CreateLogStream",
 					"logs:PutLogEvents",
-					"polly:StartSpeechSynthesisTask",
-					//"polly:SynthesizeSpeech"
+					"polly:StartSpeechSynthesisTask"
 				}
 			}));
 

@@ -14,41 +14,11 @@ public class Routine : EntityBase
 
 	public string Name { get; set; } = default!;
 
-	//public string ActivitiesJson { get; set; } = default!;
-
-	//public List<RoutineActivity> Activities
-	//{
-	//	get
-	//	{
-	//		if (string.IsNullOrWhiteSpace(ActivitiesJson))
-	//		{
-	//			return new();
-	//		}
-
-	//		return JsonSerializer.Deserialize(ActivitiesJson, AppJsonSerializerContext.Default.ListRoutineActivity) ?? new List<RoutineActivity>();
-	//	}
-	//	set => ActivitiesJson = JsonSerializer.Serialize(value, AppJsonSerializerContext.Default.ListRoutineActivity);
-	//}
-
-	public List<RoutineActivity> Activities { get; set; } = new List<RoutineActivity>();
-
-	public static RoutineModel ToModel(Routine routine)
-	{
-		return new()
-		{
-			UserId = routine.UserId,
-			RoutineId = routine.RoutineId,
-			Name = routine.Name,
-			Activities = routine.Activities
-				.OrderBy(i => i.SortOrder)
-				.Select(RoutineActivity.ToModel)
-				.ToList()
-		};
-	}
+	public List<RoutineActivity> Activities { get; set; } = new();
 
 	public static RoutineModel ToModel(Routine routine, Dictionary<string, Activity> activities)
 	{
-		return new()
+		var routineModel = new RoutineModel
 		{
 			UserId = routine.UserId,
 			RoutineId = routine.RoutineId,
@@ -57,12 +27,28 @@ public class Routine : EntityBase
 				.OrderBy(i => i.SortOrder)
 				.Select(i => new RoutineActivityModel
 				{
-					ActivityId = activities[i.ActivityId].ActivityId,
-					Name = activities[i.ActivityId].Name,
+					ActivityId = i.ActivityId,
 					DurationInSeconds = i.DurationInSeconds,
 					BreakInSeconds = i.BreakInSeconds
 				})
 				.ToList()
 		};
+
+		for (var i = 0; i < routineModel.Activities.Count; i++)
+		{
+			var routineActivityModel = routineModel.Activities[i];
+
+			if (activities.TryGetValue(routineActivityModel.ActivityId, out var activity))
+			{
+				routineActivityModel.Name = activity.Name;
+				routineActivityModel.AudioUrl = activity.AudioUrl;
+			}
+			else
+			{
+				routineModel.Activities.RemoveAt(i);
+			}
+		}
+
+		return routineModel;
 	}
 }

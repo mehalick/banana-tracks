@@ -1,6 +1,7 @@
 global using Amazon.DynamoDBv2.DataModel;
-global using BananaTracks.Api.Configuration;
 global using BananaTracks.Api.Extensions;
+global using BananaTracks.Core.Configuration;
+global using BananaTracks.Core.Entities;
 global using BananaTracks.Shared.Constants;
 global using BananaTracks.Shared.Requests;
 global using BananaTracks.Shared.Responses;

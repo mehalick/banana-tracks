@@ -8,8 +8,8 @@ internal class HealthCheck : EndpointWithoutRequest
 		Get(ApiRoutes.HealthCheck);
 	}
 
-	public override async Task HandleAsync(CancellationToken ct)
+	public override async Task HandleAsync(CancellationToken cancellationToken)
 	{
-		await SendOkAsync(ct);
+		await SendOkAsync(cancellationToken);
 	}
 }

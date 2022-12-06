@@ -6,12 +6,17 @@
 <h1>Activities</h1>
 
 <Loading IsLoading="_response is null">
-	<p><a href="/activities/add">Add Activity</a></p>
+	
+	<ul class="link-list">
+			<lil><a href="/activities/add">Add Activity</a></lil>
+	</ul>
 
 	<table class="table">
 		<thead>
 			<tr>
 				<th>Name</th>
+				<th></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -19,6 +24,15 @@
 			{
 				<tr>
 					<td>@activity.Name</td>
+					<td class="fit-cell">
+						@if (!string.IsNullOrWhiteSpace(activity.AudioUrl))
+						{
+							<a href="@activity.AudioUrl">Audio</a>
+						}
+					</td>
+					<td class="fit-cell">
+						<a href="/activities/@activity.ActivityId/delete">Delete</a>
+					</td>
 				</tr>
 			}
 		</tbody>

@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Shared", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Functions.ActivityCreated", "src\BananaTracks.Functions.ActivityCreated\BananaTracks.Functions.ActivityCreated.csproj", "{8DE33FAF-410C-4FEE-A840-E321AFACCCDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BananaTracks.Core", "src\BananaTracks.Core\BananaTracks.Core.csproj", "{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Core", "src\BananaTracks.Core\BananaTracks.Core.csproj", "{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -106,13 +106,34 @@ a, a:hover, a:focus, .btn-link {
 	border-left: 1px solid #c9d1d9;
 }
 
-.table thead {
-	background: #11151b;
+	.table thead {
+		background: #11151b;
+	}
+
+	.table th, .table td {
+		border-bottom-color: #c9d1d9 !important;
+	}
+
+		.table th.fit-cell, .table td.fit-cell {
+			width: 1%;
+			white-space: nowrap;
+		}
+
+.link-list {
+	margin: 0 -4px 1em -4px;
+	padding: 0;
+	list-style: none;
+	text-align: right;
 }
 
-.table th, .table td {
-	border-bottom-color: #c9d1d9 !important;
-}
+	.link-list li {
+		display: inline;
+	}
+
+		.link-list li > a {
+			display: inline-block;
+			margin: 0 4px;
+		}
 
 .valid.modified:not([type=checkbox]) {
 	outline: 1px solid #26b050;

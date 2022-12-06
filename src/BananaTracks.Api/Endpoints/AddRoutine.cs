@@ -1,6 +1,4 @@
-﻿using BananaTracks.Core.Entities;
-
-namespace BananaTracks.Api.Endpoints;
+﻿namespace BananaTracks.Api.Endpoints;
 
 internal class AddRoutine : Endpoint<AddRoutineRequest>
 {
@@ -31,6 +29,11 @@ internal class AddRoutine : Endpoint<AddRoutineRequest>
 				.Select(RoutineActivity.FromModel)
 				.ToList()
 		};
+
+		for (var i = 1; i <= routine.Activities.Count; i++)
+		{
+			routine.Activities[i].SortOrder = i;
+		}
 
 		await _dynamoDbContext.SaveAsync(routine, cancellationToken);
 

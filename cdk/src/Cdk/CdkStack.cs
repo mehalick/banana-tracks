@@ -103,7 +103,6 @@ public class CdkStack : Stack
 			{
 				BlockPublicAcls = false
 			}),
-			EnforceSSL = true,
 			PublicReadAccess = true,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			WebsiteIndexDocument = "index.html",

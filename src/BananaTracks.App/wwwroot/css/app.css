@@ -160,12 +160,15 @@ a, .btn-link {
 	color: var(--bt-white);
 }
 
-.card .card-footer {
-	background-color: var(--bt-accent-tertiary);
-}
+	.card .card-footer {
+		background-color: var(--bt-accent-tertiary);
+		border-color: var(--bt-accent-tertiary);
+		border-width: 2px;
+	}
 
 	.card.card-active {
 		background-color: #0f5132;
+		border-color: #0f5132;
 	}
 
 .link-list {
@@ -183,6 +186,11 @@ a, .btn-link {
 			display: inline-block;
 			margin: 0 4px;
 		}
+
+.timer {
+	font-family: var(--bs-font-monospace);
+	font-size: 1.25rem !important;
+}
 
 .valid.modified:not([type=checkbox]) {
 	outline: 1px solid #26b050;
@@ -230,35 +238,6 @@ a, .btn-link {
 		content: "An error has occurred."
 	}
 
-.loading-progress {
-	position: relative;
-	display: block;
-	width: 8rem;
-	height: 8rem;
-	margin: 20vh auto 1rem auto;
+.loading-progress-text:after {
+	content: var(--blazor-load-percentage-text, "Loading bananas... ");
 }
-
-	.loading-progress circle {
-		fill: none;
-		stroke: #e0e0e0;
-		stroke-width: 0.6rem;
-		transform-origin: 50% 50%;
-		transform: rotate(-90deg);
-	}
-
-		.loading-progress circle:last-child {
-			stroke: #1b6ec2;
-			stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-			transition: stroke-dasharray 0.05s ease-in-out;
-		}
-
-.loading-progress-text {
-	position: absolute;
-	text-align: center;
-	font-weight: bold;
-	inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
-}
-
-	.loading-progress-text:after {
-		content: var(--blazor-load-percentage-text, "Loading");
-	}

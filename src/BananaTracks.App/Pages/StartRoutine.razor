@@ -16,7 +16,7 @@
 			<p><button type="button" class="btn btn-secondary">Pause</button></p>
 			break;
 		case RunStatus.IsDone:
-			<p><button type="button" @onclick="StartTimer" class="btn btn-primary">Start</button></p>
+			<p><button type="button" class="btn btn-secondary">Done</button></p>
 			break;
 	}
 	@foreach (var activity in _activities)
@@ -33,29 +33,29 @@
 				@switch (activity.Status)
 				{
 					case ActivityStatus.IsPending:
-						<span>
-							<i class="fa-regular fa-square"></i>
-							@DisplayTime(activity.DurationRemaining) (pending)
+						<span class="d-flex align-items-center">
+							<i class="fa-regular fa-square fa-lg me-2"></i>
+							<span class="timer me-1">@DisplayTime(activity.DurationRemaining)</span>
 						</span>
 						break;
 					case ActivityStatus.IsRunning:
-						<span>
-							<i class="fa-solid fa-timer"></i>
-							@DisplayTime(activity.DurationRemaining) (running)
+						<span class="d-flex align-items-center">
+							<i class="fa-solid fa-timer fa-lg me-2"></i>
+							<span class="timer me-1">@DisplayTime(activity.DurationRemaining)</span> (running)
 						</span>
 						break;
 					case ActivityStatus.IsBreaking:
-						<span>
-							<i class="fa-solid fa-timer"></i>
-							@DisplayTime(activity.BreakRemaining) (break)
+						<span class="d-flex align-items-center">
+							<i class="fa-solid fa-timer fa-lg me-2"></i>
+							<span class="timer me-1">@DisplayTime(activity.BreakRemaining)</span> (break)
 						</span>
 						break;
 					case ActivityStatus.IsDone:
-						<span>
-							<i class="fa-solid fa-square-check"></i>
+						<span class="d-flex align-items-center">
+							<i class="fa-solid fa-square-check fa-lg me-2"></i>
 							done
 						</span>
-						
+
 						break;
 				}
 			</div>

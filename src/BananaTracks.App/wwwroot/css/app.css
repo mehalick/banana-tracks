@@ -157,6 +157,7 @@ a, .btn-link {
 	margin-bottom: 1rem;
 	background-color: var(--bt-accent-secondary);
 	border-color: var(--bt-accent-secondary);
+	border-width: 2px;
 	color: var(--bt-white);
 }
 

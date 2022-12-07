@@ -31,20 +31,24 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 		private DateTime? _durationStart;
 		private DateTime? _breakState;
 
-		public async Task<bool> UpdateDuration(Func<Task> onComplete)
+		public async Task<bool> UpdateDuration(IJSRuntime jsRuntime)
 		{
 			_durationStart ??= DateTime.Now;
 
 			Status = ActivityStatus.IsRunning;
 			DurationRemaining = _durationTime.Subtract(DateTime.Now.Subtract(_durationStart.Value));
 
-			if (DurationRemaining.Ticks <= 0)
+			if (DurationRemaining.Ticks > 0)
 			{
-				await onComplete();
-				return true;
+				return false;
 			}
-
-			return false;
+			
+			if (_breakTime != TimeSpan.Zero)
+			{
+				await jsRuntime.InvokeAsync<string>("playAudio", "audio-break");
+			}
+				
+			return true;
 		}
 
 		public bool UpdateBreak()
@@ -122,8 +126,7 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 
 			while (await _timer.WaitForNextTickAsync())
 			{
-				var isComplete = await activity.UpdateDuration(async () =>
-					await JsRuntime.InvokeAsync<string>("playAudio", "dingAudio"));
+				var isComplete = await activity.UpdateDuration(JsRuntime);
 
 				await InvokeAsync(StateHasChanged);
 
@@ -147,6 +150,8 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 		}
 
 		_runStatus = RunStatus.IsDone;
+
+		await JsRuntime.InvokeAsync<string>("playAudio", "audio-done");
 	}
 
 	private static string DisplayTime(TimeSpan timeSpan)

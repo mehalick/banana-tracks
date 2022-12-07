@@ -3,14 +3,15 @@
 
 <PageTitle>Run Routine</PageTitle>
 
-<h1>Run Routine</h1>
-
-<Loading IsLoading="_routine is null">
-	@switch (_runStatus)
+<Loading IsLoading="_routineRun is null">
+	
+	<h1>@_routineRun!.Name</h1>
+	
+	@switch (_routineRun.Status)
 	{
 		case RunStatus.IsPending:
 		default:
-			<p><button type="button" @onclick="StartTimer" class="btn btn-primary">Start</button></p>
+			<p><button type="button" @onclick="RunTimer" class="btn btn-primary">Start</button></p>
 			break;
 		case RunStatus.IsRunning:
 			<p><button type="button" class="btn btn-secondary">Pause</button></p>
@@ -19,7 +20,7 @@
 			<p><button type="button" class="btn btn-secondary">Done</button></p>
 			break;
 	}
-	@foreach (var activity in _activities)
+	@foreach (var activity in _routineRun.Activities)
 	{
 		<div class="@(activity.Status is ActivityStatus.IsRunning or ActivityStatus.IsBreaking ? "card card-active" : "card")">
 			<div class="card-body">

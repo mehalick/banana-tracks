@@ -6,35 +6,21 @@
 <h1>Activities</h1>
 
 <Loading IsLoading="_response is null">
-	
+
 	<ul class="link-list">
-			<lil><a href="/activities/add">Add Activity</a></lil>
+		<lil><a href="/activities/add">Add Activity</a></lil>
 	</ul>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var activity in _response!.Activities)
-			{
-				<tr>
-					<td>@activity.Name</td>
-					<td class="fit-cell">
-						@if (!string.IsNullOrWhiteSpace(activity.AudioUrl))
-						{
-							<a href="@activity.AudioUrl">Audio</a>
-						}
-					</td>
-					<td class="fit-cell">
-						<a href="/activities/@activity.ActivityId/delete">Delete</a>
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+	@foreach (var activity in _response!.Activities)
+	{
+		<div class="card">
+			<div class="card-body">
+				@activity.Name
+				<a class="float-end" href="/activities/@activity.ActivityId/delete" title="delete activity">
+					<i class="fa-solid fa-delete-right"></i>
+				</a>
+			</div>
+		</div>
+	}
+
 </Loading>

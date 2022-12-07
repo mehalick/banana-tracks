@@ -6,38 +6,6 @@
 <h1>Run Routine</h1>
 
 <Loading IsLoading="_routine is null">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>*</th>
-				<th>Activity</th>
-				<th>Duration</th>
-				<th>Break</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var activity in _activities)
-			{
-				<tr class="@(activity.IsCurrent ? "table-success" : "")">
-					<td>
-						@if (activity.IsCurrent)
-						{
-							<strong>*</strong>
-						}
-					</td>
-					<td>
-						@activity.Activity.Name
-						@if (!string.IsNullOrWhiteSpace(activity.Activity.AudioUrl))
-						{
-							<audio id="audio-@activity.Activity.ActivityId" src="@activity.Activity.AudioUrl" ></audio>
-						}
-					</td>
-					<td>@DisplayTime(activity.DurationRemaining)</td>
-					<td>@DisplayTime(activity.BreakRemaining)</td>
-				</tr>
-			}
-		</tbody>
-	</table>
 	@switch (_runStatus)
 	{
 		case RunStatus.IsPending:
@@ -45,10 +13,53 @@
 			<p><button type="button" @onclick="StartTimer" class="btn btn-primary">Start</button></p>
 			break;
 		case RunStatus.IsRunning:
+			<p><button type="button" class="btn btn-secondary">Pause</button></p>
 			break;
 		case RunStatus.IsDone:
-			<p>DONE</p>
+			<p><button type="button" @onclick="StartTimer" class="btn btn-primary">Start</button></p>
 			break;
+	}
+	@foreach (var activity in _activities)
+	{
+		<div class="@(activity.Status is ActivityStatus.IsRunning or ActivityStatus.IsBreaking ? "card card-active" : "card")">
+			<div class="card-body">
+				@activity.Activity.Name
+				@if (!string.IsNullOrWhiteSpace(activity.Activity.AudioUrl))
+				{
+					<audio id="audio-@activity.Activity.ActivityId" src="@activity.Activity.AudioUrl"></audio>
+				}
+			</div>
+			<div class="card-footer text-muted">
+				@switch (activity.Status)
+				{
+					case ActivityStatus.IsPending:
+						<span>
+							<i class="fa-regular fa-square"></i>
+							@DisplayTime(activity.DurationRemaining) (pending)
+						</span>
+						break;
+					case ActivityStatus.IsRunning:
+						<span>
+							<i class="fa-solid fa-timer"></i>
+							@DisplayTime(activity.DurationRemaining) (running)
+						</span>
+						break;
+					case ActivityStatus.IsBreaking:
+						<span>
+							<i class="fa-solid fa-timer"></i>
+							@DisplayTime(activity.BreakRemaining) (break)
+						</span>
+						break;
+					case ActivityStatus.IsDone:
+						<span>
+							<i class="fa-solid fa-square-check"></i>
+							done
+						</span>
+						
+						break;
+				}
+			</div>
+		</div>
 	}
 </Loading>
 

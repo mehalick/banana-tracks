@@ -1,5 +1,14 @@
 @import url(theme.css);
 
+:root {
+	--bt-dark-primary: #1e1e1e;
+	--bt-dark-secondary: #252526;
+	--bt-white: #ffffff;
+	--bt-accent-primary: #007acc;
+	--bt-accent-secondary: #37373d;
+	--bt-accent-tertiary: #333333;
+}
+
 html, body {
 	width: 100%;
 	height: 100%;
@@ -7,11 +16,11 @@ html, body {
 }
 
 body {
-	background-color: var(--md-sys-color-surface);
+	background-color: var(--bt-dark-secondary);
 }
 
 body, .table {
-	color: var(--md-sys-color-on-surface);
+	color: var(--bt-white);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -37,6 +46,7 @@ h1, h2, h3, h4, h5, h6 {
 
 header {
 	grid-area: header;
+	background-color: var(--bt-dark-primary);
 }
 
 	header .container {
@@ -51,7 +61,7 @@ main {
 
 footer {
 	grid-area: footer;
-	background: #11151b;
+	background: var(--bt-dark-primary);
 }
 
 	footer nav {
@@ -81,17 +91,21 @@ h1:focus {
 }
 
 a, .btn-link {
-	color: var(--md-sys-color-on-surface);
+	color: var(--bt-white);
 }
 
 	a:hover, a:focus {
-		color: var(--md-sys-color-primary);
+		color: var(--bt-accent-primary);
+	}
+
+	a.no-underline {
+		text-decoration: none;
 	}
 
 .btn-primary {
-	color: var(--md-sys-color-on-secondary-container);
-	background-color: var(--md-sys-color-secondary-container);
-	border-color: var(--md-sys-color-secondary-container);
+	color: var(--bt-white);
+	background-color: var(--bt-accent-primary);
+	border-color: var(--bt-accent-primary);
 }
 
 	.btn-primary:hover, .btn-primary:focus {
@@ -101,9 +115,9 @@ a, .btn-link {
 	}
 
 .btn-secondary {
-	color: var(--md-sys-color-on-tertiary-container);
-	background-color: var(--md-sys-color-tertiary-container);
-	border-color: var(--md-sys-color-tertiary-container);
+	color: var(--bt-white);
+	background-color: var(--bt-accent-secondary);
+	border-color: var(--bt-accent-secondary);
 }
 
 	.btn-secondary:hover, .btn-secondary:focus {
@@ -117,27 +131,42 @@ a, .btn-link {
 }
 
 	.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-		box-shadow: 0 0 0 0.1rem var(--md-sys-color-on-surface), 0 0 0 0.25rem var(--md-sys-color-primary-container);
+		box-shadow: 0 0 0 0.25rem var(--bt-accent-primary);
 	}
 
 .table {
-	border-top: 1px solid var(--md-sys-color-outline);
-	border-right: 1px solid var(--md-sys-color-outline);
-	border-left: 1px solid var(--md-sys-color-outline);
+	border-top: 1px solid var(--bt-white);
+	border-right: 1px solid var(--bt-white);
+	border-left: 1px solid var(--bt-white);
 }
 
 	.table thead {
-		background: var(--md-sys-color-surface);
+		background: var(--bt-dark-primary);
 	}
 
 	.table th, .table td {
-		border-bottom-color: var(--md-sys-color-outline) !important;
+		border-bottom-color: var(--bt-white) !important;
 	}
 
 		.table th.fit-cell, .table td.fit-cell {
 			width: 1%;
 			white-space: nowrap;
 		}
+
+.card {
+	margin-bottom: 1rem;
+	background-color: var(--bt-accent-secondary);
+	border-color: var(--bt-accent-secondary);
+	color: var(--bt-white);
+}
+
+.card .card-footer {
+	background-color: var(--bt-accent-tertiary);
+}
+
+	.card.card-active {
+		background-color: #0f5132;
+	}
 
 .link-list {
 	margin: 0 -4px 1em -4px;
@@ -169,6 +198,7 @@ a, .btn-link {
 
 #blazor-error-ui {
 	background: lightyellow;
+	color: var(--bt-dark-primary);
 	bottom: 0;
 	box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
 	display: none;
@@ -178,6 +208,10 @@ a, .btn-link {
 	width: 100%;
 	z-index: 1000;
 }
+
+	#blazor-error-ui a {
+		color: var(--bt-dark-primary);
+	}
 
 	#blazor-error-ui .dismiss {
 		cursor: pointer;

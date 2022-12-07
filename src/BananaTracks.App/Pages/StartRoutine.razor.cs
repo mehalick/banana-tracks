@@ -1,14 +1,11 @@
-﻿using BananaTracks.Shared.Models;
-using Microsoft.JSInterop;
-
-namespace BananaTracks.App.Pages;
+﻿namespace BananaTracks.App.Pages;
 
 public partial class StartRoutine : AppComponentBase, IDisposable
 {
 	private class ActivityRun
 	{
 		public RoutineActivityModel Activity { get; }
-		public bool IsCurrent { get; set; }
+		public ActivityStatus Status { get; private set; } = ActivityStatus.IsPending;
 		public TimeSpan DurationRemaining { get; private set; }
 		public TimeSpan BreakRemaining { get; private set; }
 
@@ -38,7 +35,7 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 		{
 			_durationStart ??= DateTime.Now;
 
-			IsCurrent = true;
+			Status = ActivityStatus.IsRunning;
 			DurationRemaining = _durationTime.Subtract(DateTime.Now.Subtract(_durationStart.Value));
 
 			if (DurationRemaining.Ticks <= 0)
@@ -52,9 +49,11 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 
 		public bool UpdateBreak()
 		{
+			Status = ActivityStatus.IsBreaking;
+
 			if (_breakTime == TimeSpan.Zero)
 			{
-				IsCurrent = false;
+				Status = ActivityStatus.IsDone;
 				return true;
 			}
 
@@ -64,7 +63,7 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 
 			if (BreakRemaining <= TimeSpan.Zero)
 			{
-				IsCurrent = false;
+				Status = ActivityStatus.IsDone;
 				return true;
 			}
 
@@ -84,6 +83,11 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 	private enum RunStatus
 	{
 		IsPending, IsRunning, IsDone
+	}
+
+	private enum ActivityStatus
+	{
+		IsPending, IsRunning, IsBreaking, IsDone
 	}
 
 	protected override async Task OnInitializedAsync()
@@ -142,16 +146,14 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 			}
 		}
 
-		_activities.Last().IsCurrent = false;
-
 		_runStatus = RunStatus.IsDone;
 	}
 
 	private static string DisplayTime(TimeSpan timeSpan)
 	{
-		if (timeSpan <= TimeSpan.Zero)
+		if (timeSpan < TimeSpan.Zero)
 		{
-			return "";
+			return "00:00";
 		}
 
 		var ts = TimeSpan.FromSeconds(Math.Round(timeSpan.TotalSeconds));

@@ -11,36 +11,20 @@
 		<li><a href="/routines/add">Add Routine</a></li>
 	</ul>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Activities</th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var routine in _response!.Routines)
-			{
-				<tr>
-					<td>@routine.Name</td>
-					<td>
-						<ul>
-							@foreach (var i in routine.Activities)
-							{
-								<li>@i.Name</li>
-							}
-						</ul>
-					</td>
-					<td class="fit-cell">
-						<a href="/routines/@routine.RoutineId/delete">Delete</a>
-					</td>
-					<td class="fit-cell">
-						<a href="/routines/@routine.RoutineId/start" class="btn btn-secondary">Start &rsaquo;</a>
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+	@foreach (var routine in _response!.Routines)
+	{
+		<div class="card">
+			<div class="card-body">
+				<a class="no-underline" href="/routines/@routine.RoutineId/start" title="start routine">
+					<i class="fa-solid fa-play fa-xl me-1"></i>
+					@routine.Name
+				</a>
+				<a class="float-end" href="/routines/@routine.RoutineId/delete" title="delete routine">
+					<i class="fa-solid fa-delete-right"></i>
+				</a>
+			</div>
+		</div>
+
+	}
+
 </Loading>

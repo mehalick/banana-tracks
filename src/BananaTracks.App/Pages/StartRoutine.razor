@@ -7,19 +7,22 @@
 	
 	<h1>@_routineRun!.Name</h1>
 	
-	@switch (_routineRun.Status)
-	{
-		case RunStatus.IsPending:
-		default:
-			<p><button type="button" @onclick="RunTimer" class="btn btn-primary">Start</button></p>
-			break;
-		case RunStatus.IsRunning:
-			<p><button type="button" class="btn btn-secondary">Pause</button></p>
-			break;
-		case RunStatus.IsDone:
-			<p><button type="button" class="btn btn-secondary">Done</button></p>
-			break;
-	}
+	<div class="d-grid d-sm-block mb-3">
+		@switch (_routineRun.Status)
+		{
+			case RunStatus.IsPending:
+			default:
+				<button type="button" @onclick="RunTimer" class="btn btn-primary">Start <i class="fa-solid fa-play ms-1"></i></button>
+				break;
+			case RunStatus.IsRunning:
+				<button type="button" class="btn btn-secondary">Pause <i class="fa-solid fa-pause ms-1"></i></button>
+				break;
+			case RunStatus.IsDone:
+				<button type="button" class="btn btn-secondary">Restart <i class="fa-solid fa-play ms-1"></i></button>
+				break;
+		}
+	</div>
+
 	@foreach (var activity in _routineRun.Activities)
 	{
 		<div class="@(activity.Status is ActivityStatus.IsRunning or ActivityStatus.IsBreaking ? "card card-active" : "card")">

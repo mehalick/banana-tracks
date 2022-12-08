@@ -5,7 +5,6 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Amazon.Polly;
 using BananaTracks.Core.Entities;
-using BananaTracks.Core.Messages;
 using System.Text.Json;
 using BananaTracks.Core.Configuration;
 
@@ -56,7 +55,7 @@ public class Function
 		{
 			OutputFormat = OutputFormat.Mp3,
 			VoiceId = VoiceId.Joanna,
-			Text = activity.Name,
+			Text = $"Start {activity.Name}, go!",
 			OutputS3BucketName = "cdn.bananatracks.com",
 			OutputS3KeyPrefix = "polly/"
 		});

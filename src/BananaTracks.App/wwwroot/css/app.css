@@ -1,12 +1,14 @@
-@import url(theme.css);
-
 :root {
-	--bt-dark-primary: #1e1e1e;
-	--bt-dark-secondary: #252526;
-	--bt-white: #ffffff;
-	--bt-accent-primary: #007acc;
+	--bt-dark-primary: #0d1117;
+	--bt-dark-secondary: #161b22;
+	--bt-dark-tertiary: #1a1f24;
+	--bt-white: #c9d1d9;
+	--bt-accent-primary: #58a6ff;
+	--btn-accent-primary-hover: #1164c3;
 	--bt-accent-secondary: #37373d;
 	--bt-accent-tertiary: #333333;
+	--bt-border-color: #30363d;
+	--bt-success: #3fb950;
 }
 
 html, body {
@@ -16,7 +18,7 @@ html, body {
 }
 
 body {
-	background-color: var(--bt-dark-secondary);
+	background-color: var(--bt-dark-primary);
 }
 
 body, .table {
@@ -46,7 +48,7 @@ h1, h2, h3, h4, h5, h6 {
 
 header {
 	/*grid-area: header;*/
-	background-color: var(--bt-dark-primary);
+	background-color: var(--bt-dark-secondary);
 }
 
 	header .container {
@@ -66,7 +68,7 @@ footer {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--bt-dark-primary);
+	background: var(--bt-dark-secondary);
 }
 
 	footer nav {
@@ -107,6 +109,10 @@ a, .btn-link {
 		text-decoration: none;
 	}
 
+.btn {
+	font-weight: 500;
+}
+
 .btn-primary {
 	color: var(--bt-white);
 	background-color: var(--bt-accent-primary);
@@ -114,21 +120,21 @@ a, .btn-link {
 }
 
 	.btn-primary:hover, .btn-primary:focus {
-		color: var(--md-sys-color-on-primary-container);
-		background-color: var(--md-sys-color-primary-container);
-		border-color: var(--md-sys-color-primary-container);
+		color: var(--bt-white);
+		background-color: var(--btn-accent-primary-hover);
+		border-color: var(--btn-accent-primary-hover);
 	}
 
 .btn-secondary {
 	color: var(--bt-white);
-	background-color: var(--bt-accent-secondary);
-	border-color: var(--bt-accent-secondary);
+	background-color: var(--bt-dark-tertiary);
+	border-color: var(--bt-dark-tertiary);
 }
 
 	.btn-secondary:hover, .btn-secondary:focus {
-		color: var(--md-sys-color-on-secondary-container);
-		background-color: var(--md-sys-color-secondary-container);
-		border-color: var(--md-sys-color-secondary-container);
+		color: var(--bt-white);
+		background-color: var(--btn-accent-primary-hover);
+		border-color: var(--btn-accent-primary-hover);
 	}
 
 .btn {
@@ -140,17 +146,18 @@ a, .btn-link {
 	}
 
 .table {
-	border-top: 1px solid var(--bt-white);
-	border-right: 1px solid var(--bt-white);
-	border-left: 1px solid var(--bt-white);
+	border-top: 1px solid var(--bt-border-color);
+	border-right: 1px solid var(--bt-border-color);
+	border-left: 1px solid var(--bt-border-color);
+	border-radius: .25rem;
 }
 
 	.table thead {
-		background: var(--bt-dark-primary);
+		background: var(--bt-dark-secondary);
 	}
 
 	.table th, .table td {
-		border-bottom-color: var(--bt-white) !important;
+		border-bottom-color: var(--bt-border-color) !important;
 	}
 
 		.table th.fit-cell, .table td.fit-cell {
@@ -160,21 +167,22 @@ a, .btn-link {
 
 .card {
 	margin-bottom: 1rem;
-	background-color: var(--bt-accent-secondary);
-	border-color: var(--bt-accent-secondary);
+	background-color: var(--bt-dark-tertiary);
+	border-color: var(--bt-dark-tertiary);
 	border-width: 2px;
 	color: var(--bt-white);
 }
 
 	.card .card-footer {
-		background-color: var(--bt-accent-tertiary);
-		border-color: var(--bt-accent-tertiary);
+		background-color: var(--bt-dark-primary);
+		border-color: var(--bt-dark-primary);
 		border-width: 2px;
 	}
 
 	.card.card-active {
-		background-color: #0f5132;
-		border-color: #0f5132;
+		background-color: var(--bt-success);
+		border-color: var(--bt-success);
+		color: var(--bt-dark-primary);
 	}
 
 .link-list {
@@ -199,7 +207,7 @@ a, .btn-link {
 }
 
 .valid.modified:not([type=checkbox]) {
-	outline: 1px solid #26b050;
+	outline: 1px solid var(--bt-success);
 }
 
 .invalid {

@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 1rem;
 }
 
-#app {
+/*#app {
 	height: 100vh;
 	display: grid;
 	grid-template-columns: 1fr;
@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 		'header'
 		'main'
 		'footer';
-}
+}*/
 
 .container {
 	max-width: 960px;
@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-	grid-area: header;
+	/*grid-area: header;*/
 	background-color: var(--bt-dark-primary);
 }
 
@@ -55,12 +55,17 @@ header {
 	}
 
 main {
-	grid-area: main;
-	overflow: auto;
+	/*grid-area: main;
+	overflow: auto;*/
+	padding-bottom: 100px;
 }
 
 footer {
-	grid-area: footer;
+	/*grid-area: footer;*/
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	background: var(--bt-dark-primary);
 }
 

@@ -30,9 +30,9 @@ internal class AddRoutine : Endpoint<AddRoutineRequest>
 				.ToList()
 		};
 
-		for (var i = 1; i <= routine.Activities.Count; i++)
+		for (var i = 0; i < routine.Activities.Count; i++)
 		{
-			routine.Activities[i].SortOrder = i;
+			routine.Activities[i].SortOrder = i + 1;
 		}
 
 		await _dynamoDbContext.SaveAsync(routine, cancellationToken);

@@ -53,6 +53,7 @@ header {
 
 	header .container {
 		display: flex;
+		align-content: center;
 		justify-content: space-between;
 	}
 
@@ -73,7 +74,7 @@ footer {
 
 	footer nav {
 		display: grid;
-		grid-template-columns: repeat(3,1fr);
+		grid-template-columns: repeat(4, 1fr);
 		grid-gap: 15px;
 	}
 

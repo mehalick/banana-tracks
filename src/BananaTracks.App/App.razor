@@ -3,7 +3,7 @@
 		<Found Context="routeData">
 			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
 				<Authorizing>
-					<p><i class="fa-duotone fa-circle-notch fa-spin fa-xl"></i> Fetching profile...</p>
+					<p><i class="fa-duotone fa-circle-notch fa-spin fa-xl me-2"></i> Fetching profile...</p>
 				</Authorizing>
 				<NotAuthorized>
 					@if (context.User.Identity?.IsAuthenticated != true)

@@ -1,0 +1,36 @@
+﻿@page "/profile"
+@inherits AppComponentBase
+
+<PageTitle>Profile</PageTitle>
+
+<h1>Profile</h1>
+
+<ul class="link-list">
+	<li><a href="#" @onclick="BeginSignOut">Log out</a></li>
+</ul>
+
+<Loading IsLoading="_claims is null">
+	<table class="table">
+		<tbody>
+		<tr>
+			<th>ID</th>
+			<td>@_id</td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td>@_email</td>
+		</tr>
+		@if (!string.IsNullOrWhiteSpace(_picture))
+		{
+			<tr>
+				<th>Picture</th>
+				<td>
+
+					<img src="@_picture" alt="picture" class="img-thumbnail" style="max-width: 256px; height: 100%;"/>
+
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+</Loading>

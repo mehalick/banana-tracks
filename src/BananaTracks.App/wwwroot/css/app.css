@@ -11,8 +11,8 @@
 	--bt-success: #3fb950;
 	--bt-input-background: #010409;
 	--bt-input-border: #30363d;
-	--bt-button-danger-text: #f85149;
-	--bt-button-danger-hover: #da3633;
+	--bt-danger-text: #f85149;
+	--bt-danger-hover: #da3633;
 }
 
 html, body {
@@ -33,25 +33,27 @@ h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 1rem;
 }
 
-/*#app {
-	height: 100vh;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: auto 1fr auto;
-	grid-template-areas:
-		'header'
-		'main'
-		'footer';
-}*/
-
-.container {
-	max-width: 960px;
-	margin: 0 auto;
-	padding: 15px;
+h1 {
+	font-size: calc(1rem + 1.5vw);
 }
 
-header {
-	/*grid-area: header;*/
+	h1:focus {
+		outline: none;
+	}
+
+a, .btn-link {
+	color: var(--bt-white);
+}
+
+	a:hover, a:focus {
+		color: var(--bt-accent-primary);
+	}
+
+	a.no-underline {
+		text-decoration: none;
+	}
+
+header, footer {
 	background-color: var(--bt-dark-secondary);
 }
 
@@ -62,18 +64,14 @@ header {
 	}
 
 main {
-	/*grid-area: main;
-	overflow: auto;*/
 	padding-bottom: 100px;
 }
 
 footer {
-	/*grid-area: footer;*/
 	position: fixed;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--bt-dark-secondary);
 }
 
 	footer nav {
@@ -98,30 +96,20 @@ nav a {
 			font-size: .75rem;
 		}
 
-h1:focus {
-	outline: none;
+.container {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 15px;
 }
-
-a, .btn-link {
-	color: var(--bt-white);
-}
-
-	a:hover, a:focus {
-		color: var(--bt-accent-primary);
-	}
-
-	a.no-underline {
-		text-decoration: none;
-	}
 
 .btn {
 	min-width: 38px;
 	font-weight: 500;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-	box-shadow: 0 0 0 0.25rem var(--bt-accent-primary);
-}
+	.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+		box-shadow: 0 0 0 0.25rem var(--bt-accent-primary);
+	}
 
 .btn-primary {
 	color: var(--bt-white);
@@ -148,15 +136,15 @@ a, .btn-link {
 	}
 
 .btn-danger {
-	color: var(--bt-button-danger-text);
+	color: var(--bt-danger-text);
 	background-color: var(--bt-dark-tertiary);
 	border-color: var(--bt-dark-tertiary);
 }
 
 	.btn-danger:hover, .btn-danger:focus {
 		color: var(--bt-white);
-		background-color: var(--bt-button-danger-hover);
-		border-color: var(--bt-button-danger-hover);
+		background-color: var(--bt-danger-hover);
+		border-color: var(--bt-danger-hover);
 	}
 
 .table {
@@ -244,11 +232,11 @@ a, .btn-link {
 }
 
 .invalid {
-	outline: 1px solid red;
+	outline: 1px solid var(--bt-danger-text);
 }
 
 .validation-message {
-	color: red;
+	color: var(--bt-danger-text);
 }
 
 #blazor-error-ui {
@@ -284,7 +272,3 @@ a, .btn-link {
 	.blazor-error-boundary::after {
 		content: "An error has occurred."
 	}
-
-.loading-progress-text:after {
-	content: var(--blazor-load-percentage-text, "Loading bananas... ");
-}

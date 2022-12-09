@@ -12,7 +12,7 @@ public partial class Profile : AppComponentBase
 
 	private List<Claim>? _claims;
 	private string? _id;
-	private string? _email;
+	private string? _name;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -23,11 +23,11 @@ public partial class Profile : AppComponentBase
 		if (_claims is not null)
 		{
 			_id = _claims.GetClaim("sub");
-			_email = _claims.GetClaim("name");
+			_name = _claims.GetClaim("name");
 		}
 	}
 
-	private void BeginSignOut(MouseEventArgs _)
+	private void LogOut(MouseEventArgs _)
 	{
 		NavigationManager.NavigateToLogout("authentication/logout");
 	}

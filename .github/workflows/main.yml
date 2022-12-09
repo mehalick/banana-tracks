@@ -13,7 +13,8 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       aws-region: us-east-1
-      git-sha: ${{ github.sha }}
+      github-sha: ${{ github.sha::7 }}
+      github-run-id: ${{ github.run_id}}
 
     steps:
 
@@ -43,12 +44,19 @@ jobs:
         name: dist
         path: publish/wwwroot
 
-    - name: Set Git Hash
+    - name: Set Git SHA
       uses: jossef/action-set-json-field@v2.1
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.GitHash
-        value: ${{ env.git-sha }}
+        value: ${{ env.github-sha }}
+
+    - name: Set Run ID
+      uses: jossef/action-set-json-field@v2.1
+      with:
+        file: publish/wwwroot/appsettings.json
+        field: Version.RunId
+        value: ${{ github.run_id}}
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16

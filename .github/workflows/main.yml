@@ -53,7 +53,7 @@ jobs:
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.GitHash
-        value: ${{ SHORT_SHA }}
+        value: ${{ env.SHORT_SHA }}
 
     - name: Set Run ID
       uses: jossef/action-set-json-field@v2.1

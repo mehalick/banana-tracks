@@ -16,10 +16,32 @@
 		<div class="card">
 			<div class="card-body">
 				@activity.Name
-				<a class="float-end" href="/activities/@activity.ActivityId/delete" title="delete activity">
-					<i class="fa-solid fa-delete-right"></i>
-				</a>
+				@if (!activity.IsSelected)
+				{
+					<a href="javascript: void(0);" @onclick="() => SelectActivity(activity, true)" class="float-end" title="Show activity details">
+						<i class="fa-solid fa-chevron-up"></i>
+					</a>
+				}
+				else
+				{
+					<a href="javascript: void(0);" @onclick="() => SelectActivity(activity, false)" class="float-end" title="Hide activity details">
+						<i class="fa-solid fa-chevron-down"></i>
+					</a>
+				}
 			</div>
+			@if (activity.IsSelected)
+			{
+				<div class="card-footer">
+					<ul class="link-list mb-0">
+						<li>
+							<a href="/activities/@activity.ActivityId/delete" title="Delete activity">
+								Delete
+							</a>
+						</li>
+					</ul>
+					
+				</div>
+			}
 		</div>
 	}
 

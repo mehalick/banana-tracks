@@ -11,6 +11,8 @@
 	--bt-success: #3fb950;
 	--bt-input-background: #010409;
 	--bt-input-border: #30363d;
+	--bt-button-danger-text: #f85149;
+	--bt-button-danger-hover: #da3633;
 }
 
 html, body {
@@ -113,7 +115,12 @@ a, .btn-link {
 	}
 
 .btn {
+	min-width: 38px;
 	font-weight: 500;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+	box-shadow: 0 0 0 0.25rem var(--bt-accent-primary);
 }
 
 .btn-primary {
@@ -140,12 +147,16 @@ a, .btn-link {
 		border-color: var(--btn-accent-primary-hover);
 	}
 
-.btn {
-	min-width: 38px;
+.btn-danger {
+	color: var(--bt-button-danger-text);
+	background-color: var(--bt-dark-tertiary);
+	border-color: var(--bt-dark-tertiary);
 }
 
-	.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-		box-shadow: 0 0 0 0.25rem var(--bt-accent-primary);
+	.btn-danger:hover, .btn-danger:focus {
+		color: var(--bt-white);
+		background-color: var(--bt-button-danger-hover);
+		border-color: var(--bt-button-danger-hover);
 	}
 
 .table {
@@ -187,6 +198,11 @@ a, .btn-link {
 		border-color: var(--bt-success);
 		color: var(--bt-dark-primary);
 	}
+
+.alert {
+	background-color: var(--bt-dark-tertiary);
+	color: var(--bt-white);
+}
 
 .form-control,
 .form-control:focus,

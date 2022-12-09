@@ -1,4 +1,6 @@
-﻿namespace BananaTracks.Shared.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace BananaTracks.Shared.Models;
 
 public class RoutineModel
 {
@@ -6,6 +8,10 @@ public class RoutineModel
 	public string RoutineId { get; set; } = default!;
 	public string Name { get; set; } = default!;
 	public List<RoutineActivityModel> Activities { get; set; } = new();
+	public bool IsSelected { get; set; }
+
+	[JsonIgnore]
+	public string ActivitiesList => string.Join(", ", Activities.Select(i => i.Name));
 }
 
 public class RoutineActivityModel

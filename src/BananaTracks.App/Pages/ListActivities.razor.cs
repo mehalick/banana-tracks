@@ -9,4 +9,9 @@ public partial class ListActivities : AppComponentBase
 	{
 		_response = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ListActivities);
 	}
+
+	private static void SelectActivity(ActivityModel activity, bool isSelected)
+	{
+		activity.IsSelected = isSelected;
+	}
 }

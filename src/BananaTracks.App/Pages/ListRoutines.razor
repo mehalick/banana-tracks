@@ -19,12 +19,27 @@
 					<i class="fa-solid fa-play fa-xl me-1"></i>
 					@routine.Name
 				</a>
-				<a class="float-end" href="/routines/@routine.RoutineId/delete" title="delete routine">
-					<i class="fa-solid fa-delete-right"></i>
-				</a>
+				@if (!routine.IsSelected)
+				{
+					<a href="javascript: void(0);" @onclick="() => SelectRoutine(routine, true)" class="float-end" title="Show routine details">
+						<i class="fa-solid fa-chevron-up"></i>
+					</a>
+				}
+				else
+				{
+					<a href="javascript: void(0);" @onclick="() => SelectRoutine(routine, false)" class="float-end" title="Hide routine details">
+						<i class="fa-solid fa-chevron-down"></i>
+					</a>
+				}
 			</div>
+			@if (routine.IsSelected)
+			{
+				<div class="card-footer d-flex justify-content-between">
+					<small class="text-truncate">@routine.ActivitiesList</small>
+					<a href="/routines/@routine.RoutineId/delete" title="Delete routine">Delete</a>
+				</div>
+			}
 		</div>
-
 	}
 
 </Loading>

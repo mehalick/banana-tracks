@@ -6,4 +6,5 @@ public record ActivityModel
 	public string ActivityId { get; set; } = default!;
 	public string Name { get; set; } = default!;
 	public string AudioUrl { get; set; } = default!;
-};
+	public bool IsSelected { get; set; }
+}

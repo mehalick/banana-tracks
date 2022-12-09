@@ -9,4 +9,9 @@ public partial class ListRoutines : AppComponentBase
 	{
 		_response = await HttpClient.GetFromJsonAsync<ListRoutinesResponse>(ApiRoutes.ListRoutines);
 	}
+
+	private static void SelectRoutine(RoutineModel routine, bool isSelected)
+	{
+		routine.IsSelected = isSelected;
+	}
 }

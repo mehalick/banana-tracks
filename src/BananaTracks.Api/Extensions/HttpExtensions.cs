@@ -9,6 +9,13 @@ internal static class HttpExtensions
 	/// </summary>
 	public static string GetUserId(this IHttpContextAccessor httpContextAccessor)
 	{
-		return httpContextAccessor.HttpContext?.User.Claims.Single(i => i.Type == ClaimTypes.NameIdentifier).Value!;
+		var claim = httpContextAccessor.HttpContext?.User.Claims.SingleOrDefault(i => i.Type == ClaimTypes.NameIdentifier);
+
+		if (claim is null)
+		{
+			throw new("Missing name identifier claim for HTTP context user.");
+		}
+
+		return claim.Value;
 	}
 }

@@ -9,6 +9,8 @@
 	--bt-accent-tertiary: #333333;
 	--bt-border-color: #30363d;
 	--bt-success: #3fb950;
+	--bt-input-background: #010409;
+	--bt-input-border: #30363d;
 }
 
 html, body {
@@ -185,6 +187,20 @@ a, .btn-link {
 		border-color: var(--bt-success);
 		color: var(--bt-dark-primary);
 	}
+
+.form-control,
+.form-control:focus,
+.form-select {
+	background-color: var(--bt-input-background);
+	border-color: var(--bt-input-border);
+	color: var(--bt-white);
+}
+
+.input-group-text {
+	background-color: var(--bt-dark-secondary);
+	border-color: var(--bt-input-border);
+	color: var(--bt-white);
+}
 
 .link-list {
 	margin: 0 -4px 1em -4px;

@@ -49,20 +49,6 @@ jobs:
         field: Version.GitHash
         value: ${{ GITHUB_SHA::6 }}
 
-    - name: Set Run ID
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: publish/wwwroot/appsettings.json
-        field: Version.RunId
-        value: ${{ GITHUB_RUN_ID }}
-
-    - name: Set Run Number
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: publish/wwwroot/appsettings.json
-        field: Version.RunNumber
-        value: ${{ GITHUB_RUN_NUMBER }}
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:

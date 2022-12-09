@@ -13,10 +13,14 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       aws-region: us-east-1
-      github-sha: ${{ github.sha::7 }}
+      github-sha: ${{ github.sha }}
       github-run-id: ${{ github.run_id}}
 
     steps:
+
+    - name: Set outputs
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - name: Checkout
       uses: actions/checkout@master
@@ -49,7 +53,7 @@ jobs:
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.GitHash
-        value: ${{ env.github-sha }}
+        value: ${{ steps.vars.outputs.sha_short }}
 
     - name: Set Run ID
       uses: jossef/action-set-json-field@v2.1

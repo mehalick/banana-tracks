@@ -47,7 +47,7 @@ jobs:
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.GitHash
-        value: ${GITHUB_SHA::6}
+        value: GITHUB_SHA::6
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16

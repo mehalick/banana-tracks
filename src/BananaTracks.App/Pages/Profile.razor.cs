@@ -9,7 +9,7 @@ namespace BananaTracks.App.Pages;
 public partial class Profile : AppComponentBase
 {
 	[Inject]
-	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+	private protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
 	private List<Claim>? _claims;
 	private string? _id;

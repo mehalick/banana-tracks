@@ -20,7 +20,7 @@ jobs:
 
     - name: Set outputs
       id: vars
-      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@master
@@ -53,7 +53,7 @@ jobs:
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.GitHash
-        value: ${{ steps.vars.outputs.sha_short }}
+        value: ${{ SHORT_SHA }}
 
     - name: Set Run ID
       uses: jossef/action-set-json-field@v2.1

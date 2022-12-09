@@ -1,4 +1,3 @@
-using BananaTracks.App.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -9,12 +8,11 @@ namespace BananaTracks.App.Pages;
 public partial class Profile : AppComponentBase
 {
 	[Inject]
-	private protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
 	private List<Claim>? _claims;
 	private string? _id;
 	private string? _email;
-	private string? _picture;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -26,7 +24,6 @@ public partial class Profile : AppComponentBase
 		{
 			_id = _claims.GetClaim("sub");
 			_email = _claims.GetClaim("name");
-			_picture = _claims.GetClaim("picture");
 		}
 	}
 

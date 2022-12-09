@@ -3,10 +3,17 @@
 
 <PageTitle>BananaTracks</PageTitle>
 
-<h1>Hi!</h1>
+<AuthorizeView>
+	<Authorized>
+		<h1>Hi!</h1>
+	</Authorized>
+	<NotAuthorized>
+		<div class="d-grid d-sm-block text-center mb-3">
+			<a href="authentication/login" class="btn btn-primary">Log In or Sign Up</a>
+		</div>
+	</NotAuthorized>
+</AuthorizeView>
 
-<p>&nbsp;</p>
-
-<p class="text-center">
+<div class="text-center mt-5">
 	<a href="https://github.com/mehalick/banana-tracks"><i class="fa-brands fa-github fa-lg me-2"></i>@_version</a>
-</p>
+</div>

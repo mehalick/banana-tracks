@@ -1,4 +1,5 @@
 global using BananaTracks.App.Components;
+global using BananaTracks.App.Extensions;
 global using BananaTracks.Shared.Models;
 global using BananaTracks.Shared.Requests;
 global using BananaTracks.Shared.Responses;

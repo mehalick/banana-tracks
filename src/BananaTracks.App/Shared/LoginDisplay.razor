@@ -4,17 +4,9 @@
 	<Authorized>
 		<span class="d-none d-sm-inline">
 			Hey, @context.User.Identity?.Name!
-			<a href="#" @onclick="BeginSignOut">Log out</a>
 		</span>
 	</Authorized>
 	<NotAuthorized>
 		<a href="authentication/login">Log in</a>
 	</NotAuthorized>
 </AuthorizeView>
-
-@code {
-	private void BeginSignOut(MouseEventArgs args)
-	{
-		Navigation.NavigateToLogout("authentication/logout");
-	}
-}

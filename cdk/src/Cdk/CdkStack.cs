@@ -30,17 +30,7 @@ public class CdkStack : Stack
 	{
 		var (appBucket, cdnBucket) = CreateS3Buckets();
 
-		var zone = new HostedZone(this, Name("HostedZone"), new HostedZoneProps
-		{
-			ZoneName = DomainName
-		});
-
-		var certificate = new Certificate(this, Name("Certificate"), new CertificateProps
-		{
-			DomainName = DomainName,
-			SubjectAlternativeNames = new[] { "*.bananatracks.com" },
-			Validation = CertificateValidation.FromDns(zone)
-		});
+		var (hostedZone, certificate) = CreateHostedZoneCertificate();
 
 		var (appDistribution, cdnDistribution) = CreateCloudFrontDistributions(appBucket, cdnBucket, certificate);
 
@@ -53,32 +43,13 @@ public class CdkStack : Stack
 
 		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, activityCreatedQueue, cdnBucket);
 
-		var activityCreatedFunction = CreateActivityCreatedFunction(lambdaRole, activityCreatedQueue);
+		_ = CreateActivityCreatedFunction(lambdaRole, activityCreatedQueue);
 
 		var apiFunction = CreateApiFunction(lambdaRole);
 
-		var api = CreateApiGateway(apiFunction, certificate);
+		var apiGateway = CreateApiGateway(apiFunction, certificate);
 
-		_ = new ARecord(this, Name("AppARecord"), new ARecordProps
-		{
-			Zone = zone,
-			RecordName = AppDomainName,
-			Target = RecordTarget.FromAlias(new CloudFrontTarget(appDistribution))
-		});
-
-		_ = new ARecord(this, Name("CdnARecord"), new ARecordProps
-		{
-			Zone = zone,
-			RecordName = CdnDomainName,
-			Target = RecordTarget.FromAlias(new CloudFrontTarget(cdnDistribution))
-		});
-
-		_ = new ARecord(this, Name("ApiARecord"), new ARecordProps
-		{
-			Zone = zone,
-			RecordName = ApiDomainName,
-			Target = RecordTarget.FromAlias(new ApiGatewayDomain(api.DomainName!))
-		});
+		CreateDnsRecords(hostedZone, appDistribution, cdnDistribution, apiGateway);
 	}
 
 	private (Bucket, Bucket) CreateS3Buckets()
@@ -127,6 +98,48 @@ public class CdkStack : Stack
 		return (appBucket, cdnBucket);
 	}
 
+	private (HostedZone, Certificate) CreateHostedZoneCertificate()
+	{
+		var hostedZone = new HostedZone(this, Name("HostedZone"), new HostedZoneProps
+		{
+			ZoneName = DomainName
+		});
+
+		var certificate = new Certificate(this, Name("Certificate"), new CertificateProps
+		{
+			DomainName = DomainName,
+			SubjectAlternativeNames = new[] { "*.bananatracks.com" },
+			Validation = CertificateValidation.FromDns(hostedZone)
+		});
+
+		return (hostedZone, certificate);
+	}
+
+	private void CreateDnsRecords(IHostedZone zone, IDistribution appDistribution, IDistribution cdnDistribution,
+		RestApiBase apiGateway)
+	{
+		_ = new ARecord(this, Name("AppARecord"), new ARecordProps
+		{
+			Zone = zone,
+			RecordName = AppDomainName,
+			Target = RecordTarget.FromAlias(new CloudFrontTarget(appDistribution))
+		});
+
+		_ = new ARecord(this, Name("CdnARecord"), new ARecordProps
+		{
+			Zone = zone,
+			RecordName = CdnDomainName,
+			Target = RecordTarget.FromAlias(new CloudFrontTarget(cdnDistribution))
+		});
+
+		_ = new ARecord(this, Name("ApiARecord"), new ARecordProps
+		{
+			Zone = zone,
+			RecordName = ApiDomainName,
+			Target = RecordTarget.FromAlias(new ApiGatewayDomain(apiGateway.DomainName!))
+		});
+	}
+	
 	private (Distribution, Distribution) CreateCloudFrontDistributions(IBucket appBucket, IBucket cdnBucket, ICertificate certificate)
 	{
 		var identity = new OriginAccessIdentity(this, Name("CloudFrontOriginAccessIdentity"));

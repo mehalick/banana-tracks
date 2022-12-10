@@ -1,6 +1,6 @@
 ﻿namespace BananaTracks.App.Pages;
 
-public partial class StartRoutine : AppComponentBase, IDisposable
+public sealed partial class StartRoutine : AppComponentBase, IDisposable
 {
 	[Parameter]
 	public string RoutineId { get; set; } = default!;
@@ -116,7 +116,7 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 
 			Console.WriteLine("[RunTimer] Play audio #audio-done");
 
-			await jsRuntime.InvokeAsync<string>("playAudio", "audio-done");
+			await jsRuntime.InvokeVoidAsync("playAudio", "audio-done");
 		}
 
 		public void Dispose() => _timer.Dispose();
@@ -160,7 +160,7 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 			{
 				Console.WriteLine($"[RunTimer] Play audio #audio-{Activity.ActivityId}");
 
-				await jsRuntime.InvokeAsync<string>("playAudio", $"audio-{Activity.ActivityId}");
+				await jsRuntime.InvokeVoidAsync("playAudio", $"audio-{Activity.ActivityId}");
 			}
 		}
 
@@ -182,7 +182,7 @@ public partial class StartRoutine : AppComponentBase, IDisposable
 
 			Console.WriteLine("[RunTimer] Play audio #audio-break");
 
-			await jsRuntime.InvokeAsync<string>("playAudio", "audio-break");
+			await jsRuntime.InvokeVoidAsync("playAudio", "audio-break");
 
 			return true;
 		}

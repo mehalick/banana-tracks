@@ -16,27 +16,31 @@
 	<script src="https://kit.fontawesome.com/51de915c46.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<div id="app">
-	<div class="text-center">
-		<div class="m-5">
-			<img src="https://cdn.bananatracks.com/icons/bananatracks.svg" alt="BananaTracks" style="max-width: 512px; width: 100%; height: auto;" />
-		</div>
-		<div>
-			<i class="fa-duotone fa-circle-notch fa-spin fa-xl me-2"></i> Loading bananas...
+	<div id="app">
+		<div class="text-center">
+			<div class="m-5">
+				<img src="https://cdn.bananatracks.com/icons/bananatracks.svg" alt="BananaTracks" style="max-width: 512px; width: 100%; height: auto;" />
+			</div>
+			<div>
+				<i class="fa-duotone fa-circle-notch fa-spin fa-xl me-2"></i> Loading bananas...
+			</div>
 		</div>
 	</div>
-</div>
 	<div id="blazor-error-ui">
 		An unhandled error has occurred.
 		<a href="" class="reload">Reload</a>
 		<a class="dismiss">🗙</a>
 	</div>
+	<script src="js/bootstrap.min.js"></script>
 	<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
 	<script src="_framework/blazor.webassembly.js"></script>
 	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
 	<script>
 		window.playAudio = (id) => {
 			document.getElementById(id).play();
+		}
+		window.blurActive = () => {
+			document.activeElement.blur?.();
 		}
 	</script>
 </body>

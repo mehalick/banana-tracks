@@ -1,37 +1,29 @@
-﻿using BananaTracks.Shared.Models;
-
-namespace BananaTracks.App.Pages;
+﻿namespace BananaTracks.App.Pages;
 
 public partial class AddRoutine : AppComponentBase
 {
 	private readonly AddRoutineRequest _addRoutineRequest = new();
 	private ListActivitiesResponse? _listActivitiesResponse;
-	private ActivityModel? _activityModel;
+	private readonly RoutineActivityModel _newActivity = new();
 
 	protected override async Task OnInitializedAsync()
 	{
 		_listActivitiesResponse = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ListActivities);
-
-		_activityModel = _listActivitiesResponse?.Activities.First()!;
-
-		_addRoutineRequest.Activities.Add(new()
-		{
-			ActivityId = _activityModel.ActivityId,
-			Name = _activityModel.Name,
-			DurationInSeconds = 300,
-			BreakInSeconds = 30
-		});
 	}
 
-	private void AddActivity()
+	private async Task AddActivity()
 	{
 		_addRoutineRequest.Activities.Add(new()
 		{
-			ActivityId = _activityModel!.ActivityId,
-			Name = _activityModel.Name,
-			DurationInSeconds = 300,
-			BreakInSeconds = 30
+			ActivityId = _newActivity.ActivityId,
+			Name = _newActivity.Name,
+			DurationInSeconds = _newActivity.DurationInSeconds,
+			BreakInSeconds = _newActivity.BreakInSeconds
 		});
+
+		await Task.Delay(100);
+
+		await JsRuntime.InvokeVoidAsync("blurActive");
 	}
 
 	private void RemoveActivity(RoutineActivityModel activity)

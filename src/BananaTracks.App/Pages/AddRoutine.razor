@@ -7,63 +7,104 @@
 
 <EditForm Model="_addRoutineRequest" OnValidSubmit="OnValidSubmit">
 	<DataAnnotationsValidator />
-	<ValidationSummary />
-
+	
 	<div class="mb-3">
 		<label for="name" class="form-label">Name</label>
 		<InputText id="name" class="form-control" @bind-Value="_addRoutineRequest.Name" />
+		<ValidationMessage For="() => _addRoutineRequest.Name" />
 	</div>
 
 	<Loading IsLoading="_listActivitiesResponse is null">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Activity</th>
-					<th>Duration</th>
-					<th>Break After</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var activity in _addRoutineRequest.Activities)
-				{
-					<tr>
-						<td>
-							<InputSelect @bind-Value="activity.ActivityId" class="form-select">
+
+		<h2>Activities</h2>
+		
+		@foreach (var activity in _addRoutineRequest.Activities)
+		{
+			<div class="card">
+				<div class="card-body">
+					<div class="mb-3">
+						<InputSelect @bind-Value="activity.ActivityId" class="form-select">
+							@foreach (var option in _listActivitiesResponse!.Activities)
+							{
+								<option value="@option.ActivityId">@option.Name</option>
+							}
+						</InputSelect>
+					</div>
+					<div class="row">
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="@Ids.Next()" class="form-label">Duration</label>
+								<div class="input-group">
+									<InputNumber id="@Ids.Current()" @bind-Value="activity.DurationInSeconds" class="form-control"/>
+									<span class="input-group-text">seconds</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="@Ids.Next()" class="form-label">Break</label>
+								<div class="input-group ">
+									<InputNumber id="@Ids.Current()" @bind-Value="activity.BreakInSeconds" class="form-control" />
+									<span class="input-group-text">seconds</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer d-flex justify-content-end">
+					<button type="button" @onclick="() => RemoveActivity(activity)" class="btn btn-secondary" title="remove activity"><i class="fa-solid fa-trash-xmark fa-fw"></i></button>
+				</div>
+			</div>
+		}
+
+		<div class="modal fade" id="modal-activity-new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="staticBackdropLabel">Add Activity</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark fa-xl"></i></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3">
+							<InputSelect @bind-Value="_newActivity.ActivityId" class="form-select">
 								@foreach (var option in _listActivitiesResponse!.Activities)
 								{
 									<option value="@option.ActivityId">@option.Name</option>
 								}
 							</InputSelect>
-						</td>
-						<td>
+						</div>
+						<div class="mb-3">
+							<label for="activity-new-duration" class="form-label">Duration</label>
 							<div class="input-group ">
-								<InputNumber @bind-Value="activity.DurationInSeconds" class="form-control" />
+								<InputNumber id="activity-new-duration" @bind-Value="_newActivity.DurationInSeconds" class="form-control" />
 								<span class="input-group-text">seconds</span>
 							</div>
-						</td>
-						<td>
+						</div>
+						<div class="mb-3">
+							<label for="activity-new-break" class="form-label">Break</label>
 							<div class="input-group ">
-								<InputNumber @bind-Value="activity.BreakInSeconds" class="form-control" />
+								<InputNumber id="activity-new-break" @bind-Value="_newActivity.BreakInSeconds" class="form-control" />
 								<span class="input-group-text">seconds</span>
 							</div>
-						</td>
-						<td>
-							<button type="button" @onclick="() => RemoveActivity(activity)" class="btn btn-secondary" title="remove activity">-</button>
-						</td>
-					</tr>
-				}
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="4">
-						<button type="button" @onclick="AddActivity" class="btn btn-secondary float-end" title="add activity">+</button>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" @onclick="AddActivity" data-bs-dismiss="modal" class="btn btn-primary">Add Activity</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="d-grid d-sm-block">
+			<button type="button" data-bs-toggle="modal" data-bs-target="#modal-activity-new" class="btn btn-secondary float-end mb-3" title="add activity"><i class="fa-solid fa-plus fa-fw me-1"></i> Add Activity</button>
+			@if (!string.IsNullOrWhiteSpace(_addRoutineRequest.Name) && _addRoutineRequest.Activities.Any())
+			{
+				<button type="submit" class="btn btn-primary">Save Routine</button>
+			}
+		</div>
+
 	</Loading>
 
-	<button type="submit" class="btn btn-primary">Add Routine</button>
+
 
 </EditForm>

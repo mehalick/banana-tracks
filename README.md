@@ -2,7 +2,7 @@
 
 BananaTracks is an open-source, free-to-use web app for creating and running custom practice routines. It doesn't store any personal information nor use cookie or tracking features.
 
-Practice routines can be used for musical instruments, exercise, and any daily activity practice.
+Practice routines can be used for music practice, exercise, and any daily activity practice.
 
 ## Web App
 
@@ -10,7 +10,7 @@ Practice routines can be used for musical instruments, exercise, and any daily a
 
 ## Source Code
 
-This repository includes the source code for the app, backend functions, and infrastructure via the AWS Cloud Development Kit (CDK).
+This repository includes the source code for the web app, API, serverless functions, and infrastructure via the AWS Cloud Development Kit (CDK).
 
 ## Architecture
 

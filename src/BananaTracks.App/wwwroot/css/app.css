@@ -41,6 +41,10 @@ h1 {
 		outline: none;
 	}
 
+h2 {
+	font-size: calc(.75rem + .9vw);
+}
+
 a, .btn-link {
 	color: var(--bt-white);
 }
@@ -121,6 +125,13 @@ nav a {
 		color: var(--bt-white);
 		background-color: var(--btn-accent-primary-hover);
 		border-color: var(--btn-accent-primary-hover);
+	}
+
+	.btn-primary.disabled, .btn-primary:disabled {
+		color: var(--bt-white);
+		background-color: var(--bt-accent-primary);
+		border-color: var(--bt-accent-primary);
+		opacity: 0.25;
 	}
 
 .btn-secondary {
@@ -222,13 +233,19 @@ nav a {
 			margin: 0 4px;
 		}
 
+.modal-content {
+	background-color: var(--bt-dark-tertiary);
+	border-color: var(--bt-border-color);
+}
+
+.modal-content .btn-close {
+	background: none;
+	color: var(--bt-white);
+}
+
 .timer {
 	font-family: var(--bs-font-monospace);
 	font-size: 1.25rem !important;
-}
-
-.valid.modified:not([type=checkbox]) {
-	outline: 1px solid var(--bt-success);
 }
 
 .invalid {

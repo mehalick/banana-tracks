@@ -42,7 +42,7 @@ h1 {
 	}
 
 h2 {
-	font-size: calc(.75rem + .9vw);
+	font-size: calc(1rem + .9vw);
 }
 
 a, .btn-link {
@@ -146,6 +146,13 @@ nav a {
 		border-color: var(--btn-accent-primary-hover);
 	}
 
+	.btn-secondary.no-focus:focus {
+		color: var(--bt-white);
+		background-color: var(--bt-dark-tertiary);
+		border-color: var(--bt-dark-tertiary);
+		box-shadow: none;
+	}
+
 .btn-danger {
 	color: var(--bt-danger-text);
 	background-color: var(--bt-dark-tertiary);
@@ -233,15 +240,17 @@ nav a {
 			margin: 0 4px;
 		}
 
-.modal-content {
+.modal-content,
+.modal-content .modal-header,
+.modal-content .modal-footer {
 	background-color: var(--bt-dark-tertiary);
 	border-color: var(--bt-border-color);
 }
 
-.modal-content .btn-close {
-	background: none;
-	color: var(--bt-white);
-}
+	.modal-content .btn-close {
+		background: none;
+		color: var(--bt-white);
+	}
 
 .timer {
 	font-family: var(--bs-font-monospace);

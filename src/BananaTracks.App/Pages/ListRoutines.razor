@@ -8,7 +8,7 @@
 <Loading IsLoading="_response is null">
 
 	<ul class="link-list">
-		<li><a href="/routines/add">Add Routine</a></li>
+		<li><a href="/routines/create">Create Routine</a></li>
 	</ul>
 
 	@foreach (var routine in _response!.Routines)
@@ -36,7 +36,7 @@
 			{
 				<div class="card-footer d-flex justify-content-between">
 					<small class="text-truncate">@routine.ActivitiesList</small>
-					<a href="/routines/@routine.RoutineId/delete" title="Delete routine">Delete</a>
+					<a href="/routines/@routine.RoutineId/delete" title="Delete routine"><i class="fa-solid fa-trash-xmark fa-fw"></i></a>
 				</div>
 			}
 		</div>

@@ -1,9 +1,9 @@
-﻿@page "/routines/add"
+﻿@page "/routines/create"
 @inherits AppComponentBase
 
-<PageTitle>Add Routine</PageTitle>
+<PageTitle>Create Routine</PageTitle>
 
-<h1>Add Routine</h1>
+<h1>Create Routine</h1>
 
 <EditForm Model="_addRoutineRequest" OnValidSubmit="OnValidSubmit">
 	<DataAnnotationsValidator />
@@ -17,6 +17,11 @@
 	<Loading IsLoading="_listActivitiesResponse is null">
 
 		<h2>Activities</h2>
+		
+		@if (!_addRoutineRequest.Activities.Any())
+		{
+			<p class="text-muted">Add one or more activities to create your routine.</p>
+		}
 		
 		@foreach (var activity in _addRoutineRequest.Activities)
 		{
@@ -96,10 +101,10 @@
 		</div>
 		
 		<div class="d-grid d-sm-block">
-			<button type="button" data-bs-toggle="modal" data-bs-target="#modal-activity-new" class="btn btn-secondary float-end mb-3" title="add activity"><i class="fa-solid fa-plus fa-fw me-1"></i> Add Activity</button>
+			<button type="button" data-bs-toggle="modal" data-bs-target="#modal-activity-new" class="btn btn-secondary no-focus float-end mb-3" title="add activity"><i class="fa-solid fa-plus fa-fw me-1"></i> Add Activity</button>
 			@if (!string.IsNullOrWhiteSpace(_addRoutineRequest.Name) && _addRoutineRequest.Activities.Any())
 			{
-				<button type="submit" class="btn btn-primary">Save Routine</button>
+				<button type="submit" class="btn btn-primary">Create Routine</button>
 			}
 		</div>
 

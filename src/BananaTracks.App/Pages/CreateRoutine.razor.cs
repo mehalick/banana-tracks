@@ -1,6 +1,6 @@
 ﻿namespace BananaTracks.App.Pages;
 
-public partial class AddRoutine : AppComponentBase
+public partial class CreateRoutine : AppComponentBase
 {
 	private readonly AddRoutineRequest _addRoutineRequest = new();
 	private ListActivitiesResponse? _listActivitiesResponse;
@@ -11,7 +11,7 @@ public partial class AddRoutine : AppComponentBase
 		_listActivitiesResponse = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ListActivities);
 	}
 
-	private async Task AddActivity()
+	private void AddActivity()
 	{
 		_addRoutineRequest.Activities.Add(new()
 		{
@@ -20,10 +20,6 @@ public partial class AddRoutine : AppComponentBase
 			DurationInSeconds = _newActivity.DurationInSeconds,
 			BreakInSeconds = _newActivity.BreakInSeconds
 		});
-
-		await Task.Delay(100);
-
-		await JsRuntime.InvokeVoidAsync("blurActive");
 	}
 
 	private void RemoveActivity(RoutineActivityModel activity)

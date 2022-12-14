@@ -34,16 +34,22 @@ public class CdkStack : Stack
 
 		var (appDistribution, cdnDistribution) = CreateCloudFrontDistributions(appBucket, cdnBucket, certificate);
 
-		var (activitiesTable, routinesTable) = CreateDynamoDbTables();
+		var (activitiesTable, routinesTable, sessionsTable) = CreateDynamoDbTables();
 
 		var activityCreatedQueue = new Queue(this, Name("ActivityCreatedQueue"), new QueueProps
 		{
 			QueueName = "ActivityCreated"
 		});
 
-		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, activityCreatedQueue, cdnBucket);
+		var sessionSavedQueue = new Queue(this, Name("SessionSavedQueue"), new QueueProps
+		{
+			QueueName = "SessionSaved"
+		});
+
+		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, sessionsTable, activityCreatedQueue, sessionSavedQueue, cdnBucket);
 
 		_ = CreateActivityCreatedFunction(lambdaRole, activityCreatedQueue);
+		_ = CreateSessionSavedFunction(lambdaRole, sessionSavedQueue);
 
 		var apiFunction = CreateApiFunction(lambdaRole);
 
@@ -183,7 +189,7 @@ public class CdkStack : Stack
 		return (appDistribution, cdnDistribution);
 	}
 
-	private (Table, Table) CreateDynamoDbTables()
+	private (Table, Table, Table) CreateDynamoDbTables()
 	{
 		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
 		{
@@ -205,10 +211,20 @@ public class CdkStack : Stack
 			PointInTimeRecovery = true
 		});
 
-		return (activitiesTable, routinesTable);
+		var sessionsTable = new Table(this, Name("DynamoDbSessions"), new TableProps
+		{
+			TableName = Name("Sessions"),
+			PartitionKey = new Attribute { Name = "UserId", Type = AttributeType.STRING },
+			SortKey = new Attribute { Name = "SessionId", Type = AttributeType.STRING },
+			BillingMode = BillingMode.PAY_PER_REQUEST,
+			RemovalPolicy = RemovalPolicy.DESTROY,
+			PointInTimeRecovery = true
+		});
+
+		return (activitiesTable, routinesTable, sessionsTable);
 	}
 
-	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, IQueue activityCreatedQueue, IBucket cdnBucket)
+	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, ITable sessionsTable, IQueue activityCreatedQueue, IQueue sessionSavedQueue, IBucket cdnBucket)
 	{
 		var lambdaRole = new Role(this, Name("LambdaRole"),
 			new RoleProps
@@ -234,7 +250,7 @@ public class CdkStack : Stack
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Effect = Effect.ALLOW,
-			Resources = new[] { activitiesTable.TableArn, routinesTable.TableArn },
+			Resources = new[] { activitiesTable.TableArn, routinesTable.TableArn, sessionsTable.TableArn },
 			Actions = new[]
 			{
 				"dynamodb:DescribeTable",
@@ -249,7 +265,7 @@ public class CdkStack : Stack
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Effect = Effect.ALLOW,
-			Resources = new[] { activityCreatedQueue.QueueArn },
+			Resources = new[] { activityCreatedQueue.QueueArn, sessionSavedQueue.QueueArn },
 			Actions = new[]
 			{
 				"sqs:ReceiveMessage",
@@ -288,6 +304,26 @@ public class CdkStack : Stack
 			});
 
 		activityCreatedFunction.AddEventSource(new SqsEventSource(activityCreatedQueue));
+
+		return activityCreatedFunction;
+	}
+
+	private Function CreateSessionSavedFunction(IRole lambdaRole, IQueue sessionSavedQueue)
+	{
+		var activityCreatedFunction = new Function(this, Name("SessionSavedFunction"),
+			new FunctionProps
+			{
+				FunctionName = Name("SessionSavedFunction"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.SessionSaved\bin\Release\net6.0"),
+				Description = "BananaTracks SessionSaved Function",
+				Handler = "BananaTracks.Functions.SessionSaved::BananaTracks.Functions.SessionSaved.Function::FunctionHandler",
+				MemorySize = 256,
+				Role = lambdaRole,
+				Runtime = Runtime.DOTNET_6,
+				Timeout = Duration.Seconds(30)
+			});
+
+		activityCreatedFunction.AddEventSource(new SqsEventSource(sessionSavedQueue));
 
 		return activityCreatedFunction;
 	}

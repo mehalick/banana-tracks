@@ -7,16 +7,6 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 	private RoutineRun? _routineRun;
 
-	private enum RunStatus
-	{
-		IsPending, IsRunning, IsDone
-	}
-
-	private enum ActivityStatus
-	{
-		IsPending, IsRunning, IsBreaking, IsDone
-	}
-
 	protected override async Task OnInitializedAsync()
 	{
 		var response = await HttpClient.GetFromJsonAsync<GetRoutineByIdResponse>($"{ApiRoutes.GetRoutineById}?RoutineId={RoutineId}");
@@ -37,6 +27,11 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 		}
 
 		await _routineRun.Run(JsRuntime, async () => await InvokeAsync(StateHasChanged));
+
+		await HttpClient.PostAsJsonAsync(ApiRoutes.AddSession, new AddSessionRequest
+		{
+			RoutineId = RoutineId
+		});
 	}
 
 	private static string DisplayTime(TimeSpan timeSpan)
@@ -52,6 +47,16 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 	}
 
 	public void Dispose() => _routineRun?.Dispose();
+
+	private enum RunStatus
+	{
+		IsPending, IsRunning, IsDone
+	}
+
+	private enum ActivityStatus
+	{
+		IsPending, IsRunning, IsBreaking, IsDone
+	}
 
 	private class RoutineRun : IDisposable
 	{

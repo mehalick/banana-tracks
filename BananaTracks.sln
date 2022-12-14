@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Functions.Acti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Core", "src\BananaTracks.Core\BananaTracks.Core.csproj", "{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Functions.SessionSaved", "src\BananaTracks.Functions.SessionSaved\BananaTracks.Functions.SessionSaved.csproj", "{03E0193E-13A7-4683-9523-6C8DBA5D5229}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,18 @@ Global
 		{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}.Release|x64.Build.0 = Release|Any CPU
 		{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}.Release|x86.Build.0 = Release|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Debug|x64.Build.0 = Debug|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Debug|x86.Build.0 = Debug|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Release|x64.ActiveCfg = Release|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Release|x64.Build.0 = Release|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Release|x86.ActiveCfg = Release|Any CPU
+		{03E0193E-13A7-4683-9523-6C8DBA5D5229}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,7 @@ public partial class Index : AppComponentBase
 
 	protected override void OnInitialized()
 	{
-		_version = $"{Configuration["Version:ShortSha"]}|{Configuration["Version:RunId"]}" ;
+		_version = Configuration["Version:ShortSha"];
 	}
 
 	protected override async Task OnInitializedAsync()

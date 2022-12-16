@@ -7,22 +7,34 @@
 	
 	<h1>@_routineRun!.Name</h1>
 	
-	<div class="d-grid d-sm-block mb-3">
-		@switch (_routineRun.Status)
-		{
-			case RunStatus.IsPending:
-			default:
-				<button type="button" @onclick="RunTimer" class="btn btn-primary">Start <i class="fa-solid fa-play ms-1"></i></button>
-				break;
-			case RunStatus.IsRunning:
-				<button type="button" class="btn btn-secondary">Pause <i class="fa-solid fa-pause ms-1"></i></button>
-				break;
-			case RunStatus.IsDone:
-				<button type="button" class="btn btn-secondary">Restart <i class="fa-solid fa-play ms-1"></i></button>
-				break;
-		}
+	<div class="row">
+		<div class="col-sm-12 col-md-4 mb-3">
+			<div class="d-grid">
+			@switch (_routineRun.Status)
+			{
+				case RunStatus.IsPending:
+				default:
+					<button type="button" @onclick="RunTimer" class="btn btn-primary">Start <i class="fa-solid fa-play ms-1"></i></button>
+					break;
+				case RunStatus.IsRunning:
+					<button type="button" class="btn btn-secondary">Pause <i class="fa-solid fa-pause ms-1"></i></button>
+					break;
+				case RunStatus.IsDone:
+					<button type="button" class="btn btn-secondary">Restart <i class="fa-solid fa-play ms-1"></i></button>
+					break;
+			}
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-8 mb-3">
+			<div class="form-check">
+				<input id="@Ids.Next()" class="form-check-input" type="checkbox" value="" @bind="_saveSession">
+				<label for="@Ids.Current()" class="form-check-label">
+					Save session when complete
+				</label>
+			</div>
+		</div>
 	</div>
-
+	
 	@foreach (var activity in _routineRun.Activities)
 	{
 		<div class="@(activity.Status is ActivityStatus.IsRunning or ActivityStatus.IsBreaking ? "card card-active" : "card")">

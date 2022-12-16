@@ -14,4 +14,4 @@ This repository includes the source code for the web app, API, serverless functi
 
 ## Architecture
 
-![BananaTracks Architecture](https://cdn.bananatracks.com/assets/architecture.drawio.svg)
+![BananaTracks Architecture](https://cdn.bananatracks.com/assets/architecture-20221216133339.svg)

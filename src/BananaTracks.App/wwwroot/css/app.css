@@ -42,7 +42,7 @@ h1 {
 	}
 
 h2 {
-	font-size: calc(1rem + .9vw);
+	font-size: calc(.8rem + .8vw);
 }
 
 a, .btn-link {
@@ -164,6 +164,11 @@ nav a {
 		background-color: var(--bt-danger-hover);
 		border-color: var(--bt-danger-hover);
 	}
+
+.form-check-input:checked {
+	background-color: var(--bt-accent-primary);
+	border-color: var(--bt-accent-primary);
+}
 
 .table {
 	border-top: 1px solid var(--bt-border-color);

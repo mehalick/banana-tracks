@@ -7,6 +7,8 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 	private RoutineRun? _routineRun;
 
+	private bool _saveSession = true;
+
 	protected override async Task OnInitializedAsync()
 	{
 		var response = await HttpClient.GetFromJsonAsync<GetRoutineByIdResponse>($"{ApiRoutes.GetRoutineById}?RoutineId={RoutineId}");
@@ -28,10 +30,13 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 		await _routineRun.Run(JsRuntime, async () => await InvokeAsync(StateHasChanged));
 
-		await HttpClient.PostAsJsonAsync(ApiRoutes.AddSession, new AddSessionRequest
+		if (_saveSession)
 		{
-			RoutineId = RoutineId
-		});
+			await HttpClient.PostAsJsonAsync(ApiRoutes.AddSession, new AddSessionRequest
+			{
+				RoutineId = RoutineId
+			});
+		}
 	}
 
 	private static string DisplayTime(TimeSpan timeSpan)

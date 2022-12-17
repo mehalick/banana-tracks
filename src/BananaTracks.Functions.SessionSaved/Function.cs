@@ -3,10 +3,11 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using Amazon.Lambda.RuntimeSupport;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using BananaTracks.Core.Configuration;
 using BananaTracks.Core.Entities;
-
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
 namespace BananaTracks.Functions.SessionSaved;
 
@@ -17,6 +18,14 @@ public class Function
 	public Function()
 	{
 		_dynamoDbContext = new DynamoDBContext(new AmazonDynamoDBClient());
+	}
+
+	private static async Task Main()
+	{
+		var handler = new Function().FunctionHandler;
+		await LambdaBootstrapBuilder.Create(handler, new SourceGeneratorLambdaJsonSerializer<LambdaFunctionJsonSerializerContext>())
+			.Build()
+			.RunAsync();
 	}
 
 	public async Task FunctionHandler(SQSEvent sqsEvent, ILambdaContext context)
@@ -42,3 +51,9 @@ public class Function
 		await Task.CompletedTask;
 	}
 }
+
+[JsonSerializable(typeof(SQSEvent))]
+public partial class LambdaFunctionJsonSerializerContext : JsonSerializerContext
+{
+}
+

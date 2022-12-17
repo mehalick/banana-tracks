@@ -2,8 +2,8 @@
 	<Application>
 		<Assembly Name="Amazon.Lambda.RuntimeSupport" Dynamic="Required All"></Assembly>
 		<Assembly Name="Amazon.Lambda.Serialization.SystemTextJson" Dynamic="Required All"></Assembly>
-		<!--<Assembly Name="Amazon.Lambda.SQSEvents" Dynamic="Required All"></Assembly>
-		<Assembly Name="AWSSDK.Core" Dynamic="Required All"></Assembly>
+		<Assembly Name="Amazon.Lambda.SQSEvents" Dynamic="Required All"></Assembly>
+		<!--<Assembly Name="AWSSDK.Core" Dynamic="Required All"></Assembly>
 		<Assembly Name="AWSSDK.DynamoDBv2" Dynamic="Required All"></Assembly>
 		<Assembly Name="BananaTracks.Core" Dynamic="Required All"></Assembly>
 		<Assembly Name="BananaTracks.Shared" Dynamic="Required All"></Assembly>-->

@@ -1,4 +1,4 @@
-name: Sync Website
+name: Deploy to Production
 
 on:
   push:
@@ -48,13 +48,6 @@ jobs:
         field: Version.ShortSha
         value: ${{ env.short-sha }}
 
-    - name: Set Run ID
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: publish/wwwroot/appsettings.json
-        field: Version.RunId
-        value: ${{ github.run_id}}
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
@@ -67,6 +60,9 @@ jobs:
 
     - name: Deploy ActivityCreated Function to Lambda
       run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityCreated
+
+    - name: Deploy SessionSaved Function to Lambda
+      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.SessionSaved
 
     - name: Deploy app to S3
       run: aws s3 sync ./publish/wwwroot/ s3://app.bananatracks.com --delete

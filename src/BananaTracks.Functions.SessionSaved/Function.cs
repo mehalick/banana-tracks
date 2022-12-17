@@ -1,6 +1,7 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using Amazon.Lambda.SQSEvents;
 using System.Text.Json.Serialization;
 
 namespace BananaTracks.Functions.SessionSaved;
@@ -22,8 +23,10 @@ public class Function
 			.RunAsync();
 	}
 
-	public async Task FunctionHandler(string sqsEvent, ILambdaContext context)
+	public async Task FunctionHandler(SQSEvent sqsEvent, ILambdaContext context)
 	{
+		context.Logger.LogInformation("HERE");
+
 		//foreach (var record in sqsEvent.Records)
 		//{
 		//	await ProcessRecordAsync(record, context);
@@ -46,8 +49,7 @@ public class Function
 	//}
 }
 
-//[JsonSerializable(typeof(SQSEvent))]
-[JsonSerializable(typeof(string))]
+[JsonSerializable(typeof(SQSEvent))]
 public partial class LambdaFunctionJsonSerializerContext : JsonSerializerContext
 {
 }

@@ -7,10 +7,10 @@
 	],
 	"region": "us-east-1",
 	"configuration": "Release",
-	"function-runtime": "provided.al2",
+	"function-architecture": "x86_64",
+	"function-runtime": "dotnet6",
 	"function-memory-size": 256,
 	"function-timeout": 30,
 	"function-name": "BananaTracksSessionSavedFunction",
-	"function-handler": "bootstrap",
-	"msbuild-parameters": "--self-contained true"
+	"function-handler": "BananaTracks.Functions.SessionSaved::BananaTracks.Functions.SessionSaved.Function::FunctionHandler"
 }

@@ -7,10 +7,10 @@
   ],
   "region": "us-east-1",
   "configuration": "Release",
-  "function-architecture": "x86_64",
-  "function-runtime": "dotnet6",
+  "function-runtime": "provided.al2",
   "function-memory-size": 256,
   "function-timeout": 30,
   "function-name": "BananaTracksApiLambda",
-  "function-handler": "BananaTracks.Api"
+  "function-handler": "bootstrap",
+  "msbuild-parameters": "--self-contained true"
 }

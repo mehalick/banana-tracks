@@ -9,7 +9,6 @@ global using FastEndpoints;
 global using System.Text.Json;
 using Amazon;
 using Amazon.DynamoDBv2;
-using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.Runtime;
 using Amazon.SQS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,11 +25,6 @@ public class Program
 		builder.Services.AddFastEndpoints();
 		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddSwaggerGen();
-
-		builder.Services.ConfigureHttpJsonOptions(options =>
-		{
-			options.SerializerOptions.AddContext<AppJsonSerializerContext>();
-		});
 
 		AddAuthServices(builder);
 		AddAwsServices(builder);
@@ -85,10 +79,7 @@ public class Program
 
 		if (builder.Environment.IsProduction())
 		{
-			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi, options =>
-			{
-				options.Serializer = new SourceGeneratorLambdaJsonSerializer<AppJsonSerializerContext>();
-			});
+			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 			builder.Services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
 			builder.Services.AddSingleton<IAmazonSQS>(_ => new AmazonSQSClient(region));
 		}

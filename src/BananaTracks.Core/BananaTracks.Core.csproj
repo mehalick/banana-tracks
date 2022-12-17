@@ -4,9 +4,6 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Nullable>enable</Nullable>
-		<PublishAot>true</PublishAot>
-		<StripSymbols>true</StripSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,12 +11,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\BananaTracks.Shared\BananaTracks.Shared.csproj" />
+		<Folder Include="Messages\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<TrimmerRootAssembly Include="AWSSDK.Core" />
-		<TrimmerRootAssembly Include="AWSSDK.DynamoDBv2" />
+	  <ProjectReference Include="..\BananaTracks.Shared\BananaTracks.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

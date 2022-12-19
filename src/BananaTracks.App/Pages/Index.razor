@@ -4,17 +4,22 @@
 <PageTitle>BananaTracks</PageTitle>
 
 <AuthorizeView>
+	<NotAuthorized>
+		<div class="d-grid d-sm-block text-center mb-3">
+			<a href="authentication/login" class="btn btn-primary">Log In or Sign Up</a>
+		</div>
+	</NotAuthorized>
 	<Authorized>
-		
+
 		<h1>Hi!</h1>
 		<p>If you're new here, get started by <a href="/activities/add">adding some activities</a> and then <a href="/routines/create">create a routine</a>.</p>
-		
+
 		<h2>What's New</h2>
 		<ul>
 			<li>2022-12 - Added support for saving sessions</li>
 			<li>2022-12 - Added profile page</li>
 		</ul>
-		
+
 		<h2>Coming Soon</h2>
 		<ul>
 			<li>Add support for deleting profile and data</li>
@@ -23,7 +28,7 @@
 			<li>Add support for pausing and stopping running routines</li>
 			<li>Upgrade .NET to 7 and add AOT Lambda compilation</li>
 		</ul>
-		
+
 		<h2>Support</h2>
 		<p>Questions, comments, or ideas? I'd love to know what you think, please just send me an email to <a href="mailto:andy.mehalick@outlook.com">andy.mehalick@outlook.com</a>.</p>
 		<p>If you have any technical issues or feature ideas please feel free to visit <a href="https://github.com/mehalick/banana-tracks/issues">https://github.com/mehalick/banana-tracks/issues</a>.</p>
@@ -33,11 +38,6 @@
 		<p>BananaTracks is completely free-to-use and open-source; it doesn't track, collect, share, or resell any personal information.</p>
 
 	</Authorized>
-	<NotAuthorized>
-		<div class="d-grid d-sm-block text-center mb-3">
-			<a href="authentication/login" class="btn btn-primary">Log In or Sign Up</a>
-		</div>
-	</NotAuthorized>
 </AuthorizeView>
 
 <div class="text-center mt-5">

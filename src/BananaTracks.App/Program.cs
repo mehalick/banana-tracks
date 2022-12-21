@@ -8,6 +8,7 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.JSInterop;
 global using System.Net.Http.Json;
+global using BananaTracks.App.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -26,6 +27,10 @@ public class Program
 
 		builder.Services
 			.AddHttpClient("BananaTracks.Api", client => client.BaseAddress = new(builder.Configuration["Api:BaseAddress"]!))
+			.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+
+		builder.Services
+			.AddHttpClient<ApiClient>(client => client.BaseAddress = new(builder.Configuration["Api:BaseAddress"]!))
 			.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 
 		builder.Services.AddScoped(sp => sp

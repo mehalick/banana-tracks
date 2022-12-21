@@ -7,7 +7,7 @@ public partial class ListRoutines : AppComponentBase
 
 	protected override async Task OnInitializedAsync()
 	{
-		_response = await HttpClient.GetFromJsonAsync<ListRoutinesResponse>(ApiRoutes.ListRoutines);
+		_response = await ApiClient.ListRoutines();
 	}
 
 	private static void SelectRoutine(RoutineModel routine, bool isSelected)

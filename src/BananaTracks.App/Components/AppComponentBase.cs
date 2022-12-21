@@ -6,12 +6,15 @@ public abstract class AppComponentBase : ComponentBase
 	protected HttpClient HttpClient { get; set; } = null!;
 
 	[Inject]
-	protected NavigationManager NavigationManager { get; set; } = null!;
+	private protected ApiClient ApiClient { get; set; } = null!;
 
 	[Inject]
-	protected IJSRuntime JsRuntime { get; set; } = null!;
+	private protected NavigationManager NavigationManager { get; set; } = null!;
 
-	public Ids Ids { get; set; } = new();
+	[Inject]
+	private protected IJSRuntime JsRuntime { get; set; } = null!;
+
+	private protected Ids Ids { get; set; } = new();
 }
 
 public class Ids

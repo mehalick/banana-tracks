@@ -11,10 +11,6 @@ jobs:
 
     steps:
 
-    - name: Set Outputs
-      id: vars
-      run: echo "short-sha=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
-
     - name: Checkout
       uses: actions/checkout@master
 
@@ -46,7 +42,7 @@ jobs:
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.ShortSha
-        value: ${{ env.short-sha }}
+        value: ${{ GITHUB_SHA }}
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16

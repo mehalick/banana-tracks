@@ -7,7 +7,7 @@ public partial class ListActivities : AppComponentBase
 
 	protected override async Task OnInitializedAsync()
 	{
-		_response = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ListActivities);
+		_response = await ApiClient.ListActivities();
 	}
 
 	private static void SelectActivity(ActivityModel activity, bool isSelected)

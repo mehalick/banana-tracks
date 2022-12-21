@@ -42,7 +42,7 @@ jobs:
       with:
         file: publish/wwwroot/appsettings.json
         field: Version.ShortSha
-        value: ${{ GITHUB_SHA }}
+        value: ${{ github.sha }}
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16

@@ -41,7 +41,7 @@ jobs:
       uses: jossef/action-set-json-field@v2.1
       with:
         file: publish/wwwroot/appsettings.json
-        field: Version.ShortSha
+        field: Git.Commit
         value: ${{ github.sha }}
 
     - name: Configure AWS Credentials

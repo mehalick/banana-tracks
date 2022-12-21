@@ -1,15 +1,13 @@
 global using Amazon.DynamoDBv2.DataModel;
 global using BananaTracks.Api.Extensions;
-global using BananaTracks.Domain.Configuration;
-global using BananaTracks.Domain.Entities;
 global using BananaTracks.Api.Shared.Constants;
 global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;
+global using BananaTracks.Domain.Configuration;
+global using BananaTracks.Domain.Entities;
 global using FastEndpoints;
 global using System.Text.Json;
-using Amazon;
 using Amazon.DynamoDBv2;
-using Amazon.Runtime;
 using Amazon.SQS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -21,13 +19,9 @@ public class Program
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
-		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddFastEndpoints();
-		builder.Services.AddHttpContextAccessor();
-		builder.Services.AddSwaggerGen();
-
 		AddAuthServices(builder);
 		AddAwsServices(builder);
+		AddWebServices(builder);
 
 		var app = builder.Build();
 
@@ -75,24 +69,24 @@ public class Program
 
 	private static void AddAwsServices(WebApplicationBuilder builder)
 	{
-		var region = RegionEndpoint.GetBySystemName(builder.Configuration["AWS:DefaultRegion"]);
+		var awsOptions = builder.Configuration.GetAWSOptions();
+
+		builder.Services.AddDefaultAWSOptions(awsOptions);
+		builder.Services.AddAWSService<IAmazonDynamoDB>();
+		builder.Services.AddAWSService<IAmazonSQS>();
+		builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
 
 		if (builder.Environment.IsProduction())
 		{
 			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
-			builder.Services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
-			builder.Services.AddSingleton<IAmazonSQS>(_ => new AmazonSQSClient(region));
 		}
-		else
-		{
-			var accessKeyId = builder.Configuration["AwsAccessKeyId"];
-			var secretAccessKey = builder.Configuration["AwsSecretAccessKey"];
-			var credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
+	}
 
-			builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(credentials));
-			builder.Services.AddSingleton<IAmazonSQS>(_ => new AmazonSQSClient(credentials, region));
-		}
-
-		builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
+	private static void AddWebServices(WebApplicationBuilder builder)
+	{
+		builder.Services.AddEndpointsApiExplorer();
+		builder.Services.AddFastEndpoints();
+		builder.Services.AddHttpContextAccessor();
+		builder.Services.AddSwaggerGen();
 	}
 }

@@ -1,6 +1,4 @@
-﻿using BananaTracks.Core.Entities;
-
-namespace BananaTracks.Api.Endpoints;
+﻿namespace BananaTracks.Api.Endpoints;
 
 internal class GetRoutineById : Endpoint<GetRoutineByIdRequest, GetRoutineByIdResponse>
 {

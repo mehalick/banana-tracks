@@ -18,8 +18,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BananaTracks.Core\BananaTracks.Core.csproj" />
-		<ProjectReference Include="..\BananaTracks.Shared\BananaTracks.Shared.csproj" />
+		<ProjectReference Include="..\BananaTracks.Api.Shared\BananaTracks.Api.Shared.csproj" />
+		<ProjectReference Include="..\BananaTracks.Domain\BananaTracks.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

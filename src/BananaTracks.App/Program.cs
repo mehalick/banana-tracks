@@ -1,9 +1,9 @@
 global using BananaTracks.App.Components;
 global using BananaTracks.App.Extensions;
-global using BananaTracks.Shared.Models;
-global using BananaTracks.Shared.Requests;
-global using BananaTracks.Shared.Responses;
-global using BananaTracks.Shared.Constants;
+global using BananaTracks.Api.Shared.Models;
+global using BananaTracks.Api.Shared.Requests;
+global using BananaTracks.Api.Shared.Responses;
+global using BananaTracks.Api.Shared.Constants;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.JSInterop;

@@ -1,10 +1,10 @@
 global using Amazon.DynamoDBv2.DataModel;
 global using BananaTracks.Api.Extensions;
-global using BananaTracks.Core.Configuration;
-global using BananaTracks.Core.Entities;
-global using BananaTracks.Shared.Constants;
-global using BananaTracks.Shared.Requests;
-global using BananaTracks.Shared.Responses;
+global using BananaTracks.Domain.Configuration;
+global using BananaTracks.Domain.Entities;
+global using BananaTracks.Api.Shared.Constants;
+global using BananaTracks.Api.Shared.Requests;
+global using BananaTracks.Api.Shared.Responses;
 global using FastEndpoints;
 global using System.Text.Json;
 using Amazon;

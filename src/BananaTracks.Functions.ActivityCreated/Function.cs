@@ -4,9 +4,9 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Amazon.Polly;
-using BananaTracks.Core.Entities;
+using BananaTracks.Domain.Configuration;
+using BananaTracks.Domain.Entities;
 using System.Text.Json;
-using BananaTracks.Core.Configuration;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 

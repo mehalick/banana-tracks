@@ -54,8 +54,8 @@ jobs:
     - name: Deploy API to Lambda
       run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api
 
-    - name: Deploy ActivityCreated Function to Lambda
-      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityCreated
+    - name: Deploy ActivityUpdated Function to Lambda
+      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityUpdated
 
     - name: Deploy SessionSaved Function to Lambda
       run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.SessionSaved

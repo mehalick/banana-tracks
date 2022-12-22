@@ -1,7 +1,19 @@
-﻿namespace BananaTracks.Domain.Messages;
+﻿using BananaTracks.Domain.Entities;
 
-public class SessionSavedMessage
+namespace BananaTracks.Domain.Messages;
+
+public record SessionSavedMessage
 {
 	public string UserId { get; set; } = default!;
 	public string RoutineId { get; set; } = default!;
+
+	private SessionSavedMessage()
+	{
+	}
+
+	public SessionSavedMessage(Session session)
+	{
+		UserId = session.UserId;
+		RoutineId = session.RoutineId;
+	}
 }

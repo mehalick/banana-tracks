@@ -1,5 +1,6 @@
 global using Amazon.DynamoDBv2.DataModel;
 global using BananaTracks.Api.Extensions;
+global using BananaTracks.Api.Providers;
 global using BananaTracks.Api.Shared.Constants;
 global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;
@@ -69,12 +70,13 @@ public class Program
 
 	private static void AddAwsServices(WebApplicationBuilder builder)
 	{
-		var awsOptions = builder.Configuration.GetAWSOptions();
+		var options = builder.Configuration.GetAWSOptions();
 
-		builder.Services.AddDefaultAWSOptions(awsOptions);
+		builder.Services.AddDefaultAWSOptions(options);
 		builder.Services.AddAWSService<IAmazonDynamoDB>();
 		builder.Services.AddAWSService<IAmazonSQS>();
 		builder.Services.AddTransient<IDynamoDBContext, DynamoDBContext>();
+		builder.Services.AddTransient<QueueProvider>();
 
 		if (builder.Environment.IsProduction())
 		{

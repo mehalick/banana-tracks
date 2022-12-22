@@ -18,7 +18,6 @@
 		<PackageReference Include="AWSSDK.Polly" Version="3.7.103" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\BananaTracks.Api.Shared\BananaTracks.Api.Shared.csproj" />
 	  <ProjectReference Include="..\BananaTracks.Domain\BananaTracks.Domain.csproj" />
 	</ItemGroup>
 </Project>

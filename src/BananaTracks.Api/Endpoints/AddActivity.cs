@@ -1,13 +1,10 @@
-﻿using Amazon.SQS;
-
-namespace BananaTracks.Api.Endpoints;
+﻿namespace BananaTracks.Api.Endpoints;
 
 internal class AddActivity : Endpoint<AddActivityRequest>
 {
-	private readonly IConfiguration _configuration;
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
-	private readonly IAmazonSQS _sqsClient;
+	private readonly QueueProvider _queueProvider;
 
 	public override void Configure()
 	{
@@ -15,19 +12,18 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public AddActivity(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, IAmazonSQS sqsClient)
+	public AddActivity(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, QueueProvider queueProvider)
 	{
-		_configuration = configuration;
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
-		_sqsClient = sqsClient;
+		_queueProvider = queueProvider;
 	}
 
 	public override async Task HandleAsync(AddActivityRequest request, CancellationToken cancellationToken)
 	{
 		var activity = await SaveActivity(request, cancellationToken);
 
-		await SendActivityCreatedMessage(activity, cancellationToken);
+		await _queueProvider.SendActivityUpdatedMessage(activity, cancellationToken);
 
 		await SendOkAsync(cancellationToken);
 	}
@@ -45,18 +41,5 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 		await _dynamoDbContext.SaveAsync(activity, cancellationToken);
 
 		return activity;
-	}
-
-	private async Task SendActivityCreatedMessage(Activity activity, CancellationToken cancellationToken)
-	{
-		var url = _configuration["AWS:SQS:ActivityCreatedQueueUrl"];
-
-		var json = JsonSerializer.Serialize(new()
-		{
-			UserId = activity.UserId,
-			ActivityId = activity.ActivityId
-		}, AppJsonSerializerContext.Default.ActivityCreatedMessage);
-
-		await _sqsClient.SendMessageAsync(url, json, cancellationToken);
 	}
 }

@@ -1,0 +1,21 @@
+﻿@page "/activities/{ActivityId}/update"
+@inherits AppComponentBase
+
+<PageTitle>Update Activity</PageTitle>
+
+<h1>Update Activity</h1>
+
+<Loading IsLoading="UpdateActivityRequest is null">
+	<EditForm Model="UpdateActivityRequest" OnValidSubmit="OnValidSubmit">
+		<DataAnnotationsValidator />
+		<ValidationSummary />
+
+		<div class="mb-3">
+			<label for="name" class="form-label">Name</label>
+			<InputText id="name" class="form-control" @bind-Value="UpdateActivityRequest!.Name" />
+		</div>
+
+		<button type="submit" class="btn btn-primary">Save</button>
+
+	</EditForm>
+</Loading>

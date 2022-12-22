@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
@@ -6,11 +7,10 @@ using Amazon.Lambda.SQSEvents;
 using Amazon.Polly;
 using BananaTracks.Domain.Configuration;
 using BananaTracks.Domain.Entities;
-using System.Text.Json;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
-namespace BananaTracks.Functions.ActivityCreated;
+namespace BananaTracks.Functions.ActivityUpdated;
 
 public class Function
 {
@@ -33,7 +33,7 @@ public class Function
 
 	private async Task ProcessRecordAsync(SQSEvent.SQSMessage message, ILambdaContext context)
 	{
-		var body = JsonSerializer.Deserialize(message.Body, AppJsonSerializerContext.Default.ActivityCreatedMessage)!;
+		var body = JsonSerializer.Deserialize(message.Body, AppJsonSerializerContext.Default.ActivityUpdatedMessage)!;
 
 		context.Logger.LogInformation($"Processed activity UserId: {body.UserId} ActivityId: {body.ActivityId}");
 
@@ -42,6 +42,7 @@ public class Function
 		if (activity is not null)
 		{
 			activity.AudioUrl = await SynthesizeSpeech(activity);
+			activity.UpdatedAt = DateTime.UtcNow;
 
 			await _dynamoDbContext.SaveAsync(activity);
 		}

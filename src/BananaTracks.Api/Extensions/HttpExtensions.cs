@@ -18,4 +18,16 @@ internal static class HttpExtensions
 
 		return claim.Value;
 	}
+
+	public static string GetTraceId(this IHttpContextAccessor httpContextAccessor)
+	{
+		var id = httpContextAccessor.HttpContext?.TraceIdentifier;
+
+		if (id is null)
+		{
+			throw new("Missing trace identifier for HTTP request.");
+		}
+
+		return id;
+	}
 }

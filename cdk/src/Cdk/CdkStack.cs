@@ -13,6 +13,8 @@ using Amazon.CDK.AWS.S3;
 using Amazon.CDK.AWS.SQS;
 using Constructs;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
+using CfnAccount = Amazon.CDK.AWS.APIGateway.CfnAccount;
+using CfnAccountProps = Amazon.CDK.AWS.APIGateway.CfnAccountProps;
 using Function = Amazon.CDK.AWS.Lambda.Function;
 using FunctionProps = Amazon.CDK.AWS.Lambda.FunctionProps;
 using IFunction = Amazon.CDK.AWS.Lambda.IFunction;
@@ -36,19 +38,11 @@ public class CdkStack : Stack
 
 		var (activitiesTable, routinesTable, sessionsTable) = CreateDynamoDbTables();
 
-		var activityCreatedQueue = new Queue(this, Name("ActivityCreatedQueue"), new QueueProps
-		{
-			QueueName = "ActivityCreated"
-		});
+		var (activityUpdatedQueue, sessionSavedQueue) = CreateSqsQueues();
 
-		var sessionSavedQueue = new Queue(this, Name("SessionSavedQueue"), new QueueProps
-		{
-			QueueName = "SessionSaved"
-		});
+		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, sessionsTable, activityUpdatedQueue, sessionSavedQueue, cdnBucket);
 
-		var lambdaRole = CreateLambdaRole(activitiesTable, routinesTable, sessionsTable, activityCreatedQueue, sessionSavedQueue, cdnBucket);
-
-		_ = CreateActivityCreatedFunction(lambdaRole, activityCreatedQueue);
+		_ = CreateActivityUpdatedFunction(lambdaRole, activityUpdatedQueue);
 		_ = CreateSessionSavedFunction(lambdaRole, sessionSavedQueue);
 
 		var apiFunction = CreateApiFunction(lambdaRole);
@@ -56,6 +50,41 @@ public class CdkStack : Stack
 		var apiGateway = CreateApiGateway(apiFunction, certificate);
 
 		CreateDnsRecords(hostedZone, appDistribution, cdnDistribution, apiGateway);
+	}
+
+	private (Queue, Queue) CreateSqsQueues()
+	{
+		var activityUpdatedQueue = new Queue(this, Name("ActivityUpdatedQueue"), new QueueProps
+		{
+			QueueName = Name("ActivityUpdated.fifo"),
+			Fifo = true,
+			DeadLetterQueue = new DeadLetterQueue
+			{
+				MaxReceiveCount = 1,
+				Queue = new Queue(this, Name("ActivityUpdatedDeadLetterQueue"), new QueueProps
+				{
+					QueueName = Name("ActivityUpdated-dlq.fifo"),
+					Fifo = true
+				})
+			}
+		});
+
+		var sessionSavedQueue = new Queue(this, Name("SessionSavedQueue"), new QueueProps
+		{
+			QueueName = Name("SessionSaved.fifo"),
+			Fifo = true,
+			DeadLetterQueue = new DeadLetterQueue
+			{
+				MaxReceiveCount = 1,
+				Queue = new Queue(this, Name("SessionSavedDeadLetterQueue"), new QueueProps
+				{
+					QueueName = Name("SessionSaved-dlq.fifo"),
+					Fifo = true
+				})
+			}
+		});
+
+		return (activityUpdatedQueue, sessionSavedQueue);
 	}
 
 	private (Bucket, Bucket) CreateS3Buckets()
@@ -88,6 +117,7 @@ public class CdkStack : Stack
 
 		cdnBucket.AddToResourcePolicy(new(new PolicyStatementProps
 		{
+			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
 			Principals = new IPrincipal[]{ new AnyPrincipal() },
 			Resources = new[]
@@ -224,7 +254,7 @@ public class CdkStack : Stack
 		return (activitiesTable, routinesTable, sessionsTable);
 	}
 
-	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, ITable sessionsTable, IQueue activityCreatedQueue, IQueue sessionSavedQueue, IBucket cdnBucket)
+	private Role CreateLambdaRole(ITable activitiesTable, ITable routinesTable, ITable sessionsTable, IQueue activityUpdatedQueue, IQueue sessionSavedQueue, IBucket cdnBucket)
 	{
 		var lambdaRole = new Role(this, Name("LambdaRole"),
 			new RoleProps
@@ -233,22 +263,37 @@ public class CdkStack : Stack
 				AssumedBy = new ServicePrincipal("lambda.amazonaws.com")
 			});
 
+		
+
 		lambdaRole.AddToPolicy(new(
 			new PolicyStatementProps
 			{
+				Sid = "AllowCloudWatch",
 				Effect = Effect.ALLOW,
 				Resources = new[] { "*" },
 				Actions = new[]
 				{
 					"logs:CreateLogGroup",
 					"logs:CreateLogStream",
-					"logs:PutLogEvents",
+					"logs:PutLogEvents"
+				}
+			}));
+
+		lambdaRole.AddToPolicy(new(
+			new PolicyStatementProps
+			{
+				Sid = "AllowPolly",
+				Effect = Effect.ALLOW,
+				Resources = new[] { "*" },
+				Actions = new[]
+				{
 					"polly:StartSpeechSynthesisTask"
 				}
 			}));
 
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
+			Sid = "AllowDynamoDb",
 			Effect = Effect.ALLOW,
 			Resources = new[] { activitiesTable.TableArn, routinesTable.TableArn, sessionsTable.TableArn },
 			Actions = new[]
@@ -264,8 +309,9 @@ public class CdkStack : Stack
 
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
+			Sid = "AllowSqs",
 			Effect = Effect.ALLOW,
-			Resources = new[] { activityCreatedQueue.QueueArn, sessionSavedQueue.QueueArn },
+			Resources = new[] { activityUpdatedQueue.QueueArn, sessionSavedQueue.QueueArn },
 			Actions = new[]
 			{
 				"sqs:ReceiveMessage",
@@ -277,6 +323,7 @@ public class CdkStack : Stack
 
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
+			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
 			Resources = new[] { cdnBucket.BucketArn },
 			Actions = new[]
@@ -288,24 +335,24 @@ public class CdkStack : Stack
 		return lambdaRole;
 	}
 
-	private Function CreateActivityCreatedFunction(IRole lambdaRole, IQueue activityCreatedQueue)
+	private Function CreateActivityUpdatedFunction(IRole lambdaRole, IQueue activityUpdatedQueue)
 	{
-		var activityCreatedFunction = new Function(this, Name("ActivityCreatedFunction"),
+		var activityUpdatedFunction = new Function(this, Name("ActivityUpdatedFunction"),
 			new FunctionProps
 			{
-				FunctionName = Name("ActivityCreatedFunction"),
-				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.ActivityCreated\bin\Release\net6.0"),
-				Description = "BananaTracks ActivityCreated Function",
-				Handler = "BananaTracks.Functions.ActivityCreated::BananaTracks.Functions.ActivityCreated.Function::FunctionHandler",
+				FunctionName = Name("ActivityUpdatedFunction"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.ActivityUpdated\bin\Release\net6.0"),
+				Description = "BananaTracks ActivityUpdated Function",
+				Handler = "BananaTracks.Functions.ActivityUpdated::BananaTracks.Functions.ActivityUpdated.Function::FunctionHandler",
 				MemorySize = 256,
 				Role = lambdaRole,
 				Runtime = Runtime.DOTNET_6,
 				Timeout = Duration.Seconds(30)
 			});
 
-		activityCreatedFunction.AddEventSource(new SqsEventSource(activityCreatedQueue));
+		activityUpdatedFunction.AddEventSource(new SqsEventSource(activityUpdatedQueue));
 
-		return activityCreatedFunction;
+		return activityUpdatedFunction;
 	}
 
 	private Function CreateSessionSavedFunction(IRole lambdaRole, IQueue sessionSavedQueue)
@@ -367,6 +414,32 @@ public class CdkStack : Stack
 		apiResource.AddMethod("GET", new LambdaIntegration(function));
 		apiResource.AddMethod("POST", new LambdaIntegration(function));
 		apiResource.AddMethod("OPTIONS", new LambdaIntegration(function));
+
+		//var role = new Role(this, Name("ApiGatewayRole"),
+		//	new RoleProps
+		//	{
+		//		RoleName = Name("ApiGatewayRole"),
+		//		AssumedBy = new ServicePrincipal("apigateway.amazonaws.com")
+		//	});
+
+		//role.AddToPolicy(new(
+		//	new PolicyStatementProps
+		//	{
+		//		Sid = "AllowCloudWatch",
+		//		Effect = Effect.ALLOW,
+		//		Resources = new[] { "*" },
+		//		Actions = new[]
+		//		{
+		//			"logs:CreateLogGroup",
+		//			"logs:CreateLogStream",
+		//			"logs:PutLogEvents"
+		//		}
+		//	}));
+
+		//_ = new CfnAccount(this, Name("CfnAccount"), new CfnAccountProps
+		//{
+		//	CloudWatchRoleArn = role.RoleArn
+		//});
 
 		return api;
 	}

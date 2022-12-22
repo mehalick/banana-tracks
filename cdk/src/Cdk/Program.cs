@@ -21,6 +21,7 @@ internal sealed class Program
 			    Region = configuration["CdkRegion"]
 			}
 		});
+		
 		app.Synth();
 	}
 }

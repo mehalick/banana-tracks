@@ -32,11 +32,10 @@
 			@if (activity.IsSelected)
 			{
 				<div class="card-footer">
-					<ul class="link-list mb-0">
-						<li>
-							<a href="/activities/@activity.ActivityId/delete" title="Delete activity"><i class="fa-solid fa-trash-xmark fa-fw"></i></a>
-						</li>
-					</ul>
+					<div class="hstack gap-3 float-end">
+						<a href="/activities/@activity.ActivityId/update" title="Edit"><i class="fa-solid fa-pen-to-square fa-fw"></i></a>
+						<a href="/activities/@activity.ActivityId/delete" title="Delete"><i class="fa-solid fa-trash-xmark fa-fw"></i></a>
+					</div>
 					
 				</div>
 			}

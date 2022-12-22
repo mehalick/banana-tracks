@@ -11,6 +11,6 @@
 	"function-runtime": "dotnet6",
 	"function-memory-size": 256,
 	"function-timeout": 30,
-	"function-name": "BananaTracksActivityCreatedFunction",
-	"function-handler": "BananaTracks.Functions.ActivityCreated::BananaTracks.Functions.ActivityCreated.Function::FunctionHandler"
+	"function-name": "BananaTracksActivityUpdatedFunction",
+	"function-handler": "BananaTracks.Functions.ActivityCreated::BananaTracks.Functions.ActivityUpdated.Function::FunctionHandler"
 }

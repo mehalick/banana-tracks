@@ -1,7 +1,7 @@
 ﻿<CascadingAuthenticationState>
 	<Router AppAssembly="@typeof(App).Assembly">
 		<Found Context="routeData">
-			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout)">
 				<Authorizing>
 					<p><i class="fa-duotone fa-circle-notch fa-spin fa-xl me-2"></i> Fetching profile...</p>
 				</Authorizing>
@@ -20,7 +20,7 @@
 		</Found>
 		<NotFound>
 			<PageTitle>Not found</PageTitle>
-			<LayoutView Layout="@typeof(MainLayout)">
+			<LayoutView Layout="@typeof(Layout)">
 				<p role="alert">Sorry, there's nothing at this address.</p>
 			</LayoutView>
 		</NotFound>

@@ -2,15 +2,15 @@
 
 public static class ApiRoutes
 {
-	public const string AddActivity = "activities.add";
-	public const string AddRoutine = "routines.add";
-	public const string AddSession = "sessions.add";
-	public const string DeleteActivity = "activities.delete";
-	public const string DeleteRoutine = "routines.delete";
+	public const string AddActivity = nameof(AddActivity);
+	public const string AddRoutine = nameof(AddRoutine);
+	public const string AddSession = nameof(AddSession);
+	public const string DeleteActivity = nameof(DeleteActivity);
+	public const string DeleteRoutine = nameof(DeleteRoutine);
 	public const string GetActivityById = nameof(GetActivityById);
-	public const string GetRoutineById = "routines.getById";
-	public const string HealthCheck = "health.check";
-	public const string ListActivities = "activities.list";
-	public const string ListRoutines = "routines.list";
+	public const string GetRoutineById = nameof(GetRoutineById);
+	public const string HealthCheck = nameof(HealthCheck);
+	public const string ListActivities = nameof(ListActivities);
+	public const string ListRoutines = nameof(ListRoutines);
 	public const string UpdateActivity = nameof(UpdateActivity);
 }

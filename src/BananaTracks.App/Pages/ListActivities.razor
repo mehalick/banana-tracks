@@ -1,14 +1,12 @@
 ﻿@page "/activities/list"
 @inherits AppComponentBase
 
-<PageTitle>Activities</PageTitle>
-
-<h1>Activities</h1>
+<Header Title="Activities"></Header>
 
 <Loading IsLoading="_response is null">
 
 	<ul class="link-list">
-		<lil><a href="/activities/add">Add Activity</a></lil>
+		<li><a href="/activities/add">Add Activity</a></li>
 	</ul>
 
 	@foreach (var activity in _response!.Activities)
@@ -18,8 +16,8 @@
 				@activity.Name
 				@if (!activity.IsSelected)
 				{
-					<a href="javascript: void(0);" @onclick="() => SelectActivity(activity, true)" class="float-end" title="Show activity details">
-						<i class="fa-solid fa-chevron-up"></i>
+					<a href="javascript:void(0);" @onclick="() => SelectActivity(activity, true)" class="float-end" title="Show activity details">
+						<i class="fa-solid fa-chevron-right"></i>
 					</a>
 				}
 				else
@@ -32,10 +30,10 @@
 			@if (activity.IsSelected)
 			{
 				<div class="card-footer">
-					<div class="hstack gap-3 float-end">
+					<LinkList>
 						<a href="/activities/@activity.ActivityId/update" title="Edit"><i class="fa-solid fa-pen-to-square fa-fw"></i></a>
 						<a href="/activities/@activity.ActivityId/delete" title="Delete"><i class="fa-solid fa-trash-xmark fa-fw"></i></a>
-					</div>
+					</LinkList>
 					
 				</div>
 			}

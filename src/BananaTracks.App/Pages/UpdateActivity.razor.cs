@@ -5,13 +5,13 @@ public partial class UpdateActivity : AppComponentBase
 	[Parameter]
 	public string ActivityId { get; set; } = default!;
 	
-	protected UpdateActivityRequest? UpdateActivityRequest;
+	private UpdateActivityRequest? _updateActivityRequest;
 
 	protected override async Task OnInitializedAsync()
 	{
 		var activity = await ApiClient.GetActivityById(ActivityId);
 
-		UpdateActivityRequest = new()
+		_updateActivityRequest = new()
 		{
 			ActivityId = activity.Activity.ActivityId,
 			Name = activity.Activity.Name
@@ -20,7 +20,7 @@ public partial class UpdateActivity : AppComponentBase
 
 	public async Task OnValidSubmit()
 	{
-		await ApiClient.UpdateActivity(UpdateActivityRequest!);
+		await ApiClient.UpdateActivity(_updateActivityRequest!);
 
 		NavigationManager.NavigateTo("activities/list");
 	}

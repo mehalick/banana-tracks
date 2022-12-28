@@ -28,6 +28,14 @@ public class Program
 
 		builder.Services.AddGrpc();
 
+		builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+		{
+			builder.AllowAnyOrigin()
+				.AllowAnyMethod()
+				.AllowAnyHeader()
+				.WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+		}));
+
 		var app = builder.Build();
 
 		app.UseCors("ApiCors");
@@ -53,7 +61,7 @@ public class Program
 
 		app.UseEndpoints(endpoints =>
 		{
-			endpoints.MapGrpcService<Services.RoutineService>();
+			endpoints.MapGrpcService<Services.RoutineService>().EnableGrpcWeb().RequireCors("AllowAll");
 		});
 
 		await app.RunAsync();

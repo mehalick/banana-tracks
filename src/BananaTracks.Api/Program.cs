@@ -46,6 +46,7 @@ public class Program
 		app.UseHttpsRedirection();
 
 		app.UseRouting();
+		app.UseCors();
 
 		app.UseAuthentication();
 		app.UseAuthorization();
@@ -56,9 +57,7 @@ public class Program
 		{
 			DefaultEnabled = true
 		});
-
 		
-
 		app.UseEndpoints(endpoints =>
 		{
 			endpoints.MapGrpcService<Services.RoutineService>().EnableGrpcWeb().RequireCors("AllowAll");

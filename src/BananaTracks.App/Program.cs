@@ -47,16 +47,15 @@ public class Program
 			options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
 		});
 
-		builder.Services.AddSingleton(services => new RoutineService.RoutineServiceClient(GetChannel(services)));
+		builder.Services.AddSingleton(_ => new RoutineService.RoutineServiceClient(GetChannel(builder.Configuration["Api:BaseAddress"])));
 
 
 		await builder.Build().RunAsync();
 
-		static GrpcChannel GetChannel(IServiceProvider services)
+		static GrpcChannel GetChannel(string? address)
 		{
 			var httpClient = new HttpClient(new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler()));
-			var baseUri = "https://localhost:7144";
-			return GrpcChannel.ForAddress(baseUri, new GrpcChannelOptions { HttpClient = httpClient });
+			return GrpcChannel.ForAddress(address!, new() { HttpClient = httpClient });
 		}
 	}
 }

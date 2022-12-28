@@ -1,0 +1,19 @@
+syntax = "proto3";
+package BananaTracks;
+option csharp_namespace = "BananaTracks.Api.Shared.Protos";
+
+service RoutineService {
+	rpc GetRoutines (GetRoutinesRequest) returns (GetRoutinesReply);
+}
+
+message GetRoutinesRequest {
+}
+
+message GetRoutinesReply {
+	repeated GetRoutinesItem routines = 1;
+}
+
+message GetRoutinesItem {
+	string routine_id = 1;
+	string name = 2;
+}

@@ -10,7 +10,9 @@ global using FastEndpoints;
 global using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Amazon.SQS;
+using BananaTracks.Api.Shared.Protos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BananaTracks.Api;
 
@@ -24,6 +26,8 @@ public class Program
 		AddAwsServices(builder);
 		AddWebServices(builder);
 
+		builder.Services.AddGrpc();
+
 		var app = builder.Build();
 
 		app.UseCors("ApiCors");
@@ -33,10 +37,24 @@ public class Program
 
 		app.UseHttpsRedirection();
 
+		app.UseRouting();
+
 		app.UseAuthentication();
 		app.UseAuthorization();
 
 		app.UseFastEndpoints();
+
+		app.UseGrpcWeb(new GrpcWebOptions
+		{
+			DefaultEnabled = true
+		});
+
+		
+
+		app.UseEndpoints(endpoints =>
+		{
+			endpoints.MapGrpcService<Services.RoutineService>();
+		});
 
 		await app.RunAsync();
 	}

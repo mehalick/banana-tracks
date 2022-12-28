@@ -10,6 +10,16 @@
 		</div>
 	</NotAuthorized>
 	<Authorized>
+		
+		@if (_items is not null)
+		{
+			<ul>
+				@foreach (var item in _items)
+				{
+					<li>@item.Name</li>
+				}
+			</ul>
+		}
 
 		<h1>Hi!</h1>
 		<p>If you're new here, get started by <a href="/activities/add">adding some activities</a> and then <a href="/routines/create">create a routine</a>.</p>

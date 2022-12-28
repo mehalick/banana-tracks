@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using BananaTracks.Api.Shared.Protos;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BananaTracks.App.Pages;
 
@@ -10,7 +11,12 @@ public partial class Index : AppComponentBase
 	[Inject]
 	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
+	[Inject]
+	protected RoutineService.RoutineServiceClient RoutineServiceClient { get; set; } = null!;
+
 	private string _version = "8428d6719a53432a4f88e4442a92e97438324df6";
+
+	private List<GetRoutinesItem> _items;
 
 	protected override void OnInitialized()
 	{
@@ -29,6 +35,9 @@ public partial class Index : AppComponentBase
 		if (authState.User?.Identity?.IsAuthenticated == true)
 		{
 			await ApiClient.GetHealthCheck();
+
+			var reply = await RoutineServiceClient.GetRoutinesAsync(new GetRoutinesRequest());
+			_items = reply.Routines.ToList();
 		}
 	}
 }

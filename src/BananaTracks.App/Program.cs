@@ -9,6 +9,9 @@ global using Microsoft.AspNetCore.Components;
 global using Microsoft.JSInterop;
 global using System.Net.Http.Json;
 global using BananaTracks.App.Services;
+using BananaTracks.Api.Shared.Protos;
+using Grpc.Net.Client;
+using Grpc.Net.Client.Web;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -44,7 +47,17 @@ public class Program
 			options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
 		});
 
+		builder.Services.AddSingleton(services => new RoutineService.RoutineServiceClient(GetChannel(services)));
+
+
 		await builder.Build().RunAsync();
+
+		static GrpcChannel GetChannel(IServiceProvider services)
+		{
+			var httpClient = new HttpClient(new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler()));
+			var baseUri = "https://localhost:7144";
+			return GrpcChannel.ForAddress(baseUri, new GrpcChannelOptions { HttpClient = httpClient });
+		}
 	}
 }
 

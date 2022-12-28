@@ -26,16 +26,8 @@ public class Program
 		builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
 
 		builder.Services
-			.AddHttpClient("BananaTracks.Api", client => client.BaseAddress = new(builder.Configuration["Api:BaseAddress"]!))
-			.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-		builder.Services
 			.AddHttpClient<ApiClient>(client => client.BaseAddress = new(builder.Configuration["Api:BaseAddress"]!))
 			.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
-
-		builder.Services.AddScoped(sp => sp
-			.GetRequiredService<IHttpClientFactory>()
-			.CreateClient("BananaTracks.Api"));
 
 		builder.Services.AddOidcAuthentication(options =>
 		{

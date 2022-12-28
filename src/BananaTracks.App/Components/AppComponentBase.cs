@@ -1,10 +1,10 @@
-﻿namespace BananaTracks.App.Components;
+﻿using System.Web;
+using Microsoft.AspNetCore.WebUtilities;
+
+namespace BananaTracks.App.Components;
 
 public abstract class AppComponentBase : ComponentBase
 {
-	[Inject]
-	protected HttpClient HttpClient { get; set; } = null!;
-
 	[Inject]
 	private protected ApiClient ApiClient { get; set; } = null!;
 
@@ -15,6 +15,24 @@ public abstract class AppComponentBase : ComponentBase
 	private protected IJSRuntime JsRuntime { get; set; } = null!;
 
 	private protected Ids Ids { get; set; } = new();
+
+	public void NavigateSuccess(string uri, string message)
+	{
+		var uriBuilder = new UriBuilder(NavigationManager.ToAbsoluteUri(uri));
+		var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+		query["status.text"] = EncodeMessage(message);
+		query["status.type"] = "success";
+		uriBuilder.Query = query.ToString();
+
+		NavigationManager.NavigateTo(uriBuilder.ToString());
+	}
+
+	private static string EncodeMessage(string message)
+	{
+		var encodedBytes = System.Text.Encoding.UTF8.GetBytes(message);
+
+		return Base64UrlTextEncoder.Encode(encodedBytes);
+	}
 }
 
 public class Ids

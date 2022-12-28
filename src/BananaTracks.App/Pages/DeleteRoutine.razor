@@ -1,12 +1,12 @@
 ﻿@page "/routines/{RoutineId}/delete"
 @inherits AppComponentBase
 
-<PageTitle>Delete Routine</PageTitle>
+<Header Title="Delete Routine"></Header>
 
-<h1>Delete Routine</h1>
+<Page>
+	<div class="alert" role="alert">
+		<i class="fa-solid fa-triangle-exclamation fa-2xl me-2"></i> Are you sure you want to permanently delete this routine?
+	</div>
 
-<div class="alert" role="alert">
-	<i class="fa-solid fa-triangle-exclamation fa-xl me-2"></i> Are you sure you want to permanently delete this routine?
-</div>
-
-<button type="button" @onclick="DeleteSubmit" class="btn btn-danger">Delete Routine</button>
+	<button type="button" @onclick="DeleteSubmit" class="btn btn-danger">Delete Routine</button>
+</Page>

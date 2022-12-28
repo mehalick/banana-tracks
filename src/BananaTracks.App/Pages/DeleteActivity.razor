@@ -1,12 +1,10 @@
 ﻿@page "/activities/{ActivityId}/delete"
 @inherits AppComponentBase
 
-<PageTitle>Delete Activity</PageTitle>
+<Page Title="Delete Activity">
+	<div class="alert" role="alert">
+		<i class="fa-solid fa-triangle-exclamation fa-2xl me-2"></i> Are you sure you want to permanently delete this activity?
+	</div>
 
-<h1>Delete Activity</h1>
-
-<div class="alert" role="alert">
-	<i class="fa-solid fa-triangle-exclamation fa-xl me-2"></i> Are you sure you want to permanently delete this activity?
-</div>
-
-<button type="button" @onclick="DeleteSubmit" class="btn btn-danger">Delete Activity</button>
+	<button type="button" @onclick="DeleteSubmit" class="btn btn-danger">Delete Activity</button>
+</Page>

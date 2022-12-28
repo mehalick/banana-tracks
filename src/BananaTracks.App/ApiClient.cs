@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace BananaTracks.App.Services;
+namespace BananaTracks.App;
 
 internal class ApiClient
 {
@@ -19,26 +19,58 @@ internal class ApiClient
 		await Get(ApiRoutes.HealthCheck);
 	}
 
+	public async Task AddActivity(AddActivityRequest request)
+	{
+		await Post(ApiRoutes.AddActivity, request, ApiClientSerializerContext.Default.AddActivityRequest);
+	}
+
+	public async Task AddRoutine(AddRoutineRequest request)
+	{
+		await Post(ApiRoutes.AddRoutine, request, ApiClientSerializerContext.Default.AddRoutineRequest);
+	}
+
+	public async Task AddSession(AddSessionRequest request)
+	{
+		await Post(ApiRoutes.AddSession, request, ApiClientSerializerContext.Default.AddSessionRequest);
+	}
+
+	public async Task DeleteActivity(DeleteActivityRequest request)
+	{
+		await Post(ApiRoutes.DeleteActivity, request, ApiClientSerializerContext.Default.DeleteActivityRequest);
+	}
+
+	public async Task DeleteRoutine(DeleteRoutineRequest request)
+	{
+		await Post(ApiRoutes.DeleteRoutine, request, ApiClientSerializerContext.Default.DeleteRoutineRequest);
+	}
+
 	public async Task<GetActivityByIdResponse> GetActivityById(string activityId)
 	{
 		var url = $"{ApiRoutes.GetActivityById}?ActivityId={activityId}";
 
-		return await Get(url, AppJsonSerializerContext.Default.GetActivityByIdResponse);
+		return await Get(url, ApiClientSerializerContext.Default.GetActivityByIdResponse);
+	}
+
+	public async Task<GetRoutineByIdResponse> GetRoutineById(string routineId)
+	{
+		var url = $"{ApiRoutes.GetRoutineById}?RoutineId={routineId}";
+
+		return await Get(url, ApiClientSerializerContext.Default.GetRoutineByIdResponse);
 	}
 
 	public async Task<ListActivitiesResponse> ListActivities()
 	{
-		return await Get(ApiRoutes.ListActivities, AppJsonSerializerContext.Default.ListActivitiesResponse);
+		return await Get(ApiRoutes.ListActivities, ApiClientSerializerContext.Default.ListActivitiesResponse);
 	}
 
 	public async Task<ListRoutinesResponse> ListRoutines()
 	{
-		return await Get(ApiRoutes.ListRoutines, AppJsonSerializerContext.Default.ListRoutinesResponse);
+		return await Get(ApiRoutes.ListRoutines, ApiClientSerializerContext.Default.ListRoutinesResponse);
 	}
 
 	public async Task UpdateActivity(UpdateActivityRequest request)
 	{
-		await Post(ApiRoutes.UpdateActivity, request, AppJsonSerializerContext.Default.UpdateActivityRequest);
+		await Post(ApiRoutes.UpdateActivity, request, ApiClientSerializerContext.Default.UpdateActivityRequest);
 	}
 
 	private async Task Get(string uri)
@@ -74,7 +106,7 @@ internal class ApiClient
 		return result;
 	}
 
-	private async Task Post<T>(string uri, T value, JsonTypeInfo<T> typeInfo, [CallerMemberName] string callerName = "") where T : new()
+	private async Task Post<T>(string uri, T value, JsonTypeInfo<T> typeInfo) where T : new()
 	{
 		try
 		{
@@ -84,27 +116,6 @@ internal class ApiClient
 		{
 			ex.Redirect();
 		}
-	}
-
-	private static async Task<T> Get<T>(Func<Task<T?>> action, [CallerMemberName] string callerName = "") where T : new()
-	{
-		var result = default(T);
-
-		try
-		{
-			result = await action();
-		}
-		catch (AccessTokenNotAvailableException ex)
-		{
-			ex.Redirect();
-		}
-
-		if (result is null)
-		{
-			throw new NullReferenceException($"Null result returned from API call '{callerName}'.");
-		}
-
-		return result;
 	}
 }
 
@@ -119,5 +130,5 @@ internal class ApiClient
 [JsonSerializable(typeof(ListRoutinesResponse))]
 [JsonSerializable(typeof(UpdateActivityRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
+internal partial class ApiClientSerializerContext : JsonSerializerContext
 { }

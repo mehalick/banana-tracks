@@ -1,11 +1,9 @@
 ﻿@page "/activities/{ActivityId}/update"
 @inherits AppComponentBase
 
-<PageTitle>Update Activity</PageTitle>
+<Header Title="Update Activity"></Header>
 
-<h1>Update Activity</h1>
-
-<Loading IsLoading="_updateActivityRequest is null">
+<Page IsLoading="_updateActivityRequest is null">
 	<EditForm Model="_updateActivityRequest" OnValidSubmit="OnValidSubmit">
 		<DataAnnotationsValidator />
 		<ValidationSummary />
@@ -18,4 +16,4 @@
 		<button type="submit" class="btn btn-primary">Save</button>
 
 	</EditForm>
-</Loading>
+</Page>

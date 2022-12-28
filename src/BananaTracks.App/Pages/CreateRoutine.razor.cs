@@ -8,7 +8,7 @@ public partial class CreateRoutine : AppComponentBase
 
 	protected override async Task OnInitializedAsync()
 	{
-		_listActivitiesResponse = await HttpClient.GetFromJsonAsync<ListActivitiesResponse>(ApiRoutes.ListActivities);
+		_listActivitiesResponse = await ApiClient.ListActivities();
 	}
 
 	private void AddActivity()
@@ -34,8 +34,8 @@ public partial class CreateRoutine : AppComponentBase
 			activity.Name = _listActivitiesResponse!.Activities.First(i => i.ActivityId == activity.ActivityId).Name;
 		}
 
-		await HttpClient.PostAsJsonAsync(ApiRoutes.AddRoutine, _addRoutineRequest);
+		await ApiClient.AddRoutine(_addRoutineRequest);
 
-		NavigationManager.NavigateTo("routines/list");
+		NavigateSuccess("routines/list", "Routine successfully created.");
 	}
 }

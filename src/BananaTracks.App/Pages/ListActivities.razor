@@ -3,7 +3,7 @@
 
 <Header Title="Activities"></Header>
 
-<Loading IsLoading="_response is null">
+<Page IsLoading="_response is null">
 
 	<ul class="link-list">
 		<li><a href="/activities/add">Add Activity</a></li>
@@ -22,7 +22,7 @@
 				}
 				else
 				{
-					<a href="javascript: void(0);" @onclick="() => SelectActivity(activity, false)" class="float-end" title="Hide activity details">
+					<a href="javascript:void(0);" @onclick="() => SelectActivity(activity, false)" class="float-end" title="Hide activity details">
 						<i class="fa-solid fa-chevron-down"></i>
 					</a>
 				}
@@ -40,4 +40,4 @@
 		</div>
 	}
 
-</Loading>
+</Page>

@@ -22,6 +22,6 @@ public partial class UpdateActivity : AppComponentBase
 	{
 		await ApiClient.UpdateActivity(_updateActivityRequest!);
 
-		NavigationManager.NavigateTo("activities/list");
+		NavigateSuccess("activities/list", "Activity successfully updated.");
 	}
 }

@@ -2,12 +2,12 @@
 
 public partial class AddActivity : AppComponentBase
 {
-	protected AddActivityRequest AddActivityRequest = new();
+	private readonly AddActivityRequest _addActivityRequest = new();
 
 	public async Task OnValidSubmit()
 	{
-		await HttpClient.PostAsJsonAsync(ApiRoutes.AddActivity, AddActivityRequest);
+		await ApiClient.AddActivity(_addActivityRequest);
 
-		NavigationManager.NavigateTo("activities/list");
+		NavigateSuccess("activities/list", "Activity successfully added.");
 	}
 }

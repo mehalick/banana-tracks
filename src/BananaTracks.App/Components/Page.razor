@@ -1,0 +1,17 @@
+﻿@inherits AppComponentBase
+
+@if (!string.IsNullOrWhiteSpace(Title))
+{
+	<Header Title="@Title"></Header>
+}
+
+@if (!string.IsNullOrWhiteSpace(StatusMessage.Value))
+{
+	<div class="alert alert-success" role="alert">
+		<i class="fa-solid fa-circle-check fa-2xl me-2"></i>
+		@StatusMessage
+	</div>
+}
+<Loading IsLoading="@IsLoading">
+	@ChildContent
+</Loading>

@@ -7,11 +7,8 @@ public partial class DeleteActivity : AppComponentBase
 
 	private async Task DeleteSubmit()
 	{
-		await HttpClient.PostAsJsonAsync(ApiRoutes.DeleteActivity, new DeleteActivityRequest
-		{
-			ActivityId = ActivityId
-		});
+		await ApiClient.DeleteActivity(new() {ActivityId = ActivityId});
 
-		NavigationManager.NavigateTo("activities/list");
+		NavigateSuccess("activities/list", "Activity successfully deleted.");
 	}
 }

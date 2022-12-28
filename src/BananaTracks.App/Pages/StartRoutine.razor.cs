@@ -11,12 +11,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 	protected override async Task OnInitializedAsync()
 	{
-		var response = await HttpClient.GetFromJsonAsync<GetRoutineByIdResponse>($"{ApiRoutes.GetRoutineById}?RoutineId={RoutineId}");
-
-		if (response is null)
-		{
-			throw new NullReferenceException($"Cannot find routine for ID '{RoutineId}'");
-		}
+		var response = await ApiClient.GetRoutineById(RoutineId);
 
 		_routineRun = new(response.Routine);
 	}
@@ -32,10 +27,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 		if (_saveSession)
 		{
-			await HttpClient.PostAsJsonAsync(ApiRoutes.AddSession, new AddSessionRequest
-			{
-				RoutineId = RoutineId
-			});
+			await ApiClient.AddSession(new() {RoutineId = RoutineId});
 		}
 	}
 

@@ -1,11 +1,7 @@
 ﻿@page "/routines/list"
 @inherits AppComponentBase
 
-<PageTitle>Routines</PageTitle>
-
-<h1>Routines</h1>
-
-<Loading IsLoading="_response is null">
+<Page Title="Routines" IsLoading="_response is null">
 
 	<ul class="link-list">
 		<li><a href="/routines/create">Create Routine</a></li>
@@ -42,4 +38,4 @@
 		</div>
 	}
 
-</Loading>
+</Page>

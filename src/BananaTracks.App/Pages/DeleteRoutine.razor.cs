@@ -7,11 +7,8 @@ public partial class DeleteRoutine : AppComponentBase
 
 	private async Task DeleteSubmit()
 	{
-		await HttpClient.PostAsJsonAsync(ApiRoutes.DeleteRoutine, new DeleteRoutineRequest
-		{
-			RoutineId = RoutineId
-		});
+		await ApiClient.DeleteRoutine(new() {RoutineId = RoutineId});
 
-		NavigationManager.NavigateTo("routines/list");
+		NavigateSuccess("routines/list", "Routine successfully deleted.");
 	}
 }

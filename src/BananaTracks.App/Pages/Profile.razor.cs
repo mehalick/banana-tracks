@@ -29,6 +29,7 @@ public partial class Profile : AppComponentBase
 
 	private void LogOut(MouseEventArgs _)
 	{
-		NavigationManager.NavigateToLogout("authentication/logout");
+		NavigateSuccess("routines/list", "Hello man");
+		//NavigationManager.NavigateToLogout("authentication/logout");
 	}
 }

@@ -1,19 +1,18 @@
 ﻿@page "/activities/add"
 @inherits AppComponentBase
 
-<PageTitle>Add Activity</PageTitle>
+<Page Title="Add Activity">
+	<EditForm Model="_addActivityRequest" OnValidSubmit="OnValidSubmit">
+		
+		<DataAnnotationsValidator />
 
-<h1>Add Activity</h1>
+		<div class="mb-3">
+			<label for="name" class="form-label">Name</label>
+			<InputText id="name" class="form-control" @bind-Value="_addActivityRequest.Name" />
+			<ValidationMessage For="() => _addActivityRequest.Name" />
+		</div>
 
-<EditForm Model="AddActivityRequest" OnValidSubmit="OnValidSubmit">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
+		<button type="submit" class="btn btn-primary">Add Activity</button>
 
-	<div class="mb-3">
-		<label for="name" class="form-label">Name</label>
-		<InputText id="name" class="form-control" @bind-Value="AddActivityRequest.Name" />
-	</div>
-
-	<button type="submit" class="btn btn-primary">Add Activity</button>
-
-</EditForm>
+	</EditForm>
+</Page>

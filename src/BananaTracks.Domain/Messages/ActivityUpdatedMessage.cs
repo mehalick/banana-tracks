@@ -7,7 +7,7 @@ public record ActivityUpdatedMessage
 	public string UserId { get; set; } = default!;
 	public string ActivityId { get; set; } = default!;
 
-	private ActivityUpdatedMessage()
+	public ActivityUpdatedMessage()
 	{
 	}
 

@@ -12,5 +12,5 @@
 	"function-memory-size": 256,
 	"function-timeout": 30,
 	"function-name": "BananaTracksActivityUpdatedFunction",
-	"function-handler": "BananaTracks.Functions.ActivityCreated::BananaTracks.Functions.ActivityUpdated.Function::FunctionHandler"
+	"function-handler": "BananaTracks.Functions.ActivityUpdated::BananaTracks.Functions.ActivityUpdated.Function::FunctionHandler"
 }

@@ -11,6 +11,7 @@ global using FastEndpoints;
 global using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Amazon.SQS;
+using Amazon.SimpleSystemsManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BananaTracks.Api;
@@ -87,6 +88,13 @@ public class Program
 
 	private static void AddWebServices(WebApplicationBuilder builder)
 	{
+		if (builder.Environment.IsProduction())
+		{
+			builder.Services
+				.AddDataProtection()
+				.PersistKeysToAWSSystemsManager("/BananaTracks/DataProtection");
+		}
+
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddFastEndpoints();
 		builder.Services.AddHttpContextAccessor();

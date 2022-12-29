@@ -282,6 +282,19 @@ public class CdkStack : Stack
 		lambdaRole.AddToPolicy(new(
 			new PolicyStatementProps
 			{
+				Sid = "AllowSystemsManager",
+				Effect = Effect.ALLOW,
+				Resources = new[] { "*" },
+				Actions = new[]
+				{
+					"ssm:PutParameter",
+					"ssm:GetParametersByPath"
+				}
+			}));
+
+		lambdaRole.AddToPolicy(new(
+			new PolicyStatementProps
+			{
 				Sid = "AllowPolly",
 				Effect = Effect.ALLOW,
 				Resources = new[] { "*" },

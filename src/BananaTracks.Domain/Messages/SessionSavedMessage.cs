@@ -7,7 +7,7 @@ public record SessionSavedMessage
 	public string UserId { get; set; } = default!;
 	public string RoutineId { get; set; } = default!;
 
-	private SessionSavedMessage()
+	public SessionSavedMessage()
 	{
 	}
 

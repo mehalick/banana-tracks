@@ -28,7 +28,7 @@ public partial class Profile : AppComponentBase
 			_name = _claims.GetClaim("name");
 		}
 
-		_timezoneOffset = await JsRuntime.InvokeAsync<int>("app.getTimezoneOffset");
+		_timezoneOffset = await JsRuntime.InvokeAsync<int>("BananaTracks.App.getTimezoneOffset");
 
 		_listSessionsResponse = await ApiClient.ListSessions();
 	}

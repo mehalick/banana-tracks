@@ -121,7 +121,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 			Console.WriteLine("[RunTimer] Play audio #audio-done");
 
-			await jsRuntime.InvokeVoidAsync("app.playAudio", "audio-done");
+			await jsRuntime.InvokeVoidAsync("BananaTracks.App.playAudio", "audio-done");
 		}
 
 		public void Dispose()
@@ -168,7 +168,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 			{
 				Console.WriteLine($"[RunTimer] Play audio #audio-{Activity.ActivityId}");
 
-				await jsRuntime.InvokeVoidAsync("app.playAudio", $"audio-{Activity.ActivityId}");
+				await jsRuntime.InvokeVoidAsync("BananaTracks.App.playAudio", $"audio-{Activity.ActivityId}");
 			}
 		}
 
@@ -190,7 +190,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 			Console.WriteLine("[RunTimer] Play audio #audio-break");
 
-			await jsRuntime.InvokeVoidAsync("app.playAudio", "audio-break");
+			await jsRuntime.InvokeVoidAsync("BananaTracks.App.playAudio", "audio-break");
 
 			return true;
 		}

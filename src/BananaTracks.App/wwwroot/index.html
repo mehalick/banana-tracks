@@ -36,8 +36,13 @@
 	<script src="_framework/blazor.webassembly.js"></script>
 	<!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
 	<script>
-		window.playAudio = (id) => {
-			document.getElementById(id).play();
+		window.app = {
+			playAudio: (id) => {
+				document.getElementById(id).play();
+			},
+			getTimezoneOffset: () => {
+				return new Date().getTimezoneOffset();
+			}
 		}
 	</script>
 </body>

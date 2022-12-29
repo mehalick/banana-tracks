@@ -33,12 +33,18 @@ public class Function
 
 		context.Logger.LogInformation($"Processed activity UserId: {body.UserId} ActivityId: {body.RoutineId}");
 
-		await _dynamoDbContext.SaveAsync(new Session
-		{
-			UserId = body.UserId,
-			RoutineId = body.RoutineId
-		});
+		var routine = await _dynamoDbContext.LoadAsync<Routine>(body.UserId, body.RoutineId);
 
+		if (routine is not null)
+		{
+			await _dynamoDbContext.SaveAsync(new Session
+			{
+				UserId = routine.UserId,
+				RoutineId = routine.RoutineId,
+				RoutineName = routine.Name
+			});
+		}
+		
 		await Task.CompletedTask;
 	}
 }

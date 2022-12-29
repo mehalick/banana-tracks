@@ -13,6 +13,8 @@ public partial class Profile : AppComponentBase
 	private List<Claim>? _claims;
 	private string? _id;
 	private string? _name;
+	private ListSessionsResponse? _listSessionsResponse;
+	private int _timezoneOffset;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -25,11 +27,14 @@ public partial class Profile : AppComponentBase
 			_id = _claims.GetClaim("sub");
 			_name = _claims.GetClaim("name");
 		}
+
+		_timezoneOffset = await JsRuntime.InvokeAsync<int>("app.getTimezoneOffset");
+
+		_listSessionsResponse = await ApiClient.ListSessions();
 	}
 
 	private void LogOut(MouseEventArgs _)
 	{
-		NavigateSuccess("routines/list", "Hello man");
-		//NavigationManager.NavigateToLogout("authentication/logout");
+		NavigationManager.NavigateToLogout("authentication/logout");
 	}
 }

@@ -68,6 +68,11 @@ internal class ApiClient
 		return await Get(ApiRoutes.ListRoutines, ApiClientSerializerContext.Default.ListRoutinesResponse);
 	}
 
+	public async Task<ListSessionsResponse> ListSessions()
+	{
+		return await Get(ApiRoutes.ListSessions, ApiClientSerializerContext.Default.ListSessionsResponse);
+	}
+
 	public async Task UpdateActivity(UpdateActivityRequest request)
 	{
 		await Post(ApiRoutes.UpdateActivity, request, ApiClientSerializerContext.Default.UpdateActivityRequest);
@@ -128,6 +133,7 @@ internal class ApiClient
 [JsonSerializable(typeof(GetRoutineByIdResponse))]
 [JsonSerializable(typeof(ListActivitiesResponse))]
 [JsonSerializable(typeof(ListRoutinesResponse))]
+[JsonSerializable(typeof(ListSessionsResponse))]
 [JsonSerializable(typeof(UpdateActivityRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal partial class ApiClientSerializerContext : JsonSerializerContext

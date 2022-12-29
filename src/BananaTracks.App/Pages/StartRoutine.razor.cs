@@ -43,7 +43,10 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 		return $"{ts.Minutes:00}:{ts.Seconds:00}";
 	}
 
-	public void Dispose() => _routineRun?.Dispose();
+	public void Dispose()
+	{
+		_routineRun?.Dispose();
+	}
 
 	private enum RunStatus
 	{
@@ -118,10 +121,13 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 			Console.WriteLine("[RunTimer] Play audio #audio-done");
 
-			await jsRuntime.InvokeVoidAsync("playAudio", "audio-done");
+			await jsRuntime.InvokeVoidAsync("app.playAudio", "audio-done");
 		}
 
-		public void Dispose() => _timer.Dispose();
+		public void Dispose()
+		{
+			_timer.Dispose();
+		}
 	}
 
 	private class ActivityRun
@@ -162,7 +168,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 			{
 				Console.WriteLine($"[RunTimer] Play audio #audio-{Activity.ActivityId}");
 
-				await jsRuntime.InvokeVoidAsync("playAudio", $"audio-{Activity.ActivityId}");
+				await jsRuntime.InvokeVoidAsync("app.playAudio", $"audio-{Activity.ActivityId}");
 			}
 		}
 
@@ -184,7 +190,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 			Console.WriteLine("[RunTimer] Play audio #audio-break");
 
-			await jsRuntime.InvokeVoidAsync("playAudio", "audio-break");
+			await jsRuntime.InvokeVoidAsync("app.playAudio", "audio-break");
 
 			return true;
 		}

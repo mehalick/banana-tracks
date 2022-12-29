@@ -12,6 +12,7 @@
 [JsonSerializable(typeof(GetRoutineByIdResponse))]
 [JsonSerializable(typeof(ListActivitiesResponse))]
 [JsonSerializable(typeof(ListRoutinesResponse))]
+[JsonSerializable(typeof(ListSessionsResponse))]
 [JsonSerializable(typeof(SessionSavedMessage))]
 [JsonSerializable(typeof(UpdateActivityRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]

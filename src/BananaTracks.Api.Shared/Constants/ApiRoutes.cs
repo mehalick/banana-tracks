@@ -12,5 +12,6 @@ public static class ApiRoutes
 	public const string HealthCheck = nameof(HealthCheck);
 	public const string ListActivities = nameof(ListActivities);
 	public const string ListRoutines = nameof(ListRoutines);
+	public const string ListSessions = nameof(ListSessions);
 	public const string UpdateActivity = nameof(UpdateActivity);
 }

@@ -3,24 +3,66 @@
 
 <Header Title="Profile"></Header>
 
-<Page IsLoading="_claims is null">
+<Page>
 	<table class="table">
+		<colgroup>
+			<col class="fit-cell" />
+			<col />
+		</colgroup>
 		<tbody>
-		<tr>
-			<th>ID</th>
-			<td>@_id</td>
-		</tr>
-		<tr>
-			<th>Name</th>
-			<td>@_name</td>
-		</tr>
+			<tr>
+				<th>ID</th>
+				<td>@_id</td>
+			</tr>
+			<tr>
+				<th>Name</th>
+				<td>@_name</td>
+			</tr>
 		</tbody>
 	</table>
+
 	<p class="text-muted">
 		Your user ID, name, and email address are provided by Auth0 and can't be managed within BananaTracks. If you need these updated please send me an email at the address below.
 	</p>
-	<div class="hstack gap-3 mb-3">
+	
+	<div class="hstack gap-3 mb-4">
 		<button type="button" @onclick="LogOut" class="btn btn-primary">Log out</button>
 		<a href="/profile/delete" class="btn btn-danger">Delete Profile and Data &rsaquo;</a>
 	</div>
+
+	<h2>Sessions</h2>
+
+	<Loading IsLoading="_listSessionsResponse is null">
+		@if (!_listSessionsResponse!.Sessions.Any())
+		{
+			<p><em>You don't have any saved sessions yet.</em></p>
+		}
+		else
+		{
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Routine</th>
+						<th>Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var session in _listSessionsResponse!.Sessions)
+					{
+						<tr>
+							<td>@session.RoutineName</td>
+							<td>
+								@{
+									var utc = session.CreatedAt.ToString("u");
+									var ltz = session.CreatedAt.AddMinutes(-_timezoneOffset).ToString("g");
+								}
+								<time datetime="@utc">@ltz</time>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
+	</Loading>
+
 </Page>

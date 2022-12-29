@@ -185,7 +185,7 @@ nav a {
 		border-bottom-color: var(--bt-border-color) !important;
 	}
 
-		.table th.fit-cell, .table td.fit-cell {
+		.table .fit-cell {
 			width: 1%;
 			white-space: nowrap;
 		}

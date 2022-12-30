@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace BananaTracks.Api.Shared.Models;
+﻿namespace BananaTracks.Api.Shared.Models;
 
 public class RoutineModel
 {
@@ -8,6 +6,7 @@ public class RoutineModel
 	public string RoutineId { get; set; } = default!;
 	public string Name { get; set; } = default!;
 	public List<RoutineActivityModel> Activities { get; set; } = new();
+	public DateTime? LastRunAt { get; set; }
 	public bool IsSelected { get; set; }
 
 	[JsonIgnore]

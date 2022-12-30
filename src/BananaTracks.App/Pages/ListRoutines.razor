@@ -4,21 +4,21 @@
 <Page Title="Routines" IsLoading="_response is null">
 
 	<ul class="link-list">
-		<li><a href="/routines/create">Create Routine</a></li>
+		<li><a class="btn btn-secondary" href="/routines/create">Create Routine</a></li>
 	</ul>
 
 	@foreach (var routine in _response!.Routines)
 	{
 		<div class="card">
 			<div class="card-body">
-				<a class="no-underline" href="/routines/@routine.RoutineId/start" title="start routine">
+				<a class="no-underline" href="/routines/@routine.RoutineId/start" title="Start routine">
 					<i class="fa-solid fa-play fa-xl me-1"></i>
 					@routine.Name
 				</a>
 				@if (!routine.IsSelected)
 				{
 					<a href="javascript:void(0);" @onclick="() => SelectRoutine(routine, true)" class="float-end" title="Show routine details">
-						<i class="fa-solid fa-chevron-right"></i>
+						<i class="fa-solid fa-ellipsis"></i>
 					</a>
 				}
 				else
@@ -32,7 +32,14 @@
 			{
 				<div class="card-footer d-flex justify-content-between">
 					<small class="text-truncate">@routine.ActivitiesList</small>
-					<a href="/routines/@routine.RoutineId/delete" title="Delete routine"><i class="fa-solid fa-trash-xmark fa-fw"></i></a>
+					<div class="hstack gap-3 float-end">
+						<a href="/routines/@routine.RoutineId/start" title="Start">
+							<i class="fa-solid fa-play fa-lg"></i>
+						</a>
+						<a href="/routines/@routine.RoutineId/delete" class="link-danger" title="Delete">
+							<i class="fa-regular fa-circle-minus fa-xl"></i>
+						</a>
+					</div>
 				</div>
 			}
 		</div>

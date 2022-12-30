@@ -13,6 +13,8 @@ public class Routine : EntityBase
 
 	public List<RoutineActivity> Activities { get; set; } = new();
 
+	public DateTime? LastRunAt { get; set; }
+
 	public static RoutineModel ToModel(Routine routine, Dictionary<string, Activity> activities)
 	{
 		var routineModel = new RoutineModel
@@ -20,6 +22,7 @@ public class Routine : EntityBase
 			UserId = routine.UserId,
 			RoutineId = routine.RoutineId,
 			Name = routine.Name,
+			LastRunAt = routine.LastRunAt,
 			Activities = routine.Activities
 				.OrderBy(i => i.SortOrder)
 				.Select(i => new RoutineActivityModel

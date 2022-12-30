@@ -10,9 +10,45 @@
 		</div>
 	</NotAuthorized>
 	<Authorized>
+		
+		<h1>Home</h1>
 
-		<h1>Hi!</h1>
-		<p>If you're new here, get started by <a href="/activities/add">adding some activities</a> and then <a href="/routines/create">create a routine</a>.</p>
+		<Loading IsLoading="_recentRunRoutines is null">
+			@if (_recentRunRoutines?.Any() == false)
+			{
+				<div class="alert alert-info mb-4">
+					If you're new here, get started by adding activities and then creating a routine!
+				</div>
+
+				<div class="hstack gap-3 justify-content-center mb-4">
+					<a class="btn btn-secondary" href="/activities/add">Add Activities</a>
+					<a class="btn btn-secondary" href="/routines/create">Create a Routine</a>
+				</div>
+			}
+			else
+			{
+				<div class="alert alert-info mb-4">
+					Welcome back, ready to practice?
+				</div>
+
+				<div class="hstack gap-3 justify-content-center mb-4">
+					@foreach (var routine in _recentRunRoutines!)
+					{
+						<a class="btn btn-secondary" href="/routines/@routine.RoutineId/start">
+							<i class="fa-solid fa-play fa-lg me-1"></i>
+							@routine.Name
+						</a>
+					}
+				</div>
+			}
+		</Loading>
+
+		<h2>About</h2>
+		<p>BananaTracks was built by me, <a href="https://andy.mehalick.com">Andy Mehalick</a>, as a replacement for a few practice tracking apps that have too many ads, a paid subscription model, or missing features.</p>
+		<p>BananaTracks is free-to-use and open-source; there's no ads, tracking, cookies, or spam.</p>
+
+		<h2>Support</h2>
+		<p>Questions, comments, or issues? Create an issue at <a href="https://github.com/mehalick/banana-tracks/issues">https://github.com/mehalick/banana-tracks/issues</a>.</p>
 
 		<h2>What's New</h2>
 		<ul>
@@ -21,22 +57,13 @@
 			<li>2022-12 - Added profile page</li>
 		</ul>
 
-		<h2>Coming Soon</h2>
+		<h2>Up Next</h2>
 		<ul>
 			<li>Add support for deleting profile and data</li>
-			<li>Add calendar view of saved sessions</li>
 			<li>Add support to edit routines and re-order activities</li>
 			<li>Add support for pausing and stopping running routines</li>
-			<li>Upgrade .NET to 7 and add AOT Lambda compilation</li>
+			<li>Add calendar view of saved sessions</li>
 		</ul>
-
-		<h2>Support</h2>
-		<p>Questions, comments, or ideas? I'd love to know what you think, please just send me an email to <a href="mailto:andy.mehalick@outlook.com">andy.mehalick@outlook.com</a>.</p>
-		<p>If you have any technical issues or feature ideas please feel free to visit <a href="https://github.com/mehalick/banana-tracks/issues">https://github.com/mehalick/banana-tracks/issues</a>.</p>
-
-		<h2>About</h2>
-		<p>BananaTracks was designed and developed by me, <a href="https://andy.mehalick.com">Andy Mehalick</a>. I wanted a replacement for a few practice tracking apps that have too many ads, a paid subscription model, or not quite the right features and customization options.</p>
-		<p>BananaTracks is completely free-to-use and open-source; it doesn't track, collect, share, or resell any personal information.</p>
 
 	</Authorized>
 </AuthorizeView>

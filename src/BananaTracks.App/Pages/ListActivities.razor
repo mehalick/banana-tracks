@@ -6,7 +6,7 @@
 <Page IsLoading="_response is null">
 
 	<ul class="link-list">
-		<li><a href="/activities/add">Add Activity</a></li>
+		<li><a class="btn btn-secondary" href="/activities/add">Add Activity</a></li>
 	</ul>
 
 	@foreach (var activity in _response!.Activities)
@@ -17,7 +17,7 @@
 				@if (!activity.IsSelected)
 				{
 					<a href="javascript:void(0);" @onclick="() => SelectActivity(activity, true)" class="float-end" title="Show activity details">
-						<i class="fa-solid fa-chevron-right"></i>
+						<i class="fa-solid fa-ellipsis"></i>
 					</a>
 				}
 				else
@@ -30,11 +30,14 @@
 			@if (activity.IsSelected)
 			{
 				<div class="card-footer">
-					<LinkList>
-						<a href="/activities/@activity.ActivityId/update" title="Edit"><i class="fa-solid fa-pen-to-square fa-fw"></i></a>
-						<a href="/activities/@activity.ActivityId/delete" title="Delete"><i class="fa-solid fa-trash-xmark fa-fw"></i></a>
-					</LinkList>
-					
+					<div class="hstack gap-3 float-end">
+						<a href="/activities/@activity.ActivityId/update" title="Edit">
+							<i class="fa-solid fa-square-pen fa-xl"></i>
+						</a>
+						<a href="/activities/@activity.ActivityId/delete" class="link-danger" title="Delete">
+							<i class="fa-regular fa-circle-minus fa-xl"></i>
+						</a>
+					</div>
 				</div>
 			}
 		</div>

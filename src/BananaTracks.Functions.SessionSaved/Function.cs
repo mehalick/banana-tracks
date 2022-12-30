@@ -37,6 +37,10 @@ public class Function
 
 		if (routine is not null)
 		{
+			routine.LastRunAt = DateTime.UtcNow;
+
+			await _dynamoDbContext.SaveAsync(routine);
+			
 			await _dynamoDbContext.SaveAsync(new Session
 			{
 				UserId = routine.UserId,

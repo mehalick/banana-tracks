@@ -1,18 +1,19 @@
+global using System.Text.Json;
 global using Amazon.DynamoDBv2.DataModel;
 global using BananaTracks.Api.Extensions;
 global using BananaTracks.Api.Providers;
 global using BananaTracks.Api.Shared.Constants;
-global using BananaTracks.Api.Shared.Models;
 global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;
 global using BananaTracks.Domain.Configuration;
 global using BananaTracks.Domain.Entities;
 global using FastEndpoints;
-global using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Amazon.SQS;
-using Amazon.SimpleSystemsManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OpenTelemetry;
+using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
+using OpenTelemetry.Trace;
 
 namespace BananaTracks.Api;
 
@@ -84,6 +85,14 @@ public class Program
 		{
 			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 		}
+
+		Sdk.CreateTracerProviderBuilder()
+			.AddAWSInstrumentation()
+			.AddXRayTraceId() // for generating AWS X-Ray compliant trace IDs
+			.AddOtlpExporter() // default address localhost:4317
+			.Build();
+
+		Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator()); // configure AWS X-Ray propagator
 	}
 
 	private static void AddWebServices(WebApplicationBuilder builder)

@@ -13,8 +13,6 @@ using Amazon.CDK.AWS.S3;
 using Amazon.CDK.AWS.SQS;
 using Constructs;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
-using CfnAccount = Amazon.CDK.AWS.APIGateway.CfnAccount;
-using CfnAccountProps = Amazon.CDK.AWS.APIGateway.CfnAccountProps;
 using Function = Amazon.CDK.AWS.Lambda.Function;
 using FunctionProps = Amazon.CDK.AWS.Lambda.FunctionProps;
 using IFunction = Amazon.CDK.AWS.Lambda.IFunction;
@@ -119,10 +117,10 @@ public class CdkStack : Stack
 		{
 			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
-			Principals = new IPrincipal[]{ new AnyPrincipal() },
+			Principals = new IPrincipal[] { new AnyPrincipal() },
 			Resources = new[]
 			{
-				cdnBucket.ArnForObjects("polly"), 
+				cdnBucket.ArnForObjects("polly"),
 				cdnBucket.ArnForObjects("polly/*")
 			},
 			Actions = new[]
@@ -175,7 +173,7 @@ public class CdkStack : Stack
 			Target = RecordTarget.FromAlias(new ApiGatewayDomain(apiGateway.DomainName!))
 		});
 	}
-	
+
 	private (Distribution, Distribution) CreateCloudFrontDistributions(IBucket appBucket, IBucket cdnBucket, ICertificate certificate)
 	{
 		var identity = new OriginAccessIdentity(this, Name("CloudFrontOriginAccessIdentity"));
@@ -262,8 +260,6 @@ public class CdkStack : Stack
 				RoleName = Name("LambdaRole"),
 				AssumedBy = new ServicePrincipal("lambda.amazonaws.com")
 			});
-
-		
 
 		lambdaRole.AddToPolicy(new(
 			new PolicyStatementProps

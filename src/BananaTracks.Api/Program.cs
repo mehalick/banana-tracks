@@ -10,6 +10,7 @@ global using BananaTracks.Domain.Entities;
 global using FastEndpoints;
 using Amazon.DynamoDBv2;
 using Amazon.SQS;
+using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using OpenTelemetry;
 using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;

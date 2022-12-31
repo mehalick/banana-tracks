@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace BananaTracks.App.Components;
@@ -20,7 +21,7 @@ public partial class InputGroupText : InputBase<string>
 	protected override bool TryParseValueFromString(string? value, out string result, [NotNullWhen(false)] out string? validationErrorMessage)
 	{
 		result = value ?? default!;
-		validationErrorMessage = null;
+		validationErrorMessage = null!;
 		return true;
 	}
 }

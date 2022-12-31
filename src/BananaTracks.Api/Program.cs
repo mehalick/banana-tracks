@@ -93,6 +93,8 @@ public class Program
 			.Build();
 
 		Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator()); // configure AWS X-Ray propagator
+
+		AWSSDKHandler.RegisterXRayForAllServices();
 	}
 
 	private static void AddWebServices(WebApplicationBuilder builder)

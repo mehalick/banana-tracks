@@ -282,6 +282,19 @@ public class CdkStack : Stack
 		lambdaRole.AddToPolicy(new(
 			new PolicyStatementProps
 			{
+				Sid = "AllowXRay",
+				Effect = Effect.ALLOW,
+				Resources = new[] { "*" },
+				Actions = new[]
+				{
+					"xray:PutTraceSegments",
+					"xray:PutTelemetryRecords"
+				}
+			}));
+
+		lambdaRole.AddToPolicy(new(
+			new PolicyStatementProps
+			{
 				Sid = "AllowSystemsManager",
 				Effect = Effect.ALLOW,
 				Resources = new[] { "*" },
@@ -400,7 +413,8 @@ public class CdkStack : Stack
 				MemorySize = 256,
 				Role = lambdaRole,
 				Runtime = Runtime.DOTNET_6,
-				Timeout = Duration.Seconds(30)
+				Timeout = Duration.Seconds(30),
+				Tracing = Tracing.ACTIVE
 			});
 	}
 

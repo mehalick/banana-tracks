@@ -1,6 +1,6 @@
 ﻿namespace BananaTracks.App.Pages;
 
-public partial class CreateRoutine : AppComponentBase
+public partial class AddRoutine : AppComponentBase
 {
 	private readonly AddRoutineRequest _addRoutineRequest = new();
 	private ListActivitiesResponse? _listActivitiesResponse;

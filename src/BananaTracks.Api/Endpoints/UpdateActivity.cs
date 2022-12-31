@@ -28,9 +28,6 @@ internal class UpdateActivity : Endpoint<UpdateActivityRequest>
 
 		if (activity is null)
 		{
-			// TODO throw exception and return problem details (GH-4)
-			await SendOkAsync(cancellationToken);
-
 			return;
 		}
 
@@ -43,7 +40,5 @@ internal class UpdateActivity : Endpoint<UpdateActivityRequest>
 
 			await _queueProvider.SendActivityUpdatedMessage(activity, cancellationToken);
 		}
-
-		await SendOkAsync(cancellationToken);
 	}
 }

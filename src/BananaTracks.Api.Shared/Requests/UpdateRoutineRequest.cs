@@ -1,9 +1,9 @@
 ﻿namespace BananaTracks.Api.Shared.Requests;
 
-public class UpdateActivityRequest
+public class UpdateRoutineRequest
 {
 	[Required]
-	public string ActivityId { get; set; }= default!;
+	public string RoutineId { get; set; }= default!;
 
 	[Required]
 	public string Name { get; set; } = default!;

@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inherits AppComponentBase
 
-<PageTitle>BananaTracks</PageTitle>
+<Header Title="Home"></Header>
 
 <AuthorizeView>
 	<NotAuthorized>
@@ -10,9 +10,6 @@
 		</div>
 	</NotAuthorized>
 	<Authorized>
-		
-		<h1>Home</h1>
-
 		<Loading IsLoading="_recentRunRoutines is null">
 			@if (_recentRunRoutines?.Any() == false)
 			{

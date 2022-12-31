@@ -4,7 +4,7 @@
 <Page Title="Routines" IsLoading="_response is null">
 
 	<ul class="link-list">
-		<li><a class="btn btn-secondary" href="/routines/create">Create Routine</a></li>
+		<li><a class="btn btn-secondary" href="/routines/add">Create Routine</a></li>
 	</ul>
 
 	@foreach (var routine in _response!.Routines)
@@ -33,11 +33,11 @@
 				<div class="card-footer d-flex justify-content-between">
 					<small class="text-truncate">@routine.ActivitiesList</small>
 					<div class="hstack gap-3 float-end">
-						<a href="/routines/@routine.RoutineId/start" title="Start">
+						<a href="/routines/@routine.RoutineId/start" class="btn btn-secondary" title="Start">
 							<i class="fa-solid fa-play fa-lg"></i>
 						</a>
-						<a href="/routines/@routine.RoutineId/delete" class="link-danger" title="Delete">
-							<i class="fa-regular fa-circle-minus fa-xl"></i>
+						<a href="/routines/@routine.RoutineId/update" class="btn btn-secondary" title="Update">
+							<i class="fa-solid fa-square-pen fa-lg"></i>
 						</a>
 					</div>
 				</div>

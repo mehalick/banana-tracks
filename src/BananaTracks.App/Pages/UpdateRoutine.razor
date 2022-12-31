@@ -1,0 +1,19 @@
+﻿@page "/routines/{RoutineId}/update"
+@inherits AppComponentBase
+
+<Header Title="Update Routine"></Header>
+
+<Page IsLoading="_updateRoutineRequest is null">
+	<EditForm Model="_updateRoutineRequest" OnValidSubmit="OnValidSubmit">
+		
+		<DataAnnotationsValidator />
+
+		<InputGroupText Label="Name" @bind-Value="@_updateRoutineRequest!.Name" For="() => _updateRoutineRequest!.Name" />
+
+		<div class="hstack gap-3">
+			<button type="submit" class="btn btn-primary">Save</button>
+			<a href="/routines/@_updateRoutineRequest!.RoutineId/delete" class="btn btn-danger">Delete &rsaquo;</a>
+		</div>
+
+	</EditForm>
+</Page>

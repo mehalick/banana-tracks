@@ -13,6 +13,7 @@ public class Routine : EntityBase
 
 	public List<RoutineActivity> Activities { get; set; } = new();
 
+	[DynamoDBProperty(typeof(DateTimeUtcConverter))]
 	public DateTime? LastRunAt { get; set; }
 
 	public static RoutineModel ToModel(Routine routine, Dictionary<string, Activity> activities)

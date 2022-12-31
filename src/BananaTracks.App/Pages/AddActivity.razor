@@ -6,11 +6,7 @@
 		
 		<DataAnnotationsValidator />
 
-		<div class="mb-3">
-			<label for="name" class="form-label">Name</label>
-			<InputText id="name" class="form-control" @bind-Value="_addActivityRequest.Name" />
-			<ValidationMessage For="() => _addActivityRequest.Name" />
-		</div>
+		<InputGroupText Label="Name" @bind-Value="@_addActivityRequest.Name" For="() => _addActivityRequest.Name" />
 
 		<button type="submit" class="btn btn-primary">Add Activity</button>
 

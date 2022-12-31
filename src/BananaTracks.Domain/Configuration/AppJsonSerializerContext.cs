@@ -15,6 +15,7 @@
 [JsonSerializable(typeof(ListSessionsResponse))]
 [JsonSerializable(typeof(SessionSavedMessage))]
 [JsonSerializable(typeof(UpdateActivityRequest))]
+[JsonSerializable(typeof(UpdateRoutineRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 public partial class AppJsonSerializerContext : JsonSerializerContext
 { }

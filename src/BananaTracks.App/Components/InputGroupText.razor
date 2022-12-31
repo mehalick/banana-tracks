@@ -1,0 +1,7 @@
+﻿@inherits InputBase<string>
+
+<div class="mb-3">
+	<label for="@_id" class="form-label">@Label</label>
+	<InputText id="@_id" class="form-control" @bind-Value="@CurrentValue" maxlength="@MaxLength" />
+	<ValidationMessage For="@For" />
+</div>

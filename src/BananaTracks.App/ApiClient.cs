@@ -78,6 +78,11 @@ internal class ApiClient
 		await Post(ApiRoutes.UpdateActivity, request, ApiClientSerializerContext.Default.UpdateActivityRequest);
 	}
 
+	public async Task UpdateRoutine(UpdateRoutineRequest request)
+	{
+		await Post(ApiRoutes.UpdateRoutine, request, ApiClientSerializerContext.Default.UpdateRoutineRequest);
+	}
+
 	private async Task Get(string uri)
 	{
 		try
@@ -135,6 +140,7 @@ internal class ApiClient
 [JsonSerializable(typeof(ListRoutinesResponse))]
 [JsonSerializable(typeof(ListSessionsResponse))]
 [JsonSerializable(typeof(UpdateActivityRequest))]
+[JsonSerializable(typeof(UpdateRoutineRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal partial class ApiClientSerializerContext : JsonSerializerContext
 { }

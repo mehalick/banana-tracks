@@ -1,4 +1,4 @@
-﻿@page "/routines/create"
+﻿@page "/routines/add"
 @inherits AppComponentBase
 
 <Page Title="Create Routine">
@@ -7,11 +7,7 @@
 		
 		<DataAnnotationsValidator />
 
-		<div class="mb-3">
-			<label for="name" class="form-label">Name</label>
-			<InputText id="name" class="form-control" @bind-Value="_addRoutineRequest.Name" />
-			<ValidationMessage For="() => _addRoutineRequest.Name" />
-		</div>
+		<InputGroupText Label="Name" @bind-Value="@_addRoutineRequest.Name" For="() => _addRoutineRequest.Name" />
 
 		<Loading IsLoading="_listActivitiesResponse is null">
 
@@ -66,11 +62,13 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<h1 class="modal-title fs-5" id="staticBackdropLabel">Add Activity</h1>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark fa-xl"></i></button>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1">
+								<i class="fa-solid fa-xmark fa-xl"></i>
+							</button>
 						</div>
 						<div class="modal-body">
 							<div class="mb-3">
-								<InputSelect @bind-Value="_newActivity.ActivityId" class="form-select">
+								<InputSelect @bind-Value="_newActivity.ActivityId" class="form-select" tabindex="-1">
 									@foreach (var option in _listActivitiesResponse!.Activities)
 									{
 										<option value="@option.ActivityId">@option.Name</option>
@@ -80,31 +78,31 @@
 							<div class="mb-3">
 								<label for="activity-new-duration" class="form-label">Duration</label>
 								<div class="input-group ">
-									<InputNumber id="activity-new-duration" @bind-Value="_newActivity.DurationInSeconds" class="form-control" />
+									<InputNumber id="activity-new-duration" @bind-Value="_newActivity.DurationInSeconds" class="form-control" tabindex="-1" />
 									<span class="input-group-text">seconds</span>
 								</div>
 							</div>
 							<div class="mb-3">
 								<label for="activity-new-break" class="form-label">Break</label>
 								<div class="input-group ">
-									<InputNumber id="activity-new-break" @bind-Value="_newActivity.BreakInSeconds" class="form-control" />
+									<InputNumber id="activity-new-break" @bind-Value="_newActivity.BreakInSeconds" class="form-control" tabindex="-1" />
 									<span class="input-group-text">seconds</span>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" @onclick="AddActivity" data-bs-dismiss="modal" class="btn btn-primary">Add Activity</button>
+							<button type="button" @onclick="AddActivity" data-bs-dismiss="modal" class="btn btn-primary" tabindex="-1">Add Activity</button>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="d-grid d-sm-block">
-				<button type="button" data-bs-toggle="modal" data-bs-target="#modal-activity-new" class="btn btn-secondary no-focus float-end mb-3" title="add activity"><i class="fa-solid fa-plus fa-fw me-1"></i> Add Activity</button>
-				@if (!string.IsNullOrWhiteSpace(_addRoutineRequest.Name) && _addRoutineRequest.Activities.Any())
-				{
-					<button type="submit" class="btn btn-primary">Create Routine</button>
-				}
+			<div class="d-flex justify-content-between">
+				<button type="submit" class="btn btn-primary">Create Routine</button>
+				<button type="button" data-bs-toggle="modal" data-bs-target="#modal-activity-new" class="btn btn-secondary no-focus" title="add activity">
+					<i class="fa-solid fa-plus fa-fw me-1"></i> 
+					Add Activity
+				</button>
 			</div>
 
 		</Loading>

@@ -47,7 +47,7 @@ jobs:
     - name: Set Git SHA in API
       uses: jossef/action-set-json-field@v2.1
       with:
-        file: /src/BananaTracks.App/appsettings.json
+        file: /src/BananaTracks.Api/appsettings.json
         field: Git.Commit
         value: ${{ github.sha }}
 

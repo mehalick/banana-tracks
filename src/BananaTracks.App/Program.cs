@@ -1,13 +1,12 @@
-global using BananaTracks.App.Components;
-global using BananaTracks.App.Extensions;
+global using BananaTracks.Api.Shared.Clients;
 global using BananaTracks.Api.Shared.Models;
 global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;
-global using BananaTracks.Api.Shared.Constants;
+global using BananaTracks.App.Components;
+global using BananaTracks.App.Extensions;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.JSInterop;
-global using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

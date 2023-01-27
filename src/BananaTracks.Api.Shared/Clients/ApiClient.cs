@@ -1,11 +1,14 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
+﻿using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization.Metadata;
+using BananaTracks.Api.Shared.Constants;
+using BananaTracks.Api.Shared.Requests;
+using BananaTracks.Api.Shared.Responses;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace BananaTracks.App;
+namespace BananaTracks.Api.Shared.Clients;
 
-internal class ApiClient
+public class ApiClient
 {
 	private readonly HttpClient _httpClient;
 
@@ -142,5 +145,5 @@ internal class ApiClient
 [JsonSerializable(typeof(UpdateActivityRequest))]
 [JsonSerializable(typeof(UpdateRoutineRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-internal partial class ApiClientSerializerContext : JsonSerializerContext
+public partial class ApiClientSerializerContext : JsonSerializerContext
 { }

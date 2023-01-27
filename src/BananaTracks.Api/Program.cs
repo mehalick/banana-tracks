@@ -12,9 +12,6 @@ using Amazon.DynamoDBv2;
 using Amazon.SQS;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using OpenTelemetry;
-using OpenTelemetry.Contrib.Extensions.AWSXRay.Trace;
-using OpenTelemetry.Trace;
 
 namespace BananaTracks.Api;
 
@@ -42,7 +39,6 @@ public class Program
 		app.UseAuthentication();
 		app.UseAuthorization();
 
-		
 		app.UseFastEndpoints();
 
 		await app.RunAsync();
@@ -98,7 +94,7 @@ public class Program
 		//	.AddOtlpExporter() // default address localhost:4317
 		//	.Build();
 
-		/Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator()); // configure AWS X-Ray propagator
+		//Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator()); // configure AWS X-Ray propagator
 
 		AWSSDKHandler.RegisterXRayForAllServices();
 	}

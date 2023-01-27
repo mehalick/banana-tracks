@@ -30,6 +30,8 @@ public class Program
 
 		var app = builder.Build();
 
+		app.UseXRay("BananaTracks");
+
 		app.UseCors("ApiCors");
 
 		app.UseSwagger();
@@ -40,6 +42,7 @@ public class Program
 		app.UseAuthentication();
 		app.UseAuthorization();
 
+		
 		app.UseFastEndpoints();
 
 		await app.RunAsync();
@@ -87,13 +90,15 @@ public class Program
 			builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 		}
 
-		Sdk.CreateTracerProviderBuilder()
-			.AddAWSInstrumentation()
-			.AddXRayTraceId() // for generating AWS X-Ray compliant trace IDs
-			.AddOtlpExporter() // default address localhost:4317
-			.Build();
+		//builder.Services.AddOpenTelemetryTracing(i => {});
 
-		Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator()); // configure AWS X-Ray propagator
+		//Sdk.CreateTracerProviderBuilder()
+		//	.AddAWSInstrumentation()
+		//	.AddXRayTraceId() // for generating AWS X-Ray compliant trace IDs
+		//	.AddOtlpExporter() // default address localhost:4317
+		//	.Build();
+
+		/Sdk.SetDefaultTextMapPropagator(new AWSXRayPropagator()); // configure AWS X-Ray propagator
 
 		AWSSDKHandler.RegisterXRayForAllServices();
 	}

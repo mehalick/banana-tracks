@@ -37,10 +37,17 @@ jobs:
         name: dist
         path: publish/wwwroot
 
-    - name: Set Git SHA
+    - name: Set Git SHA in App
       uses: jossef/action-set-json-field@v2.1
       with:
         file: publish/wwwroot/appsettings.json
+        field: Git.Commit
+        value: ${{ github.sha }}
+
+    - name: Set Git SHA in API
+      uses: jossef/action-set-json-field@v2.1
+      with:
+        file: /src/BananaTracks.App/appsettings.json
         field: Git.Commit
         value: ${{ github.sha }}
 
@@ -52,7 +59,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy API to Lambda
-      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api
+      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api --function-publish true --function-description Live
 
     - name: Deploy ActivityUpdated Function to Lambda
       run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityUpdated

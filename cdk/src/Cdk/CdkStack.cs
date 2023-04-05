@@ -22,10 +22,11 @@ namespace Cdk;
 public class CdkStack : Stack
 {
 	private const string DomainName = "bananatracks.com";
-	private const string ApiDomainName = "api.bananatracks.com";
-	private const string AppDomainName = "app.bananatracks.com";
-	private const string CdnDomainName = "cdn.bananatracks.com";
-
+	private const string WildcardDomain = $"*.{DomainName}";
+	private const string ApiDomainName = $"api.{DomainName}";
+	private const string AppDomainName = $"app.{DomainName}";
+	private const string CdnDomainName = $"cdn.{DomainName}";
+	
 	internal CdkStack(Construct scope, string id, IStackProps props) : base(scope, id, props)
 	{
 		var (appBucket, cdnBucket) = CreateS3Buckets();
@@ -142,7 +143,7 @@ public class CdkStack : Stack
 		var certificate = new Certificate(this, Name("Certificate"), new CertificateProps
 		{
 			DomainName = DomainName,
-			SubjectAlternativeNames = new[] { "*.bananatracks.com" },
+			SubjectAlternativeNames = new[] { WildcardDomain },
 			Validation = CertificateValidation.FromDns(hostedZone)
 		});
 
@@ -437,32 +438,6 @@ public class CdkStack : Stack
 		apiResource.AddMethod("GET", new LambdaIntegration(function));
 		apiResource.AddMethod("POST", new LambdaIntegration(function));
 		apiResource.AddMethod("OPTIONS", new LambdaIntegration(function));
-
-		//var role = new Role(this, Name("ApiGatewayRole"),
-		//	new RoleProps
-		//	{
-		//		RoleName = Name("ApiGatewayRole"),
-		//		AssumedBy = new ServicePrincipal("apigateway.amazonaws.com")
-		//	});
-
-		//role.AddToPolicy(new(
-		//	new PolicyStatementProps
-		//	{
-		//		Sid = "AllowCloudWatch",
-		//		Effect = Effect.ALLOW,
-		//		Resources = new[] { "*" },
-		//		Actions = new[]
-		//		{
-		//			"logs:CreateLogGroup",
-		//			"logs:CreateLogStream",
-		//			"logs:PutLogEvents"
-		//		}
-		//	}));
-
-		//_ = new CfnAccount(this, Name("CfnAccount"), new CfnAccountProps
-		//{
-		//	CloudWatchRoleArn = role.RoleArn
-		//});
 
 		return api;
 	}

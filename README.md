@@ -18,7 +18,7 @@ This repository includes the source code for the web app, API, serverless functi
 
 ## Deploying
 
-While the public BananaTracks app is free-to-use you can also clone this repository and deploy to your own AWS account.
+While the public BananaTracks app is free-to-use, you can also clone this repository and deploy to your own AWS account.
 
 ## Clone Repository
 
@@ -52,7 +52,7 @@ If you don't already have the AWS and CDK command line interfaces (CLI) installe
 
 ## Configure AWS Account Name and Region
 
-The CDK and CDK project will need your AWS account name and region when bootstrapping and deploying. In the CDK project they are set with .NET user secrets:
+The CDK project will need your AWS account name and region when bootstrapping and deploying. In the CDK project they are set with .NET user secrets:
 
 ```pwsh
 # set your AWS account name and region
@@ -111,5 +111,5 @@ cdk deploy
 
 The API project uses [Auth0](https://auth0.com/) for authentication, you'll need to set up an account and add the details to the API project's [app settings](https://github.com/mehalick/banana-tracks/blob/main/src/BananaTracks.Api/appsettings.json).
 
-You'll also need to set the AWS-specific app settings here as well.
+You'll also need to set the AWS-specific app settings here as well, specifically the region and SQS URLs.
 

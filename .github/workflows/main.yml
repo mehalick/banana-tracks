@@ -41,14 +41,14 @@ jobs:
       uses: jossef/action-set-json-field@v2.1
       with:
         file: publish/wwwroot/appsettings.json
-        field: Git.Commit
+        field: Version.CommitHash
         value: ${{ github.sha }}
 
     - name: Set Git SHA in API
       uses: jossef/action-set-json-field@v2.1
       with:
         file: ./src/BananaTracks.Api/appsettings.json
-        field: Git.Commit
+        field: Version.CommitHash
         value: ${{ github.sha }}
 
     - name: Configure AWS Credentials

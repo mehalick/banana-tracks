@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace BananaTracks.App.Pages;
 
@@ -6,6 +7,9 @@ public partial class Index : AppComponentBase
 {
 	[Inject]
 	protected IConfiguration Configuration { get; set; } = null!;
+
+	[Inject]
+	protected IOptions<Version> Version { get; set; } = null!;
 
 	[Inject]
 	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
@@ -21,6 +25,8 @@ public partial class Index : AppComponentBase
 		{
 			_version = version;
 		}
+
+		_version = Version.Value.CommitHash;
 
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 

@@ -21,6 +21,8 @@ public class Program
 		builder.RootComponents.Add<App>("#app");
 		builder.RootComponents.Add<HeadOutlet>("head::after");
 
+		builder.Services.Configure<Version>(builder.Configuration.GetSection("Version"));
+
 		builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
 
 		builder.Services

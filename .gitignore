@@ -30,3 +30,5 @@ artifacts/
 # NPM
 node_modules
 **/wwwroot/dist/
+
+.idea/.idea.BananaTracks/.idea/

@@ -229,6 +229,12 @@ public class CdkStack : Stack
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			PointInTimeRecovery = true
 		});
+		
+		activitiesTable.AddLocalSecondaryIndex(new LocalSecondaryIndexProps
+		{
+			IndexName = "RoutineIndex",
+			SortKey = new Attribute { Name = "RoutineId", Type = AttributeType.STRING }
+		});
 
 		var routinesTable = new Table(this, Name("DynamoDbRoutines"), new TableProps
 		{

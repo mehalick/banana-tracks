@@ -5,5 +5,15 @@ public class AddRoutineRequest
 	[Required]
 	public string Name { get; set; } = default!;
 
-	public List<RoutineActivityModel> Activities { get; set; } = new();
+	public List<AddRoutineRequestActivity> Activities { get; set; } = new();
+}
+
+public class AddRoutineRequestActivity
+{
+	[Required]
+	public string Name { get; set; } = default!;
+
+	public int DurationInSeconds { get; set; } = 300;
+
+	public int BreakInSeconds { get; set; } = 15;
 }

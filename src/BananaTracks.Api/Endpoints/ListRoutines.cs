@@ -1,4 +1,6 @@
-﻿namespace BananaTracks.Api.Endpoints;
+﻿using BananaTracks.Domain.Extensions;
+
+namespace BananaTracks.Api.Endpoints;
 
 public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 {
@@ -32,11 +34,11 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 			Routines = routines
 				.Active()
 				.OrderBy(i => i.Name)
-				.Select(i => Routine.ToModel(i, activities))
+				.Select(i => Routine.ToModel(i, activities.Where(j => j.RoutineId == i.RoutineId)))
 		};
 	}
 
-	private async Task<Dictionary<string, Activity>> GetActivities(string userId, CancellationToken cancellationToken)
+	private async Task<List<Activity>> GetActivities(string userId, CancellationToken cancellationToken)
 	{
 		var activities = await _dynamoDbContext
 			.QueryAsync<Activity>(userId)
@@ -44,6 +46,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 
 		return activities
 			.Active()
-			.ToDictionary(i => i.ActivityId, i => i);
+			.OrderBy(i => i.SortOrder)
+			.ToList();
 	}
 }

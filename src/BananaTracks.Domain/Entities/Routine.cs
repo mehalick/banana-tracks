@@ -11,45 +11,28 @@ public class Routine : EntityBase
 
 	public string Name { get; set; } = default!;
 
-	public List<RoutineActivity> Activities { get; set; } = new();
-
 	[DynamoDBProperty(typeof(DateTimeUtcConverter))]
 	public DateTime? LastRunAt { get; set; }
 
-	public static RoutineModel ToModel(Routine routine, Dictionary<string, Activity> activities)
+	public static RoutineModel ToModel(Routine routine, IEnumerable<Activity> activities)
 	{
-		var routineModel = new RoutineModel
+		return new()
 		{
 			UserId = routine.UserId,
 			RoutineId = routine.RoutineId,
 			Name = routine.Name,
 			LastRunAt = routine.LastRunAt,
-			Activities = routine.Activities
+			Activities = activities
 				.OrderBy(i => i.SortOrder)
 				.Select(i => new RoutineActivityModel
 				{
 					ActivityId = i.ActivityId,
+					Name = i.Name,
+					AudioUrl = i.AudioUrl,
 					DurationInSeconds = i.DurationInSeconds,
 					BreakInSeconds = i.BreakInSeconds
 				})
 				.ToList()
 		};
-
-		for (var i = 0; i < routineModel.Activities.Count; i++)
-		{
-			var routineActivityModel = routineModel.Activities[i];
-
-			if (activities.TryGetValue(routineActivityModel.ActivityId, out var activity))
-			{
-				routineActivityModel.Name = activity.Name;
-				routineActivityModel.AudioUrl = activity.AudioUrl;
-			}
-			else
-			{
-				routineModel.Activities.RemoveAt(i);
-			}
-		}
-
-		return routineModel;
 	}
 }

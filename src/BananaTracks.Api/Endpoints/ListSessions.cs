@@ -1,4 +1,6 @@
-﻿namespace BananaTracks.Api.Endpoints;
+﻿using BananaTracks.Domain.Extensions;
+
+namespace BananaTracks.Api.Endpoints;
 
 public class ListSessions : EndpointWithoutRequest<ListSessionsResponse>
 {

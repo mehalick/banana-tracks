@@ -4,6 +4,7 @@ internal class AddRoutine : Endpoint<AddRoutineRequest>
 {
 	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IDynamoDBContext _dynamoDbContext;
+	private readonly QueueProvider _queueProvider;
 
 	public override void Configure()
 	{
@@ -11,10 +12,11 @@ internal class AddRoutine : Endpoint<AddRoutineRequest>
 		SerializerContext(AppJsonSerializerContext.Default);
 	}
 
-	public AddRoutine(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
+	public AddRoutine(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, QueueProvider queueProvider)
 	{
 		_httpContextAccessor = httpContextAccessor;
 		_dynamoDbContext = dynamoDbContext;
+		_queueProvider = queueProvider;
 	}
 
 	public override async Task HandleAsync(AddRoutineRequest request, CancellationToken cancellationToken)
@@ -24,18 +26,26 @@ internal class AddRoutine : Endpoint<AddRoutineRequest>
 		var routine = new Routine
 		{
 			UserId = userId,
-			Name = request.Name,
-			Activities = request.Activities
-				.Select(RoutineActivity.FromModel)
-				.ToList()
+			Name = request.Name
 		};
-
-		for (var i = 0; i < routine.Activities.Count; i++)
-		{
-			routine.Activities[i].SortOrder = i + 1;
-		}
-
+		
 		await _dynamoDbContext.SaveAsync(routine, cancellationToken);
+
+		for (var i = 0; i < request.Activities.Count; i++)
+		{
+			var activity = new Activity
+			{
+				UserId = userId,
+				RoutineId = routine.RoutineId,
+				Name = request.Activities[i].Name,
+				SortOrder = i + 1,
+				DurationInSeconds = request.Activities[i].DurationInSeconds,
+				BreakInSeconds = request.Activities[i].BreakInSeconds
+			};
+			
+			await _dynamoDbContext.SaveAsync(activity, cancellationToken);
+			await _queueProvider.SendActivityUpdatedMessage(activity, cancellationToken);
+		}
 
 		await SendOkAsync(cancellationToken);
 	}

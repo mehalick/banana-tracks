@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BananaTracks.Domain.Extensions;
 using Activity = BananaTracks.Domain.Entities.Activity;
 
 namespace BananaTracks.Api.Endpoints;

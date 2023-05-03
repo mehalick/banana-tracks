@@ -21,7 +21,7 @@ internal class GetRoutineById : Endpoint<GetRoutineByIdRequest, GetRoutineByIdRe
 	{
 		var userId = _httpContextAccessor.GetUserId();
 
-		var activities = await GetActivities(userId, cancellationToken);
+		var activities = await GetActivities(userId, request.RoutineId, cancellationToken);
 		var routine = await _dynamoDbContext.LoadAsync<Routine>(userId, request.RoutineId, cancellationToken);
 
 		Response = new()
@@ -30,12 +30,15 @@ internal class GetRoutineById : Endpoint<GetRoutineByIdRequest, GetRoutineByIdRe
 		};
 	}
 
-	private async Task<Dictionary<string, Activity>> GetActivities(string userId, CancellationToken cancellationToken)
+	private async Task<List<Activity>> GetActivities(string userId, string routineId, CancellationToken cancellationToken)
 	{
 		var activities = await _dynamoDbContext
 			.QueryAsync<Activity>(userId)
 			.GetRemainingAsync(cancellationToken);
 
-		return activities.ToDictionary(i => i.ActivityId, i => i);
+		return activities
+			.Where(i => i.RoutineId == routineId) // TODO: use secondary local index instead
+			.OrderBy(i => i.SortOrder)
+			.ToList();
 	}
 }

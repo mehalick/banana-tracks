@@ -52,11 +52,13 @@ public class Function
 
 	private async Task<string> SynthesizeSpeech(Activity activity)
 	{
+		var ts = TimeSpan.FromSeconds(activity.DurationInSeconds);
+		
 		var response = await _pollyClient.StartSpeechSynthesisTaskAsync(new()
 		{
 			OutputFormat = OutputFormat.Mp3,
 			VoiceId = VoiceId.Joanna,
-			Text = $"Start {activity.Name}, go!",
+			Text = $"Next, {activity.Name}, for {ts.Minutes} minutes and {ts.Seconds} seconds, go!",
 			OutputS3BucketName = "cdn.bananatracks.com",
 			OutputS3KeyPrefix = "polly/"
 		});

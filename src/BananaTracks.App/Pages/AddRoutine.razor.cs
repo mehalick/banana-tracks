@@ -2,38 +2,26 @@
 
 public partial class AddRoutine : AppComponentBase
 {
-	private readonly AddRoutineRequest _addRoutineRequest = new();
-	private ListActivitiesResponse? _listActivitiesResponse;
-	private readonly RoutineActivityModel _newActivity = new();
-
-	protected override async Task OnInitializedAsync()
+	private readonly AddRoutineRequest _addRoutineRequest = new()
 	{
-		_listActivitiesResponse = await ApiClient.ListActivities();
-	}
-
+		Activities = new()
+		{
+			new AddRoutineRequestActivity()
+		}
+	};
+	
 	private void AddActivity()
 	{
-		_addRoutineRequest.Activities.Add(new()
-		{
-			ActivityId = _newActivity.ActivityId,
-			Name = _newActivity.Name,
-			DurationInSeconds = _newActivity.DurationInSeconds,
-			BreakInSeconds = _newActivity.BreakInSeconds
-		});
+		_addRoutineRequest.Activities.Add(new());
 	}
 
-	private void RemoveActivity(RoutineActivityModel activity)
+	private void RemoveActivity(AddRoutineRequestActivity activity)
 	{
 		_addRoutineRequest.Activities.Remove(activity);
 	}
 
-	public async Task OnValidSubmit()
+	private async Task OnValidSubmit()
 	{
-		foreach (var activity in _addRoutineRequest.Activities)
-		{
-			activity.Name = _listActivitiesResponse!.Activities.First(i => i.ActivityId == activity.ActivityId).Name;
-		}
-
 		await ApiClient.AddRoutine(_addRoutineRequest);
 
 		NavigateSuccess("routines/list", "Routine successfully created.");

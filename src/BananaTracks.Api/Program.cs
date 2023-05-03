@@ -7,6 +7,7 @@ global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;
 global using BananaTracks.Domain.Configuration;
 global using BananaTracks.Domain.Entities;
+global using BananaTracks.Domain.Extensions;
 global using FastEndpoints;
 using Amazon.DynamoDBv2;
 using Amazon.SQS;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BananaTracks.Api;
 
-public class Program
+public static class Program
 {
 	public static async Task Main(string[] args)
 	{

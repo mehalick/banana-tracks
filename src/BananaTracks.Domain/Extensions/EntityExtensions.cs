@@ -1,6 +1,8 @@
-﻿namespace BananaTracks.Api.Extensions;
+﻿using BananaTracks.Domain.Entities;
 
-internal static class EntityExtensions
+namespace BananaTracks.Domain.Extensions;
+
+public static class EntityExtensions
 {
 	/// <summary>
 	/// Filters collection to only include active entities.

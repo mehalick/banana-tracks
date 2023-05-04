@@ -9,10 +9,13 @@ global using BananaTracks.Domain;
 global using BananaTracks.Domain.Entities;
 global using BananaTracks.Domain.Extensions;
 global using FastEndpoints;
+using Amazon.CloudWatchLogs;
 using Amazon.DynamoDBv2;
 using Amazon.SQS;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Serilog;
+using Serilog.Sinks.AwsCloudWatch;
 
 namespace BananaTracks.Api;
 
@@ -21,6 +24,15 @@ public static class Program
 	public static async Task Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
+
+		var client = new AmazonCloudWatchLogsClient();
+		
+		builder.Host.UseSerilog((context, services, configuration) =>
+		{
+			configuration
+				.WriteTo.Console()
+				.WriteTo.AmazonCloudWatch(logGroup: "/banana-tracks/serilog", logStreamPrefix: DateTime.UtcNow.ToString("yyyyMMddHHmmssfff"), cloudWatchClient: client);
+		}); 
 
 		AddAuthServices(builder);
 		AddAwsServices(builder);

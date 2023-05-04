@@ -1,20 +1,21 @@
 ﻿using Amazon.SQS;
 using Amazon.SQS.Model;
 using System.Text.Json.Serialization.Metadata;
+using BananaTracks.Domain.Messages;
 
 namespace BananaTracks.Api.Providers;
 
 internal class QueueProvider
 {
 	private readonly IConfiguration _configuration;
-	private readonly IHttpContextAccessor _httpContextAccessor;
 	private readonly IAmazonSQS _sqsClient;
+	private readonly ILogger<QueueProvider> _log;
 
-	public QueueProvider(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IAmazonSQS sqsClient)
+	public QueueProvider(IConfiguration configuration, IAmazonSQS sqsClient, ILogger<QueueProvider> log)
 	{
 		_configuration = configuration;
-		_httpContextAccessor = httpContextAccessor;
 		_sqsClient = sqsClient;
+		_log = log;
 	}
 
 	public async Task SendActivityUpdatedMessage(Activity activity, CancellationToken cancellationToken)
@@ -27,18 +28,29 @@ internal class QueueProvider
 		await SendMessage("AWS:SQS:SessionSavedQueueUrl", new(session), Serializer.Default.SessionSavedMessage, cancellationToken);
 	}
 
-	private async Task SendMessage<T>(string urlSetting, T activity, JsonTypeInfo<T> jsonTypeInfo, CancellationToken cancellationToken)
+	private async Task<SendMessageResponse> SendMessage<T>(string urlSetting, T message, JsonTypeInfo<T> jsonTypeInfo, CancellationToken cancellationToken)
+		where T : MessageBase
 	{
 		var url = _configuration[urlSetting];
 
-		var json = JsonSerializer.Serialize(activity, jsonTypeInfo);
+		var json = JsonSerializer.Serialize(message, jsonTypeInfo);
 
 		var request = new SendMessageRequest(url, json)
 		{
-			MessageGroupId = _httpContextAccessor.GetUserId(),
-			MessageDeduplicationId = _httpContextAccessor.GetTraceId()
+			MessageGroupId = message.GroupId,
+			MessageDeduplicationId = message.DeduplicationId
 		};
 
-		await _sqsClient.SendMessageAsync(request, cancellationToken);
+		var response = await _sqsClient.SendMessageAsync(request, cancellationToken);
+		
+		_log.LogInformation("SQS {@Message} sent", new
+		{
+			QueueUrl = url,
+			message.DeduplicationId,
+			response.MessageId,
+			response.HttpStatusCode
+		});
+		
+		return response;
 	}
 }

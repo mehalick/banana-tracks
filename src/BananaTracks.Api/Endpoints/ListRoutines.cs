@@ -26,7 +26,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 		var routines = await _dynamoDbContext
 			.QueryAsync<Routine>(userId)
 			.GetRemainingAsync(cancellationToken);
-
+	
 		Response = new()
 		{
 			Routines = routines

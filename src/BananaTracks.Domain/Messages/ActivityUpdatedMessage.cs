@@ -2,18 +2,16 @@
 
 namespace BananaTracks.Domain.Messages;
 
-public record ActivityUpdatedMessage
+public record ActivityUpdatedMessage : MessageBase
 {
-	public string UserId { get; set; } = default!;
 	public string ActivityId { get; set; } = default!;
 
 	public ActivityUpdatedMessage()
 	{
 	}
 
-	public ActivityUpdatedMessage(Activity activity)
+	public ActivityUpdatedMessage(Activity activity) : base(activity.UserId, activity.ActivityId)
 	{
-		UserId = activity.UserId;
 		ActivityId = activity.ActivityId;
 	}
 }

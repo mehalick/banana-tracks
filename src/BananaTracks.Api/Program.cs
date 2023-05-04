@@ -33,7 +33,6 @@ public static class Program
 			configuration
 				.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
 				.Enrich.FromLogContext()
-				.Enrich.WithProperty("Version", context.Configuration["Version:RunId"])
 				.WriteTo.Console()
 				.WriteTo.AmazonCloudWatch(logGroup: "/banana-tracks/serilog", logStreamPrefix: DateTime.UtcNow.ToString("yyyyMMddHHmmssfff"), cloudWatchClient: client);
 		}); 

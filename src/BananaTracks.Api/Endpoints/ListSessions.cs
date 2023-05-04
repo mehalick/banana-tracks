@@ -1,6 +1,4 @@
-﻿using BananaTracks.Domain.Extensions;
-
-namespace BananaTracks.Api.Endpoints;
+﻿namespace BananaTracks.Api.Endpoints;
 
 public class ListSessions : EndpointWithoutRequest<ListSessionsResponse>
 {
@@ -10,7 +8,7 @@ public class ListSessions : EndpointWithoutRequest<ListSessionsResponse>
 	public override void Configure()
 	{
 		Get(ApiRoutes.ListSessions);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public ListSessions(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
@@ -32,7 +30,7 @@ public class ListSessions : EndpointWithoutRequest<ListSessionsResponse>
 			Sessions = sessions
 				.Active()
 				.OrderByDescending(i => i.CreatedAt)
-				.Select(Session.ToModel)
+				.Select(i => i.ToModel())
 		};
 	}
 }

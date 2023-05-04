@@ -9,7 +9,7 @@ internal class DeleteActivity : Endpoint<DeleteActivityRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.DeleteActivity);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public DeleteActivity(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, IWebHostEnvironment webHostEnvironment)

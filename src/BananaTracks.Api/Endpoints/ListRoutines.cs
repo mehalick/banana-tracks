@@ -1,6 +1,4 @@
-﻿using BananaTracks.Domain.Extensions;
-
-namespace BananaTracks.Api.Endpoints;
+﻿namespace BananaTracks.Api.Endpoints;
 
 public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 {
@@ -10,7 +8,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 	public override void Configure()
 	{
 		Get(ApiRoutes.ListRoutines);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public ListRoutines(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
@@ -34,7 +32,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 			Routines = routines
 				.Active()
 				.OrderBy(i => i.Name)
-				.Select(i => Routine.ToModel(i, activities.Where(j => j.RoutineId == i.RoutineId)))
+				.Select(i => i.ToModel(activities.Where(j => j.RoutineId == i.RoutineId)))
 		};
 	}
 

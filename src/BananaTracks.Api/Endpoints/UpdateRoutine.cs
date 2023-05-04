@@ -8,7 +8,7 @@ public class UpdateRoutine : Endpoint<UpdateRoutineRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.UpdateRoutine);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public UpdateRoutine(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)

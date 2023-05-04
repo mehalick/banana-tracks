@@ -5,7 +5,7 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Amazon.Polly;
-using BananaTracks.Domain.Configuration;
+using BananaTracks.Domain;
 using BananaTracks.Domain.Entities;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -33,7 +33,7 @@ public class Function
 
 	private async Task ProcessRecordAsync(SQSEvent.SQSMessage message, ILambdaContext context)
 	{
-		var body = JsonSerializer.Deserialize(message.Body, AppJsonSerializerContext.Default.ActivityUpdatedMessage)!;
+		var body = JsonSerializer.Deserialize(message.Body, Serializer.Default.ActivityUpdatedMessage)!;
 
 		context.Logger.LogInformation($"Processed activity UserId: {body.UserId} ActivityId: {body.ActivityId}");
 

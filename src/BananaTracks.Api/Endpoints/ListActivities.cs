@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using BananaTracks.Domain.Extensions;
 using Activity = BananaTracks.Domain.Entities.Activity;
 
 namespace BananaTracks.Api.Endpoints;
@@ -13,7 +12,7 @@ public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 	public override void Configure()
 	{
 		Get(ApiRoutes.ListActivities);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public ListActivities(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
@@ -44,7 +43,7 @@ public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 			Activities = activities
 				.Active()
 				.OrderBy(i => i.Name)
-				.Select(Activity.ToModel)
+				.Select(i => i.ToModel())
 		};
 	}
 }

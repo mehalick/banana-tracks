@@ -2,5 +2,5 @@ namespace BananaTracks.Api.Shared.Responses;
 
 public class ListActivitiesResponse
 {
-	public IEnumerable<ActivityModel> Activities { get; set; } = Enumerable.Empty<ActivityModel>();
+	public IEnumerable<ActivityModelOld> Activities { get; set; } = Enumerable.Empty<ActivityModelOld>();
 }

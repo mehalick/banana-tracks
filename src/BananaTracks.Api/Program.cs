@@ -5,7 +5,7 @@ global using BananaTracks.Api.Providers;
 global using BananaTracks.Api.Shared.Constants;
 global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;
-global using BananaTracks.Domain.Configuration;
+global using BananaTracks.Domain;
 global using BananaTracks.Domain.Entities;
 global using BananaTracks.Domain.Extensions;
 global using FastEndpoints;

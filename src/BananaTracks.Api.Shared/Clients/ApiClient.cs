@@ -2,8 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization.Metadata;
 using BananaTracks.Api.Shared.Constants;
-using BananaTracks.Api.Shared.Requests;
-using BananaTracks.Api.Shared.Responses;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace BananaTracks.Api.Shared.Clients;

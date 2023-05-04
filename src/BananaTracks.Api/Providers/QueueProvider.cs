@@ -19,12 +19,12 @@ internal class QueueProvider
 
 	public async Task SendActivityUpdatedMessage(Activity activity, CancellationToken cancellationToken)
 	{
-		await SendMessage("AWS:SQS:ActivityCreatedQueueUrl", new(activity), AppJsonSerializerContext.Default.ActivityUpdatedMessage, cancellationToken);
+		await SendMessage("AWS:SQS:ActivityCreatedQueueUrl", new(activity), Serializer.Default.ActivityUpdatedMessage, cancellationToken);
 	}
 
 	public async Task SendSessionSavedMessage(Session session, CancellationToken cancellationToken)
 	{
-		await SendMessage("AWS:SQS:SessionSavedQueueUrl", new(session), AppJsonSerializerContext.Default.SessionSavedMessage, cancellationToken);
+		await SendMessage("AWS:SQS:SessionSavedQueueUrl", new(session), Serializer.Default.SessionSavedMessage, cancellationToken);
 	}
 
 	private async Task SendMessage<T>(string urlSetting, T activity, JsonTypeInfo<T> jsonTypeInfo, CancellationToken cancellationToken)

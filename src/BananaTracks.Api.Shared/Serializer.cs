@@ -1,6 +1,5 @@
-﻿namespace BananaTracks.Domain.Configuration;
+﻿namespace BananaTracks.Api.Shared;
 
-[JsonSerializable(typeof(ActivityUpdatedMessage))]
 [JsonSerializable(typeof(AddActivityRequest))]
 [JsonSerializable(typeof(AddRoutineRequest))]
 [JsonSerializable(typeof(AddSessionRequest))]
@@ -13,9 +12,8 @@
 [JsonSerializable(typeof(ListActivitiesResponse))]
 [JsonSerializable(typeof(ListRoutinesResponse))]
 [JsonSerializable(typeof(ListSessionsResponse))]
-[JsonSerializable(typeof(SessionSavedMessage))]
 [JsonSerializable(typeof(UpdateActivityRequest))]
 [JsonSerializable(typeof(UpdateRoutineRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-public partial class AppJsonSerializerContext : JsonSerializerContext
+public partial class Serializer : JsonSerializerContext
 { }

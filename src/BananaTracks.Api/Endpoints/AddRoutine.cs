@@ -9,7 +9,7 @@ internal class AddRoutine : Endpoint<AddRoutineRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.AddRoutine);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public AddRoutine(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, QueueProvider queueProvider)

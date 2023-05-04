@@ -20,15 +20,4 @@ public class Activity : EntityBase
 	public int BreakInSeconds { get; set; }
 
 	public int SortOrder { get; set; }
-
-	public static ActivityModel ToModel(Activity activity)
-	{
-		return new()
-		{
-			UserId = activity.UserId,
-			ActivityId = activity.ActivityId,
-			Name = activity.Name,
-			AudioUrl = activity.AudioUrl
-		};
-	}
 }

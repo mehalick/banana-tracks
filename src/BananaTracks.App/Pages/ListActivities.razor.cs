@@ -10,7 +10,7 @@ public partial class ListActivities : AppComponentBase
 		_response = await ApiClient.ListActivities();
 	}
 
-	private static void SelectActivity(ActivityModel activity, bool isSelected)
+	private static void SelectActivity(ActivityModelOld activity, bool isSelected)
 	{
 		activity.IsSelected = isSelected;
 	}

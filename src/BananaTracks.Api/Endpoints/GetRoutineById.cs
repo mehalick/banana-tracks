@@ -8,7 +8,7 @@ internal class GetRoutineById : Endpoint<GetRoutineByIdRequest, GetRoutineByIdRe
 	public override void Configure()
 	{
 		Get(ApiRoutes.GetRoutineById);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public GetRoutineById(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
@@ -26,7 +26,7 @@ internal class GetRoutineById : Endpoint<GetRoutineByIdRequest, GetRoutineByIdRe
 
 		Response = new()
 		{
-			Routine = Routine.ToModel(routine, activities)
+			Routine = routine.ToModel(activities)
 		};
 	}
 

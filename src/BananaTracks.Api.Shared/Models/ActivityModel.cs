@@ -1,10 +1,10 @@
-﻿namespace BananaTracks.Api.Shared.Models;
+namespace BananaTracks.Api.Shared.Models;
 
-public record ActivityModel
+public class ActivityModel
 {
-	public string UserId { get; set; } = default!;
 	public string ActivityId { get; set; } = default!;
 	public string Name { get; set; } = default!;
+	public int DurationInSeconds { get; set; } = 300;
+	public int BreakInSeconds { get; set; } = 30;
 	public string AudioUrl { get; set; } = default!;
-	public bool IsSelected { get; set; }
 }

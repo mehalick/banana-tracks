@@ -132,7 +132,7 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 
 	private class ActivityRun
 	{
-		public RoutineActivityModel Activity { get; }
+		public ActivityModel Activity { get; }
 		public ActivityStatus Status { get; private set; } = ActivityStatus.IsPending;
 		public TimeSpan DurationRemaining { get; private set; }
 		public TimeSpan BreakRemaining { get; private set; }
@@ -142,18 +142,18 @@ public sealed partial class StartRoutine : AppComponentBase, IDisposable
 		private DateTime? _durationStart;
 		private DateTime? _breakState;
 
-		private ActivityRun(RoutineActivityModel routineActivity)
+		private ActivityRun(ActivityModel activity)
 		{
-			Activity = routineActivity;
+			Activity = activity;
 
-			_durationTime = TimeSpan.FromSeconds(routineActivity.DurationInSeconds);
-			_breakTime = TimeSpan.FromSeconds(routineActivity.BreakInSeconds);
+			_durationTime = TimeSpan.FromSeconds(activity.DurationInSeconds);
+			_breakTime = TimeSpan.FromSeconds(activity.BreakInSeconds);
 
 			DurationRemaining = _durationTime;
 			BreakRemaining = _breakTime;
 		}
 
-		public static ActivityRun Create(RoutineActivityModel activity)
+		public static ActivityRun Create(ActivityModel activity)
 		{
 			return new(activity);
 		}

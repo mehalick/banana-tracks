@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace BananaTracks.App;
 
-public class Program
+internal static class Program
 {
 	public static async Task Main(string[] args)
 	{

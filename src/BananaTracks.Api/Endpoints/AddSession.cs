@@ -8,7 +8,7 @@ internal class AddSession : Endpoint<AddSessionRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.AddSession);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public AddSession(IHttpContextAccessor httpContextAccessor, QueueProvider queueProvider)

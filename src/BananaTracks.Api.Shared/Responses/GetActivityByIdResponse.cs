@@ -2,5 +2,5 @@
 
 public class GetActivityByIdResponse
 {
-	public ActivityModel Activity { get; set; } = new();
+	public ActivityModelOld Activity { get; set; } = new();
 }

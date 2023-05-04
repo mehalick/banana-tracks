@@ -8,7 +8,7 @@ internal class GetActivityById : Endpoint<GetActivityByIdRequest, GetActivityByI
 	public override void Configure()
 	{
 		Get(ApiRoutes.GetActivityById);
-		SerializerContext(AppJsonSerializerContext.Default);
+		SerializerContext(Serializer.Default);
 	}
 
 	public GetActivityById(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
@@ -25,7 +25,7 @@ internal class GetActivityById : Endpoint<GetActivityByIdRequest, GetActivityByI
 
 		Response = new()
 		{
-			Activity = Activity.ToModel(activity)
+			Activity = activity.ToModel()
 		};
 	}
 }

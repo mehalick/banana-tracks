@@ -2,9 +2,9 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
-using BananaTracks.Domain.Configuration;
 using BananaTracks.Domain.Entities;
 using System.Text.Json;
+using BananaTracks.Domain;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
@@ -29,7 +29,7 @@ public class Function
 
 	private async Task ProcessRecordAsync(SQSEvent.SQSMessage message, ILambdaContext context)
 	{
-		var body = JsonSerializer.Deserialize(message.Body, AppJsonSerializerContext.Default.SessionSavedMessage)!;
+		var body = JsonSerializer.Deserialize(message.Body, Serializer.Default.SessionSavedMessage)!;
 
 		context.Logger.LogInformation($"Processed activity UserId: {body.UserId} ActivityId: {body.RoutineId}");
 

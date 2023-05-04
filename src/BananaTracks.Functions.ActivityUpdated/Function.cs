@@ -7,6 +7,7 @@ using Amazon.Lambda.SQSEvents;
 using Amazon.Polly;
 using BananaTracks.Domain;
 using BananaTracks.Domain.Entities;
+using Humanizer;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
@@ -52,15 +53,15 @@ public class Function
 
 	private async Task<string> SynthesizeSpeech(Activity activity)
 	{
-		var ts = TimeSpan.FromSeconds(activity.DurationInSeconds);
+		var duration = TimeSpan.FromSeconds(activity.DurationInSeconds).Humanize(precision: 2);
 		
 		var response = await _pollyClient.StartSpeechSynthesisTaskAsync(new()
 		{
 			OutputFormat = OutputFormat.Mp3,
 			VoiceId = VoiceId.Joanna,
-			Text = $"Next, {activity.Name}, for {ts.Minutes} minutes and {ts.Seconds} seconds, go!",
+			Text = $"Start {activity.Name}, for {duration}",
 			OutputS3BucketName = "cdn.bananatracks.com",
-			OutputS3KeyPrefix = "polly/"
+			OutputS3KeyPrefix = $"polly/{activity.ActivityId}" 
 		});
 
 		// https://s3.us-east-1.amazonaws.com/cdn.bananatracks.com/polly/.some-guid.mp3

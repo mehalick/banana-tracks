@@ -16,6 +16,7 @@
 		<PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.1.0" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.16" />
 		<PackageReference Include="AWSSDK.Polly" Version="3.7.103.18" />
+		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\BananaTracks.Domain\BananaTracks.Domain.csproj" />

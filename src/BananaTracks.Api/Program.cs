@@ -15,6 +15,7 @@ using Amazon.SQS;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
+using Serilog.Events;
 using Serilog.Sinks.AwsCloudWatch;
 
 namespace BananaTracks.Api;
@@ -30,6 +31,9 @@ public static class Program
 		builder.Host.UseSerilog((context, services, configuration) =>
 		{
 			configuration
+				.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+				.Enrich.FromLogContext()
+				.Enrich.WithProperty("Version", context.Configuration["Version:RunId"])
 				.WriteTo.Console()
 				.WriteTo.AmazonCloudWatch(logGroup: "/banana-tracks/serilog", logStreamPrefix: DateTime.UtcNow.ToString("yyyyMMddHHmmssfff"), cloudWatchClient: client);
 		}); 
@@ -39,6 +43,8 @@ public static class Program
 		AddWebServices(builder);
 
 		var app = builder.Build();
+		
+		app.UseSerilogRequestLogging();
 
 		app.UseXRay("BananaTracks");
 

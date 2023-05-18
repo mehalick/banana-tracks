@@ -16,7 +16,7 @@ public abstract class AppComponentBase : ComponentBase
 
 	private protected Ids Ids { get; set; } = new();
 
-	public void NavigateSuccess(string uri, string message)
+	protected void NavigateSuccess(string uri, string message)
 	{
 		var uriBuilder = new UriBuilder(NavigationManager.ToAbsoluteUri(uri));
 		var query = HttpUtility.ParseQueryString(uriBuilder.Query);

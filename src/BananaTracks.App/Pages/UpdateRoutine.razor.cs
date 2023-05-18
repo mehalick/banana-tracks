@@ -6,22 +6,35 @@ public partial class UpdateRoutine : AppComponentBase
 	public string RoutineId { get; set; } = default!;
 	
 	private UpdateRoutineRequest? _updateRoutineRequest;
+	private List<ActivityModel> _activities = new();
 
 	protected override async Task OnInitializedAsync()
 	{
-		var activity = await ApiClient.GetRoutineById(RoutineId);
+		var response = await ApiClient.GetRoutineById(RoutineId);
 
 		_updateRoutineRequest = new()
 		{
-			RoutineId = activity.Routine.RoutineId,
-			Name = activity.Routine.Name
+			RoutineId = response.Routine.RoutineId,
+			Name = response.Routine.Name
 		};
+
+		_activities = response.Routine.Activities;
 	}
 
-	public async Task OnValidSubmit()
+	private async Task OnValidSubmit()
 	{
 		await ApiClient.UpdateRoutine(_updateRoutineRequest!);
 
 		NavigateSuccess("routines/list", "Routine successfully updated.");
+	}
+	
+	private void AddActivity()
+	{
+		_activities.Add(new());
+	}
+	
+	private void RemoveActivity(ActivityModel activity)
+	{
+		_activities.Remove(activity);
 	}
 }

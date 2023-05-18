@@ -5,6 +5,7 @@ public static class ApiRoutes
 	public const string AddActivity = nameof(AddActivity);
 	public const string AddRoutine = nameof(AddRoutine);
 	public const string AddSession = nameof(AddSession);
+	public const string CreateRoutine = nameof(CreateRoutine);
 	public const string DeleteActivity = nameof(DeleteActivity);
 	public const string DeleteRoutine = nameof(DeleteRoutine);
 	public const string GetActivityById = nameof(GetActivityById);

@@ -20,20 +20,26 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 	public override async Task HandleAsync(CancellationToken cancellationToken)
 	{
 		var userId = _httpContextAccessor.GetUserId();
+		var getRoutinesTask = GetRoutines(userId, cancellationToken);
+		var getActivitiesTask = GetActivities(userId, cancellationToken);
 
-		var activities = await GetActivities(userId, cancellationToken);
+		await Task.WhenAll(getRoutinesTask, getActivitiesTask);
 
-		var routines = await _dynamoDbContext
-			.QueryAsync<Routine>(userId)
-			.GetRemainingAsync(cancellationToken);
-	
 		Response = new()
 		{
-			Routines = routines
+			Routines = getRoutinesTask
+				.Result
 				.Active()
 				.OrderBy(i => i.Name)
-				.Select(i => i.ToModel(activities.Where(j => j.RoutineId == i.RoutineId)))
+				.Select(i => i.ToModel(getActivitiesTask.Result.Where(j => j.RoutineId == i.RoutineId)))
 		};
+	}
+
+	private Task<List<Routine>> GetRoutines(string userId, CancellationToken cancellationToken)
+	{
+		return _dynamoDbContext
+			.QueryAsync<Routine>(userId)
+			.GetRemainingAsync(cancellationToken);
 	}
 
 	private async Task<List<Activity>> GetActivities(string userId, CancellationToken cancellationToken)

@@ -3,6 +3,8 @@
 [JsonSerializable(typeof(AddActivityRequest))]
 [JsonSerializable(typeof(AddRoutineRequest))]
 [JsonSerializable(typeof(AddSessionRequest))]
+[JsonSerializable(typeof(CreateRoutineRequest))]
+[JsonSerializable(typeof(CreateRoutineResponse))]
 [JsonSerializable(typeof(DeleteActivityRequest))]
 [JsonSerializable(typeof(DeleteRoutineRequest))]
 [JsonSerializable(typeof(GetActivityByIdRequest))]

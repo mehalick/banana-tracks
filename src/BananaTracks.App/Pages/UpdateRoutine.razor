@@ -1,19 +1,68 @@
 ﻿@page "/routines/{RoutineId}/update"
 @inherits AppComponentBase
 
-<Header Title="Update Routine"></Header>
-
-<Page IsLoading="_updateRoutineRequest is null">
+<Page Title="@_updateRoutineRequest?.Name" IsLoading="_updateRoutineRequest is null">
+	
 	<EditForm Model="_updateRoutineRequest" OnValidSubmit="OnValidSubmit">
 		
 		<DataAnnotationsValidator />
 
-		<InputGroupText Label="Name" @bind-Value="@_updateRoutineRequest!.Name" For="() => _updateRoutineRequest!.Name" />
-
-		<div class="hstack gap-3">
-			<button type="submit" class="btn btn-primary">Save</button>
-			<a href="/routines/@_updateRoutineRequest!.RoutineId/delete" class="btn btn-danger">Delete &rsaquo;</a>
+		<div class="row align-items-center">
+			<div class="col">
+				<label for="@Ids.Next()" class="visually-hidden">Name</label>
+				<InputText id="@Ids.Current()" class="form-control" @bind-Value="@_updateRoutineRequest!.Name"/>
+			</div>
+			<div class="col-auto">
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+			<div class="col-auto">
+				<a href="/routines/@_updateRoutineRequest!.RoutineId/delete" class="btn btn-danger">Delete &rsaquo;</a>
+			</div>
 		</div>
-
+		
 	</EditForm>
+	
+	<h2>Activities</h2>
+	
+	@foreach (var activity in _activities)
+	{
+		<div class="card">
+			<div class="card-body">
+				<div class="mb-3">
+					<InputText @bind-Value="activity.Name" class="form-control"></InputText>
+				</div>
+				<div class="row">
+					<div class="col-sm">
+						<div class="mb-3">
+							<label for="@Ids.Next()" class="form-label">Duration</label>
+							<div class="input-group">
+								<InputNumber id="@Ids.Current()" @bind-Value="activity.DurationInSeconds" class="form-control" />
+								<span class="input-group-text">seconds</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm">
+						<div class="mb-3">
+							<label for="@Ids.Next()" class="form-label">Break</label>
+							<div class="input-group ">
+								<InputNumber id="@Ids.Current()" @bind-Value="activity.BreakInSeconds" class="form-control" />
+								<span class="input-group-text">seconds</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer d-flex justify-content-end">
+				<button type="button" @onclick="() => RemoveActivity(activity)" class="btn btn-secondary" title="remove activity"><i class="fa-solid fa-trash-xmark fa-fw"></i></button>
+			</div>
+		</div>
+	}
+	
+	<div class="d-flex justify-content-between">
+    	<button type="button" @onclick="AddActivity" class="btn btn-secondary no-focus" title="add activity">
+    		<i class="fa-solid fa-plus fa-fw me-1"></i> 
+    		Add Activity
+    	</button>
+    </div>
+	
 </Page>

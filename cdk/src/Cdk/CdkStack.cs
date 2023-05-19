@@ -376,6 +376,7 @@ public class CdkStack : Stack
 				MemorySize = 256,
 				Role = lambdaRole,
 				Runtime = Runtime.DOTNET_6,
+				Architecture = Architecture.ARM_64,
 				Timeout = Duration.Seconds(30)
 			});
 
@@ -396,6 +397,7 @@ public class CdkStack : Stack
 				MemorySize = 256,
 				Role = lambdaRole,
 				Runtime = Runtime.DOTNET_6,
+				Architecture = Architecture.ARM_64,
 				Timeout = Duration.Seconds(30)
 			});
 

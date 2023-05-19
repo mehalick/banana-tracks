@@ -1,5 +1,10 @@
 {
 	"region": "us-east-1",
 	"configuration": "Release",
-	"function-name": "BananaTracksSessionSavedFunction"
+	"function-architecture": "arm64",
+	"function-runtime": "dotnet6",
+	"function-memory-size": 256,
+	"function-timeout": 30,
+	"function-name": "BananaTracksSessionSavedFunction",
+	"function-handler": "BananaTracks.Functions.SessionSaved::BananaTracks.Functions.SessionSaved.Function::FunctionHandler"
 }

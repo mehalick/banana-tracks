@@ -1,5 +1,10 @@
 {
   "region": "us-east-1",
   "configuration": "Release",
-  "function-name": "BananaTracksApiLambda"
+  "function-architecture": "arm64",
+  "function-runtime": "dotnet6",
+  "function-memory-size": 256,
+  "function-timeout": 30,
+  "function-name": "BananaTracksApiLambda",
+  "function-handler": "BananaTracks.Api"
 }

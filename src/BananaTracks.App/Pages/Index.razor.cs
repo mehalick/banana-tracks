@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
 
 namespace BananaTracks.App.Pages;
@@ -13,6 +14,9 @@ public partial class Index : AppComponentBase
 
 	[Inject]
 	protected AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+
+	[Inject]
+	protected ILocalStorageService LocalStorageService { get; set; } = null!;
 
 	private string _version = "8428d6719a53432a4f88e4442a92e97438324df6";
 	private IReadOnlyCollection<RoutineModel>? _recentRunRoutines;
@@ -30,14 +34,36 @@ public partial class Index : AppComponentBase
 
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-		if (authState.User?.Identity?.IsAuthenticated == true)
+		if (authState.User?.Identity?.IsAuthenticated != true)
 		{
-			var response = await ApiClient.ListRoutines();
-
-			_recentRunRoutines = response.Routines
-				.OrderByDescending(i => i.LastRunAt)
-				.Take(3)
-				.ToList();
+			return;
 		}
+
+		var routines = await LocalStorageService.GetItemAsync<IReadOnlyCollection<RoutineModel>>("RecentRoutines");
+
+		if (routines is not null && routines.Any())
+		{
+			_recentRunRoutines = routines;
+			
+			await GetRecentRoutines();
+		}
+		else
+		{
+			_recentRunRoutines = await GetRecentRoutines();
+		}
+	}
+
+	private async Task<IReadOnlyCollection<RoutineModel>> GetRecentRoutines()
+	{
+		var response = await ApiClient.ListRoutines();
+
+		var routines = response.Routines
+			.OrderByDescending(i => i.LastRunAt)
+			.Take(3)
+			.ToList();
+
+		await LocalStorageService.SetItemAsync("RecentRoutines", routines);
+
+		return routines;
 	}
 }

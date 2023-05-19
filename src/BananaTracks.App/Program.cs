@@ -7,6 +7,7 @@ global using BananaTracks.App.Extensions;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.JSInterop;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -35,6 +36,8 @@ internal static class Program
 			options.ProviderOptions.ResponseType = "code";
 			options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
 		});
+		
+		builder.Services.AddBlazoredLocalStorage();
 
 		await builder.Build().RunAsync();
 	}

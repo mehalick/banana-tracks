@@ -3,6 +3,7 @@ using Amazon.CDK.AWS.APIGateway;
 using Amazon.CDK.AWS.CertificateManager;
 using Amazon.CDK.AWS.CloudFront;
 using Amazon.CDK.AWS.CloudFront.Origins;
+using Amazon.CDK.AWS.Cognito;
 using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.IAM;
 using Amazon.CDK.AWS.Lambda;
@@ -26,7 +27,7 @@ public class CdkStack : Stack
 	private const string ApiDomainName = $"api.{DomainName}";
 	private const string AppDomainName = $"app.{DomainName}";
 	private const string CdnDomainName = $"cdn.{DomainName}";
-	
+
 	internal CdkStack(Construct scope, string id, IStackProps props) : base(scope, id, props)
 	{
 		var (appBucket, cdnBucket) = CreateS3Buckets();
@@ -49,6 +50,8 @@ public class CdkStack : Stack
 		var apiGateway = CreateApiGateway(apiFunction, certificate);
 
 		CreateDnsRecords(hostedZone, appDistribution, cdnDistribution, apiGateway);
+
+		CreateCognito();
 	}
 
 	private (Queue, Queue) CreateSqsQueues()
@@ -118,7 +121,10 @@ public class CdkStack : Stack
 		{
 			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
-			Principals = new IPrincipal[] { new AnyPrincipal() },
+			Principals = new IPrincipal[]
+			{
+				new AnyPrincipal()
+			},
 			Resources = new[]
 			{
 				cdnBucket.ArnForObjects("polly"),
@@ -143,7 +149,10 @@ public class CdkStack : Stack
 		var certificate = new Certificate(this, Name("Certificate"), new CertificateProps
 		{
 			DomainName = DomainName,
-			SubjectAlternativeNames = new[] { WildcardDomain },
+			SubjectAlternativeNames = new[]
+			{
+				WildcardDomain
+			},
 			Validation = CertificateValidation.FromDns(hostedZone)
 		});
 
@@ -195,7 +204,10 @@ public class CdkStack : Stack
 				CachePolicy = CachePolicy.CACHING_DISABLED
 			},
 			Certificate = certificate,
-			DomainNames = new[] { AppDomainName },
+			DomainNames = new[]
+			{
+				AppDomainName
+			},
 			HttpVersion = HttpVersion.HTTP2_AND_3
 		});
 
@@ -211,7 +223,10 @@ public class CdkStack : Stack
 				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD
 			},
 			Certificate = certificate,
-			DomainNames = new[] { CdnDomainName },
+			DomainNames = new[]
+			{
+				CdnDomainName
+			},
 			HttpVersion = HttpVersion.HTTP2_AND_3
 		});
 
@@ -223,24 +238,44 @@ public class CdkStack : Stack
 		var activitiesTable = new Table(this, Name("DynamoDbActivities"), new TableProps
 		{
 			TableName = Name("Activities"),
-			PartitionKey = new Attribute { Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute { Name = "ActivityId", Type = AttributeType.STRING },
+			PartitionKey = new Attribute
+			{
+				Name = "UserId",
+				Type = AttributeType.STRING
+			},
+			SortKey = new Attribute
+			{
+				Name = "ActivityId",
+				Type = AttributeType.STRING
+			},
 			BillingMode = BillingMode.PAY_PER_REQUEST,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			PointInTimeRecovery = true
 		});
-		
+
 		activitiesTable.AddLocalSecondaryIndex(new LocalSecondaryIndexProps
 		{
 			IndexName = "RoutineIndex",
-			SortKey = new Attribute { Name = "RoutineId", Type = AttributeType.STRING }
+			SortKey = new Attribute
+			{
+				Name = "RoutineId",
+				Type = AttributeType.STRING
+			}
 		});
 
 		var routinesTable = new Table(this, Name("DynamoDbRoutines"), new TableProps
 		{
 			TableName = Name("Routines"),
-			PartitionKey = new Attribute { Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute { Name = "RoutineId", Type = AttributeType.STRING },
+			PartitionKey = new Attribute
+			{
+				Name = "UserId",
+				Type = AttributeType.STRING
+			},
+			SortKey = new Attribute
+			{
+				Name = "RoutineId",
+				Type = AttributeType.STRING
+			},
 			BillingMode = BillingMode.PAY_PER_REQUEST,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			PointInTimeRecovery = true
@@ -249,8 +284,16 @@ public class CdkStack : Stack
 		var sessionsTable = new Table(this, Name("DynamoDbSessions"), new TableProps
 		{
 			TableName = Name("Sessions"),
-			PartitionKey = new Attribute { Name = "UserId", Type = AttributeType.STRING },
-			SortKey = new Attribute { Name = "SessionId", Type = AttributeType.STRING },
+			PartitionKey = new Attribute
+			{
+				Name = "UserId",
+				Type = AttributeType.STRING
+			},
+			SortKey = new Attribute
+			{
+				Name = "SessionId",
+				Type = AttributeType.STRING
+			},
 			BillingMode = BillingMode.PAY_PER_REQUEST,
 			RemovalPolicy = RemovalPolicy.DESTROY,
 			PointInTimeRecovery = true
@@ -273,7 +316,10 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowCloudWatch",
 				Effect = Effect.ALLOW,
-				Resources = new[] { "*" },
+				Resources = new[]
+				{
+					"*"
+				},
 				Actions = new[]
 				{
 					"logs:CreateLogGroup",
@@ -287,7 +333,10 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowXRay",
 				Effect = Effect.ALLOW,
-				Resources = new[] { "*" },
+				Resources = new[]
+				{
+					"*"
+				},
 				Actions = new[]
 				{
 					"xray:PutTraceSegments",
@@ -300,7 +349,10 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowSystemsManager",
 				Effect = Effect.ALLOW,
-				Resources = new[] { "*" },
+				Resources = new[]
+				{
+					"*"
+				},
 				Actions = new[]
 				{
 					"ssm:PutParameter",
@@ -313,7 +365,10 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowPolly",
 				Effect = Effect.ALLOW,
-				Resources = new[] { "*" },
+				Resources = new[]
+				{
+					"*"
+				},
 				Actions = new[]
 				{
 					"polly:StartSpeechSynthesisTask"
@@ -324,7 +379,12 @@ public class CdkStack : Stack
 		{
 			Sid = "AllowDynamoDb",
 			Effect = Effect.ALLOW,
-			Resources = new[] { activitiesTable.TableArn, routinesTable.TableArn, sessionsTable.TableArn },
+			Resources = new[]
+			{
+				activitiesTable.TableArn,
+				routinesTable.TableArn,
+				sessionsTable.TableArn
+			},
 			Actions = new[]
 			{
 				"dynamodb:DescribeTable",
@@ -340,7 +400,11 @@ public class CdkStack : Stack
 		{
 			Sid = "AllowSqs",
 			Effect = Effect.ALLOW,
-			Resources = new[] { activityUpdatedQueue.QueueArn, sessionSavedQueue.QueueArn },
+			Resources = new[]
+			{
+				activityUpdatedQueue.QueueArn,
+				sessionSavedQueue.QueueArn
+			},
 			Actions = new[]
 			{
 				"sqs:ReceiveMessage",
@@ -354,7 +418,10 @@ public class CdkStack : Stack
 		{
 			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
-			Resources = new[] { cdnBucket.BucketArn },
+			Resources = new[]
+			{
+				cdnBucket.BucketArn
+			},
 			Actions = new[]
 			{
 				"s3:PutObject"
@@ -435,7 +502,10 @@ public class CdkStack : Stack
 				{
 					StageName = "production"
 				},
-				EndpointTypes = new[] { EndpointType.REGIONAL },
+				EndpointTypes = new[]
+				{
+					EndpointType.REGIONAL
+				},
 				DomainName = new DomainNameOptions
 				{
 					DomainName = $"api.{DomainName}",
@@ -449,6 +519,71 @@ public class CdkStack : Stack
 		apiResource.AddMethod("OPTIONS", new LambdaIntegration(function));
 
 		return api;
+	}
+
+	private void CreateCognito()
+	{
+		var userPool = new UserPool(this, Name("CognitoUserPool"), new UserPoolProps
+		{
+			UserPoolName = "BananaTracksApp",
+			SelfSignUpEnabled = true,
+			SignInAliases = new SignInAliases
+			{
+				Email = true
+			},
+			AutoVerify = new AutoVerifiedAttrs
+			{
+				Email = true
+			},
+			StandardAttributes = new StandardAttributes
+			{
+				GivenName = new StandardAttribute
+				{
+					Required = true,
+					Mutable = true
+				}
+			},
+			PasswordPolicy = new PasswordPolicy
+			{
+				MinLength = 8,
+				RequireDigits = false,
+				RequireSymbols = false,
+				RequireUppercase = false,
+				RequireLowercase = false
+			},
+			AccountRecovery = AccountRecovery.EMAIL_ONLY,
+			RemovalPolicy = RemovalPolicy.DESTROY,
+			Mfa = Mfa.OPTIONAL
+		});
+
+		_ = new UserPoolDomain(this, Name("CognitoUserPoolDomain"), new UserPoolDomainProps
+		{
+			UserPool = userPool,
+			CognitoDomain = new CognitoDomainOptions
+			{
+				DomainPrefix = "banana-tracks"
+			}
+		});
+
+		var clientApp = new UserPoolClient(this, Name("CognitoUserPoolClient"), new UserPoolClientProps
+		{
+			UserPool = userPool,
+			UserPoolClientName = "BananaTracksApp",
+			AuthFlows = new AuthFlow
+			{
+				UserPassword = true
+			}
+		});
+
+		_ = new CfnOutput(this, "UserPoolId", new CfnOutputProps
+		{
+			Value = userPool.UserPoolId
+		});
+
+		_ = new CfnOutput(this, "UserPoolClientId", new CfnOutputProps
+		{
+			Value = clientApp.UserPoolClientId
+		});
 	}
 
 	private static string Name(string name)

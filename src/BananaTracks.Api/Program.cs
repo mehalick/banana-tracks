@@ -27,7 +27,7 @@ public static class Program
 		var builder = WebApplication.CreateBuilder(args);
 
 		var client = new AmazonCloudWatchLogsClient();
-		
+
 		builder.Host.UseSerilog((context, services, configuration) =>
 		{
 			configuration
@@ -36,14 +36,14 @@ public static class Program
 				.Enrich.WithProperty("Version", context.Configuration["Version:RunId"])
 				.WriteTo.Console()
 				.WriteTo.AmazonCloudWatch(logGroup: "/banana-tracks/serilog", logStreamPrefix: DateTime.UtcNow.ToString("yyyyMMddHHmmssfff"), cloudWatchClient: client);
-		}); 
+		});
 
 		AddAuthServices(builder);
 		AddAwsServices(builder);
 		AddWebServices(builder);
 
 		var app = builder.Build();
-		
+
 		app.UseSerilogRequestLogging();
 
 		app.UseXRay("BananaTracks");
@@ -72,12 +72,11 @@ public static class Program
 			})
 			.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, c =>
 			{
-				c.Authority = builder.Configuration["Auth0:Domain"];
-				c.Audience = builder.Configuration["Auth0:Audience"];
+				c.Authority = builder.Configuration["AWS:Cognito:Authority"];
 				c.TokenValidationParameters = new()
 				{
-					ValidAudience = builder.Configuration["Auth0:Audience"],
-					ValidIssuer = builder.Configuration["Auth0:Domain"]
+					ValidateIssuerSigningKey = true,
+					ValidateAudience = false
 				};
 			});
 

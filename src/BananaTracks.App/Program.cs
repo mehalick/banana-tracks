@@ -32,11 +32,13 @@ internal static class Program
 
 		builder.Services.AddOidcAuthentication(options =>
 		{
-			builder.Configuration.Bind("Auth0", options.ProviderOptions);
+			options.ProviderOptions.Authority = builder.Configuration["AWS:Cognito:Authority"];
+			options.ProviderOptions.ClientId = builder.Configuration["AWS:Cognito:ClientId"];
 			options.ProviderOptions.ResponseType = "code";
-			options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
+			options.ProviderOptions.RedirectUri = builder.Configuration["AWS:Cognito:RedirectUri"];
+			options.ProviderOptions.PostLogoutRedirectUri = "";
 		});
-		
+
 		builder.Services.AddBlazoredLocalStorage();
 
 		await builder.Build().RunAsync();
@@ -48,6 +50,9 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 	public CustomAuthorizationMessageHandler(IConfiguration configuration, IAccessTokenProvider provider, NavigationManager navigation)
 		: base(provider, navigation)
 	{
-		ConfigureHandler(new[] { configuration["Api:BaseAddress"] });
+		ConfigureHandler(new[]
+		{
+			configuration["Api:BaseAddress"]
+		});
 	}
 }

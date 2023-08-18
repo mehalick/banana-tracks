@@ -40,11 +40,11 @@ public partial class Index : AppComponentBase
 		}
 
 		var routines = await LocalStorageService.GetItemAsync<IReadOnlyCollection<RoutineModel>>("RecentRoutines");
-		
+
 		if (routines.Any())
 		{
 			_recentRunRoutines = routines;
-			
+
 			StateHasChanged();
 
 			await GetRecentRoutines();
@@ -58,13 +58,16 @@ public partial class Index : AppComponentBase
 	private async Task<IReadOnlyCollection<RoutineModel>> GetRecentRoutines()
 	{
 		var response = await ApiClient.ListRoutines();
-		
+
 		var routines = response.Routines
 			.OrderByDescending(i => i.LastRunAt)
 			.Take(3)
 			.ToList();
 
-		await LocalStorageService.SetItemAsync("RecentRoutines", routines);
+		if (routines.Any())
+		{
+			await LocalStorageService.SetItemAsync("RecentRoutines", routines);
+		}
 
 		return routines;
 	}

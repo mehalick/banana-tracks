@@ -29,7 +29,7 @@ jobs:
       run: dotnet test -c Release --no-build
 
     - name: Publish
-      run: dotnet publish -c Release --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj
+      run: dotnet publish -c Release --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj -p:PublishReadyToRun=true
 
     - name: Download Artifacts
       uses: actions/upload-artifact@v1
@@ -57,14 +57,14 @@ jobs:
             file: ./src/BananaTracks.Api/appsettings.json
             field: Version.RunId
             value: ${{ github.run_id }}
-    
+
     -   name: Set Run Number in API
         uses: jossef/action-set-json-field@v2.1
         with:
             file: ./src/BananaTracks.Api/appsettings.json
             field: Version.RunNumber
             value: ${{ github.run_number }}
-    
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:

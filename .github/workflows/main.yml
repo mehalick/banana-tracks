@@ -23,7 +23,7 @@ jobs:
       run: dotnet tool install -g Amazon.Lambda.Tools
 
     - name: Restore
-      run: dotnet restore -c Release -r linux-arm64 -p:PublishReadyToRun=true
+      run: dotnet restore -r linux-arm64 -p:PublishReadyToRun=true
 
     - name: Build
       run: dotnet build --no-restore -c Release -r linux-arm64 -p:PublishReadyToRun=true

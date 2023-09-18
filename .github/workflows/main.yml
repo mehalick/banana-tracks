@@ -29,7 +29,7 @@ jobs:
       run: dotnet test -c Release --no-build
 
     - name: Publish
-      run: dotnet publish -c Release -r arm64 --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj -p:PublishReadyToRun=true
+      run: dotnet publish -c Release -r linux-arm64 --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj -p:PublishReadyToRun=true
 
     - name: Download Artifacts
       uses: actions/upload-artifact@v1

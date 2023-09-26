@@ -34,16 +34,16 @@ jobs:
       #      - name: Publish
       #        run: dotnet publish -c Release -r linux-arm64 --no-build -o publish -p:PublishReadyToRun=true ./src/BananaTracks.App/BananaTracks.App.csproj
       #
-      - name: Download Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: dist
-          path: publish/wwwroot
+      #      - name: Download Artifacts
+      #        uses: actions/upload-artifact@v1
+      #        with:
+      #          name: dist
+      #          path: publish/wwwroot
 
       - name: Set Git SHA in App
         uses: jossef/action-set-json-field@v2.1
         with:
-          file: publish/wwwroot/appsettings.json
+          file: ./src/BananaTracks.Api/appsettings.json
           field: Version.CommitHash
           value: ${{ github.sha }}
 

@@ -25,7 +25,7 @@ jobs:
       - name: Set Git SHA in App
         uses: jossef/action-set-json-field@v2.1
         with:
-          file: ./src/BananaTracks.App/appsettings.json
+          file: ./src/BananaTracks.App/wwwroots/appsettings.json
           field: Version.CommitHash
           value: ${{ github.sha }}
 

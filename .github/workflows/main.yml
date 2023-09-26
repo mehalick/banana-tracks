@@ -76,7 +76,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy API to Lambda
-        run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api -c Release -r linux-arm64 -p:PublishReadyToRun=true
+        run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api --msbuild-parameters "/p:PublishReadyToRun=true --self-contained false"
 
       - name: Deploy ActivityUpdated Function to Lambda
         run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityUpdated

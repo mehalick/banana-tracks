@@ -22,28 +22,10 @@ jobs:
       - name: Install Lambda Tools
         run: dotnet tool install -g Amazon.Lambda.Tools
 
-      - name: Restore
-        run: dotnet restore -r linux-arm64 -p:PublishReadyToRun=true
-
-      - name: Build
-        run: dotnet build -c Release --no-restore
-
-      - name: Test
-        run: dotnet test -c Release --no-build
-
-      #      - name: Publish
-      #        run: dotnet publish -c Release -r linux-arm64 --no-build -o publish -p:PublishReadyToRun=true ./src/BananaTracks.App/BananaTracks.App.csproj
-      #
-      #      - name: Download Artifacts
-      #        uses: actions/upload-artifact@v1
-      #        with:
-      #          name: dist
-      #          path: publish/wwwroot
-
       - name: Set Git SHA in App
         uses: jossef/action-set-json-field@v2.1
         with:
-          file: ./src/BananaTracks.Api/appsettings.json
+          file: ./src/BananaTracks.App/appsettings.json
           field: Version.CommitHash
           value: ${{ github.sha }}
 
@@ -67,6 +49,24 @@ jobs:
           file: ./src/BananaTracks.Api/appsettings.json
           field: Version.RunNumber
           value: ${{ github.run_number }}
+
+      - name: Restore
+        run: dotnet restore -r linux-arm64 -p:PublishReadyToRun=true
+
+      - name: Build
+        run: dotnet build -c Release --no-restore
+
+      - name: Test
+        run: dotnet test -c Release --no-build
+
+      - name: Publish
+        run: dotnet publish -c Release --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj
+
+      - name: Download Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: publish/wwwroot
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16

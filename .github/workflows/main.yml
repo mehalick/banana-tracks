@@ -3,7 +3,7 @@ name: Deploy to Production
 on:
   push:
     branches:
-    - main
+      - main
 
 jobs:
   deploy:
@@ -11,78 +11,78 @@ jobs:
 
     steps:
 
-    - name: Checkout
-      uses: actions/checkout@master
+      - name: Checkout
+        uses: actions/checkout@master
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '7.0'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '7.0'
 
-    - name: Install Lambda Tools
-      run: dotnet tool install -g Amazon.Lambda.Tools
+      - name: Install Lambda Tools
+        run: dotnet tool install -g Amazon.Lambda.Tools
 
-    - name: Restore
-      run: dotnet restore -r linux-arm64 -p:PublishReadyToRun=true
+      - name: Restore
+        run: dotnet restore -r linux-arm64 -p:PublishReadyToRun=true
 
-    - name: Build
-      run: dotnet build --no-restore -c Release -r linux-arm64 -p:PublishReadyToRun=true
+      - name: Build
+        run: dotnet build -c Release -r linux-arm64 --no-restore --no-self-contained -p:PublishReadyToRun=true
 
-    - name: Test
-      run: dotnet test -c Release --no-build
+      - name: Test
+        run: dotnet test -c Release --no-build
 
-    - name: Publish
-      run: dotnet publish -c Release -r linux-arm64 -p:PublishReadyToRun=true --no-build -o publish ./src/BananaTracks.App/BananaTracks.App.csproj
+      - name: Publish
+        run: dotnet publish -c Release -r linux-arm64 --no-build -o publish -p:PublishReadyToRun=true ./src/BananaTracks.App/BananaTracks.App.csproj
 
-    - name: Download Artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: dist
-        path: publish/wwwroot
+      - name: Download Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: publish/wwwroot
 
-    - name: Set Git SHA in App
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: publish/wwwroot/appsettings.json
-        field: Version.CommitHash
-        value: ${{ github.sha }}
-
-    - name: Set Git SHA in API
-      uses: jossef/action-set-json-field@v2.1
-      with:
-        file: ./src/BananaTracks.Api/appsettings.json
-        field: Version.CommitHash
-        value: ${{ github.sha }}
-
-    -   name: Set Run ID in API
+      - name: Set Git SHA in App
         uses: jossef/action-set-json-field@v2.1
         with:
-            file: ./src/BananaTracks.Api/appsettings.json
-            field: Version.RunId
-            value: ${{ github.run_id }}
+          file: publish/wwwroot/appsettings.json
+          field: Version.CommitHash
+          value: ${{ github.sha }}
 
-    -   name: Set Run Number in API
+      - name: Set Git SHA in API
         uses: jossef/action-set-json-field@v2.1
         with:
-            file: ./src/BananaTracks.Api/appsettings.json
-            field: Version.RunNumber
-            value: ${{ github.run_number }}
+          file: ./src/BananaTracks.Api/appsettings.json
+          field: Version.CommitHash
+          value: ${{ github.sha }}
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1-node16
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      - name: Set Run ID in API
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: ./src/BananaTracks.Api/appsettings.json
+          field: Version.RunId
+          value: ${{ github.run_id }}
 
-    - name: Deploy API to Lambda
-      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api
+      - name: Set Run Number in API
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: ./src/BananaTracks.Api/appsettings.json
+          field: Version.RunNumber
+          value: ${{ github.run_number }}
 
-    - name: Deploy ActivityUpdated Function to Lambda
-      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityUpdated
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Deploy SessionSaved Function to Lambda
-      run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.SessionSaved
+      - name: Deploy API to Lambda
+        run: dotnet lambda deploy-function -pl ./src/BananaTracks.Api -c Release -r linux-arm64 --no-build -p:PublishReadyToRun=true
 
-    - name: Deploy app to S3
-      run: aws s3 sync ./publish/wwwroot/ s3://app.bananatracks.com --delete
+      - name: Deploy ActivityUpdated Function to Lambda
+        run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.ActivityUpdated
+
+      - name: Deploy SessionSaved Function to Lambda
+        run: dotnet lambda deploy-function -pl ./src/BananaTracks.Functions.SessionSaved
+
+      - name: Deploy app to S3
+        run: aws s3 sync ./publish/wwwroot/ s3://app.bananatracks.com --delete

@@ -30,5 +30,8 @@ artifacts/
 # NPM
 node_modules
 **/wwwroot/dist/
+**/publish/
 
 .idea/.idea.BananaTracks/.idea/
+
+

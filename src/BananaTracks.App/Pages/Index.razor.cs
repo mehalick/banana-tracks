@@ -34,14 +34,14 @@ public partial class Index : AppComponentBase
 
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-		if (authState.User?.Identity?.IsAuthenticated != true)
+		if (authState.User.Identity?.IsAuthenticated != true)
 		{
 			return;
 		}
 
 		var routines = await LocalStorageService.GetItemAsync<IReadOnlyCollection<RoutineModel>>("RecentRoutines");
 
-		if (routines.Any())
+		if (routines?.Any() == true)
 		{
 			_recentRunRoutines = routines;
 

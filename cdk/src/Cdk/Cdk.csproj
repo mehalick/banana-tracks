@@ -2,10 +2,13 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<UserSecretsId>cae61fff-6c1e-4c29-9c5f-86fcdc081406</UserSecretsId>
+		<AssemblyName>BananaTracks.Cdk</AssemblyName>
+		<RootNamespace>BananaTracks.Cdk</RootNamespace>
+		<LangVersion>default</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

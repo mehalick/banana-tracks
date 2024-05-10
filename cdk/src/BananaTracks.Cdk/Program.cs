@@ -1,7 +1,7 @@
 ﻿using Amazon.CDK;
 using Microsoft.Extensions.Configuration;
 
-namespace Cdk;
+namespace BananaTracks.Cdk;
 
 internal sealed class Program
 {
@@ -21,7 +21,7 @@ internal sealed class Program
 			    Region = configuration["CdkRegion"]
 			}
 		});
-		
+
 		app.Synth();
 	}
 }

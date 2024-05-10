@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -9,13 +9,15 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<!-- Generate ready to run images during publishing to improve cold start time. -->
 		<PublishReadyToRun>true</PublishReadyToRun>
+		<LangVersion>default</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
-		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
-		<PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.1.0" />
-		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.16" />
-		<PackageReference Include="AWSSDK.Polly" Version="3.7.103.18" />
+		<PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
+		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.3" />
+		<PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.2.0" />
+		<PackageReference Include="AWSSDK.Core" Version="3.7.303.27" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.303.2" />
+		<PackageReference Include="AWSSDK.Polly" Version="3.7.303" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
 	</ItemGroup>
 	<ItemGroup>

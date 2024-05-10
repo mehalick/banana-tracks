@@ -18,7 +18,7 @@ using Function = Amazon.CDK.AWS.Lambda.Function;
 using FunctionProps = Amazon.CDK.AWS.Lambda.FunctionProps;
 using IFunction = Amazon.CDK.AWS.Lambda.IFunction;
 
-namespace Cdk;
+namespace BananaTracks.Cdk;
 
 public class CdkStack : Stack
 {
@@ -121,19 +121,19 @@ public class CdkStack : Stack
 		{
 			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
-			Principals = new IPrincipal[]
-			{
+			Principals =
+			[
 				new AnyPrincipal()
-			},
-			Resources = new[]
-			{
+			],
+			Resources =
+			[
 				cdnBucket.ArnForObjects("polly"),
 				cdnBucket.ArnForObjects("polly/*")
-			},
-			Actions = new[]
-			{
+			],
+			Actions =
+			[
 				"s3:PutObject"
-			}
+			]
 		}));
 
 		return (appBucket, cdnBucket);
@@ -149,10 +149,10 @@ public class CdkStack : Stack
 		var certificate = new Certificate(this, Name("Certificate"), new CertificateProps
 		{
 			DomainName = DomainName,
-			SubjectAlternativeNames = new[]
-			{
+			SubjectAlternativeNames =
+			[
 				WildcardDomain
-			},
+			],
 			Validation = CertificateValidation.FromDns(hostedZone)
 		});
 
@@ -204,10 +204,10 @@ public class CdkStack : Stack
 				CachePolicy = CachePolicy.CACHING_DISABLED
 			},
 			Certificate = certificate,
-			DomainNames = new[]
-			{
+			DomainNames =
+			[
 				AppDomainName
-			},
+			],
 			HttpVersion = HttpVersion.HTTP2_AND_3
 		});
 
@@ -223,10 +223,10 @@ public class CdkStack : Stack
 				AllowedMethods = AllowedMethods.ALLOW_GET_HEAD
 			},
 			Certificate = certificate,
-			DomainNames = new[]
-			{
+			DomainNames =
+			[
 				CdnDomainName
-			},
+			],
 			HttpVersion = HttpVersion.HTTP2_AND_3
 		});
 
@@ -316,16 +316,16 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowCloudWatch",
 				Effect = Effect.ALLOW,
-				Resources = new[]
-				{
+				Resources =
+				[
 					"*"
-				},
-				Actions = new[]
-				{
+				],
+				Actions =
+				[
 					"logs:CreateLogGroup",
 					"logs:CreateLogStream",
 					"logs:PutLogEvents"
-				}
+				]
 			}));
 
 		lambdaRole.AddToPolicy(new(
@@ -333,15 +333,15 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowXRay",
 				Effect = Effect.ALLOW,
-				Resources = new[]
-				{
+				Resources =
+				[
 					"*"
-				},
-				Actions = new[]
-				{
+				],
+				Actions =
+				[
 					"xray:PutTraceSegments",
 					"xray:PutTelemetryRecords"
-				}
+				]
 			}));
 
 		lambdaRole.AddToPolicy(new(
@@ -349,15 +349,15 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowSystemsManager",
 				Effect = Effect.ALLOW,
-				Resources = new[]
-				{
+				Resources =
+				[
 					"*"
-				},
-				Actions = new[]
-				{
+				],
+				Actions =
+				[
 					"ssm:PutParameter",
 					"ssm:GetParametersByPath"
-				}
+				]
 			}));
 
 		lambdaRole.AddToPolicy(new(
@@ -365,67 +365,67 @@ public class CdkStack : Stack
 			{
 				Sid = "AllowPolly",
 				Effect = Effect.ALLOW,
-				Resources = new[]
-				{
+				Resources =
+				[
 					"*"
-				},
-				Actions = new[]
-				{
+				],
+				Actions =
+				[
 					"polly:StartSpeechSynthesisTask"
-				}
+				]
 			}));
 
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Sid = "AllowDynamoDb",
 			Effect = Effect.ALLOW,
-			Resources = new[]
-			{
+			Resources =
+			[
 				activitiesTable.TableArn,
 				routinesTable.TableArn,
 				sessionsTable.TableArn
-			},
-			Actions = new[]
-			{
+			],
+			Actions =
+			[
 				"dynamodb:DescribeTable",
 				"dynamodb:GetItem",
 				"dynamodb:PutItem",
 				"dynamodb:Query",
 				"dynamodb:Scan",
 				"dynamodb:UpdateItem"
-			}
+			]
 		}));
 
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Sid = "AllowSqs",
 			Effect = Effect.ALLOW,
-			Resources = new[]
-			{
+			Resources =
+			[
 				activityUpdatedQueue.QueueArn,
 				sessionSavedQueue.QueueArn
-			},
-			Actions = new[]
-			{
+			],
+			Actions =
+			[
 				"sqs:ReceiveMessage",
 				"sqs:DeleteMessage",
 				"sqs:GetQueueAttributes",
 				"sqs:SendMessage"
-			}
+			]
 		}));
 
 		lambdaRole.AddToPolicy(new(new PolicyStatementProps
 		{
 			Sid = "AllowS3",
 			Effect = Effect.ALLOW,
-			Resources = new[]
-			{
+			Resources =
+			[
 				cdnBucket.BucketArn
-			},
-			Actions = new[]
-			{
+			],
+			Actions =
+			[
 				"s3:PutObject"
-			}
+			]
 		}));
 
 		return lambdaRole;
@@ -437,12 +437,12 @@ public class CdkStack : Stack
 			new FunctionProps
 			{
 				FunctionName = Name("ActivityUpdatedFunction"),
-				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.ActivityUpdated\bin\Release\net6.0"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.ActivityUpdated\bin\Release\net8.0"),
 				Description = "BananaTracks ActivityUpdated Function",
 				Handler = "BananaTracks.Functions.ActivityUpdated::BananaTracks.Functions.ActivityUpdated.Function::FunctionHandler",
 				MemorySize = 256,
 				Role = lambdaRole,
-				Runtime = Runtime.DOTNET_6,
+				Runtime = Runtime.DOTNET_8,
 				Architecture = Architecture.ARM_64,
 				Timeout = Duration.Seconds(30)
 			});
@@ -458,12 +458,12 @@ public class CdkStack : Stack
 			new FunctionProps
 			{
 				FunctionName = Name("SessionSavedFunction"),
-				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.SessionSaved\bin\Release\net6.0"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Functions.SessionSaved\bin\Release\net8.0"),
 				Description = "BananaTracks SessionSaved Function",
 				Handler = "BananaTracks.Functions.SessionSaved::BananaTracks.Functions.SessionSaved.Function::FunctionHandler",
 				MemorySize = 256,
 				Role = lambdaRole,
-				Runtime = Runtime.DOTNET_6,
+				Runtime = Runtime.DOTNET_8,
 				Architecture = Architecture.ARM_64,
 				Timeout = Duration.Seconds(30)
 			});
@@ -479,12 +479,12 @@ public class CdkStack : Stack
 			new FunctionProps
 			{
 				FunctionName = Name("ApiLambda"),
-				Code = Code.FromAsset(@"..\src\BananaTracks.Api\bin\Release\net6.0"),
+				Code = Code.FromAsset(@"..\src\BananaTracks.Api\bin\Release\net8.0"),
 				Description = "BananaTracks API",
 				Handler = "BananaTracks.Api",
 				MemorySize = 256,
 				Role = lambdaRole,
-				Runtime = Runtime.DOTNET_6,
+				Runtime = Runtime.DOTNET_8,
 				Architecture = Architecture.ARM_64,
 				Timeout = Duration.Seconds(30),
 				Tracing = Tracing.ACTIVE
@@ -502,10 +502,10 @@ public class CdkStack : Stack
 				{
 					StageName = "production"
 				},
-				EndpointTypes = new[]
-				{
+				EndpointTypes =
+				[
 					EndpointType.REGIONAL
-				},
+				],
 				DomainName = new DomainNameOptions
 				{
 					DomainName = $"api.{DomainName}",

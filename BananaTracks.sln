@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdk", "cdk\src\Cdk\Cdk.csproj", "{C408C818-A839-4EC1-A00D-F1AE8687936E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Cdk", "cdk\src\BananaTracks.Cdk\BananaTracks.Cdk.csproj", "{C408C818-A839-4EC1-A00D-F1AE8687936E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.App", "src\BananaTracks.App\BananaTracks.App.csproj", "{9ADCE9DF-631E-4C1F-9CD5-D74448782858}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Domain", "src\BananaTracks.Domain\BananaTracks.Domain.csproj", "{2A20F335-AC3A-4EA5-8CBD-2F54E4576E11}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BananaTracks.Functions.SessionSaved", "src\BananaTracks.Functions.SessionSaved\BananaTracks.Functions.SessionSaved.csproj", "{03E0193E-13A7-4683-9523-6C8DBA5D5229}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{00FC69A9-711F-41F9-B31D-18A821994BDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,5 +127,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8398B4F-4A7D-4850-BE29-63BB56272D47}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C408C818-A839-4EC1-A00D-F1AE8687936E} = {00FC69A9-711F-41F9-B31D-18A821994BDC}
 	EndGlobalSection
 EndGlobal

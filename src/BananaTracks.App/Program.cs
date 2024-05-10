@@ -52,7 +52,7 @@ public class CustomAuthorizationMessageHandler : AuthorizationMessageHandler
 	{
 		ConfigureHandler(new[]
 		{
-			configuration["Api:BaseAddress"]
+			configuration["Api:BaseAddress"]!
 		});
 	}
 }

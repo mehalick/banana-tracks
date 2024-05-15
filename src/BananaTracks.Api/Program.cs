@@ -75,6 +75,8 @@ public static class Program
 				};
 			});
 
+		builder.Services.AddAuthorization();
+
 		builder.Services.AddCors(options =>
 		{
 			options.AddPolicy("ApiCors", i => i

@@ -8,7 +8,7 @@ internal class GetRoutineById : Endpoint<GetRoutineByIdRequest, GetRoutineByIdRe
 	public override void Configure()
 	{
 		Get(ApiRoutes.GetRoutineById);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public GetRoutineById(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)

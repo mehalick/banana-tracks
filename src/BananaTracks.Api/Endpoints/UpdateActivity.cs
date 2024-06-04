@@ -9,7 +9,7 @@ internal class UpdateActivity : Endpoint<UpdateActivityRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.UpdateActivity);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public UpdateActivity(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext,

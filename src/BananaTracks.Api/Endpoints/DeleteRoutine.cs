@@ -9,7 +9,7 @@ internal class DeleteRoutine : Endpoint<DeleteRoutineRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.DeleteRoutine);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public DeleteRoutine(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, IWebHostEnvironment webHostEnvironment)

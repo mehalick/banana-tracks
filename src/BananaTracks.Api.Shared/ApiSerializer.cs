@@ -17,5 +17,5 @@
 [JsonSerializable(typeof(UpdateActivityRequest))]
 [JsonSerializable(typeof(UpdateRoutineRequest))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-public partial class Serializer : JsonSerializerContext
+public partial class ApiSerializer : JsonSerializerContext
 { }

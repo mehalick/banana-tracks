@@ -2,6 +2,7 @@ global using System.Text.Json;
 global using Amazon.DynamoDBv2.DataModel;
 global using BananaTracks.Api.Extensions;
 global using BananaTracks.Api.Providers;
+global using BananaTracks.Api.Shared;
 global using BananaTracks.Api.Shared.Constants;
 global using BananaTracks.Api.Shared.Requests;
 global using BananaTracks.Api.Shared.Responses;

@@ -8,7 +8,7 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 	public override void Configure()
 	{
 		Get(ApiRoutes.ListRoutines);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public ListRoutines(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
@@ -20,26 +20,25 @@ public class ListRoutines : EndpointWithoutRequest<ListRoutinesResponse>
 	public override async Task HandleAsync(CancellationToken cancellationToken)
 	{
 		var userId = _httpContextAccessor.GetUserId();
-		var getRoutinesTask = GetRoutines(userId, cancellationToken);
-		var getActivitiesTask = GetActivities(userId, cancellationToken);
-
-		await Task.WhenAll(getRoutinesTask, getActivitiesTask);
+		var activities = await GetActivities(userId, cancellationToken);
+		var routines = await GetRoutines(userId, cancellationToken);
 
 		Response = new()
 		{
-			Routines = getRoutinesTask
-				.Result
+			Routines = routines
 				.Active()
 				.OrderBy(i => i.Name)
-				.Select(i => i.ToModel(getActivitiesTask.Result.Where(j => j.RoutineId == i.RoutineId)))
+				.Select(i => i.ToModel(activities.Where(j => j.RoutineId == i.RoutineId)))
 		};
 	}
 
-	private Task<List<Routine>> GetRoutines(string userId, CancellationToken cancellationToken)
+	private async Task<List<Routine>> GetRoutines(string userId, CancellationToken cancellationToken)
 	{
-		return _dynamoDbContext
+		var results =  await _dynamoDbContext
 			.QueryAsync<Routine>(userId)
 			.GetRemainingAsync(cancellationToken);
+
+		return results;
 	}
 
 	private async Task<List<Activity>> GetActivities(string userId, CancellationToken cancellationToken)

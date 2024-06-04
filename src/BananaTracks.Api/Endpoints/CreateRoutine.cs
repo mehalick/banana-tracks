@@ -5,7 +5,7 @@ internal class CreateRoutine : Endpoint<CreateRoutineRequest, CreateRoutineRespo
 	public override void Configure()
 	{
 		Post(ApiRoutes.CreateRoutine);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 	
 	private readonly IHttpContextAccessor _httpContextAccessor;

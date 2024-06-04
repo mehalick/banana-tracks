@@ -8,7 +8,7 @@ public class ListSessions : EndpointWithoutRequest<ListSessionsResponse>
 	public override void Configure()
 	{
 		Get(ApiRoutes.ListSessions);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public ListSessions(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)

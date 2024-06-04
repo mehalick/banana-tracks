@@ -9,7 +9,7 @@ internal class AddActivity : Endpoint<AddActivityRequest>
 	public override void Configure()
 	{
 		Post(ApiRoutes.AddActivity);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public AddActivity(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext, QueueProvider queueProvider)

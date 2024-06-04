@@ -12,7 +12,7 @@ public class ListActivities : EndpointWithoutRequest<ListActivitiesResponse>
 	public override void Configure()
 	{
 		Get(ApiRoutes.ListActivities);
-		SerializerContext(Serializer.Default);
+		SerializerContext(ApiSerializer.Default);
 	}
 
 	public ListActivities(IHttpContextAccessor httpContextAccessor, IDynamoDBContext dynamoDbContext)
